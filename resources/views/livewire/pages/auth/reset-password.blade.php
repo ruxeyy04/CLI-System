@@ -10,8 +10,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Volt\Component;
 
-new #[Layout('layouts.guest')] class extends Component
-{
+new #[Layout('layouts.auth')] class extends Component {
     #[Locked]
     public string $token = '';
     public string $email = '';
@@ -27,7 +26,26 @@ new #[Layout('layouts.guest')] class extends Component
 
         $this->email = request()->string('email');
     }
+    public function getPasswordStrength(): int
+    {
+        $length = strlen($this->password);
+        $strength = 0;
 
+        if (preg_match('/[a-z]/', $this->password)) {
+            $strength++;
+        }
+        if (preg_match('/[A-Z]/', $this->password)) {
+            $strength++;
+        }
+        if (preg_match('/[0-9]/', $this->password)) {
+            $strength++;
+        }
+        if (preg_match('/[\W]/', $this->password)) {
+            $strength++;
+        }
+
+        return $strength + ($length >= 8 ? 1 : 0);
+    }
     /**
      * Reset the password for the given user.
      */
@@ -42,17 +60,16 @@ new #[Layout('layouts.guest')] class extends Component
         // Here we will attempt to reset the user's password. If it is successful we
         // will update the password on an actual user model and persist it to the
         // database. Otherwise we will parse the error and return the response.
-        $status = Password::reset(
-            $this->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user) {
-                $user->forceFill([
+        $status = Password::reset($this->only('email', 'password', 'password_confirmation', 'token'), function ($user) {
+            $user
+                ->forceFill([
                     'password' => Hash::make($this->password),
                     'remember_token' => Str::random(60),
-                ])->save();
+                ])
+                ->save();
 
-                event(new PasswordReset($user));
-            }
-        );
+            event(new PasswordReset($user));
+        });
 
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can
@@ -70,36 +87,77 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
-    <form wire:submit="resetPassword">
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+    <div class="w-lg-500px p-10">
+        <form class="form w-100" wire:submit.prevent="resetPassword">
+            <div class="text-center mb-10">
+                <h1 class="text-gray-900 fw-bolder mb-3">Setup New Password</h1>
+                <div class="text-gray-500 fw-semibold fs-6">
+                    Already reset the password?
+                    <a href="{{ route('login') }}" class="link-primary fw-bold" wire:navigate>Sign in</a>
+                </div>
+            </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input wire:model="password" id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            <!-- Email (readonly) -->
+            <div class="fv-row mb-8">
+                <input type="email" placeholder="Email" name="email" autocomplete="off"
+                    class="form-control bg-transparent" wire:model="email" required readonly>
+                @error('email')
+                    <div class="fv-plugins-message-container invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+            <!-- Password -->
+            <div class="fv-row mb-8">
+                <input type="password" placeholder="Password" name="password" autocomplete="off"
+                    class="form-control bg-transparent" wire:model="password" oninput="updateStrengthMeter()">
 
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
-                          type="password"
-                          name="password_confirmation" required autocomplete="new-password" />
+                <!-- Password Strength Meter -->
+                <div class="d-flex align-items-center my-3">
+                    <div id="strength-1" class="flex-grow-1 bg-secondary rounded h-5px me-2"></div>
+                    <div id="strength-2" class="flex-grow-1 bg-secondary rounded h-5px me-2"></div>
+                    <div id="strength-3" class="flex-grow-1 bg-secondary rounded h-5px me-2"></div>
+                    <div id="strength-4" class="flex-grow-1 bg-secondary rounded h-5px"></div>
+                </div>
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
+                <div class="text-muted">Use 8 or more characters with a mix of letters, numbers & symbols.</div>
+                @error('password')
+                    <div class="fv-plugins-message-container invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Reset Password') }}
-            </x-primary-button>
-        </div>
-    </form>
+            <!-- Confirm Password -->
+            <div class="fv-row mb-8">
+                <input type="password" placeholder="Repeat Password" name="password_confirmation" autocomplete="off"
+                    class="form-control bg-transparent" wire:model="password_confirmation">
+            </div>
+
+            <div class="d-grid mb-10">
+                <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
+                    <span wire:loading.remove class="indicator-label">Submit</span>
+                    <span wire:loading>
+                        Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
+
+<script>
+    function updateStrengthMeter() {
+        const password = document.querySelector('input[name="password"]').value;
+        const meterBars = [1, 2, 3, 4].map(num => document.getElementById(`strength-${num}`));
+
+        let strength = 0;
+        if (password.length >= 8) strength++;
+        if (/[a-z]/.test(password)) strength++;
+        if (/[A-Z]/.test(password)) strength++;
+        if (/[0-9]/.test(password)) strength++;
+        if (/[\W]/.test(password)) strength++;
+
+        meterBars.forEach((bar, index) => {
+            bar.classList.toggle('bg-success', index < strength);
+            bar.classList.toggle('bg-secondary', index >= strength);
+        });
+    }
+</script>

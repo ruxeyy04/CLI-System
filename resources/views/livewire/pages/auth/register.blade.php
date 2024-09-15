@@ -26,7 +26,7 @@ new #[Layout('layouts.auth')] class extends Component
         $validated = $this->validate([
             'fname' => ['required', 'string', 'max:255'],
             'lname' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:'.User::class],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -59,7 +59,7 @@ new #[Layout('layouts.auth')] class extends Component
             <!-- First Name Field -->
             <div class="fv-row mb-8">
                 <input type="text" placeholder="First Name" name="fname" autocomplete="off"
-                       class="form-control bg-transparent" wire:model.lazy="fname" />
+                       class="form-control bg-transparent" wire:model="fname" />
 
                 @error('fname')
                     <div class="fv-plugins-message-container invalid-feedback">{{ $message }}</div>
@@ -69,7 +69,7 @@ new #[Layout('layouts.auth')] class extends Component
             <!-- Last Name Field -->
             <div class="fv-row mb-8">
                 <input type="text" placeholder="Last Name" name="lname" autocomplete="off"
-                       class="form-control bg-transparent" wire:model.lazy="lname" />
+                       class="form-control bg-transparent" wire:model="lname" />
 
                 @error('lname')
                     <div class="fv-plugins-message-container invalid-feedback">{{ $message }}</div>
@@ -79,7 +79,7 @@ new #[Layout('layouts.auth')] class extends Component
             <!-- Username Field -->
             <div class="fv-row mb-8">
                 <input type="text" placeholder="Username" name="username" autocomplete="off"
-                       class="form-control bg-transparent" wire:model.lazy="username" />
+                       class="form-control bg-transparent" wire:model="username" />
 
                 @error('username')
                     <div class="fv-plugins-message-container invalid-feedback">{{ $message }}</div>
@@ -89,7 +89,7 @@ new #[Layout('layouts.auth')] class extends Component
             <!-- Email Field -->
             <div class="fv-row mb-8">
                 <input type="text" placeholder="Email" name="email" autocomplete="off"
-                       class="form-control bg-transparent" wire:model.lazy="email" />
+                       class="form-control bg-transparent" wire:model="email" />
 
                 @error('email')
                     <div class="fv-plugins-message-container invalid-feedback">{{ $message }}</div>
@@ -99,7 +99,7 @@ new #[Layout('layouts.auth')] class extends Component
             <!-- Password Field -->
             <div class="fv-row mb-8">
                 <input type="password" placeholder="Password" name="password" autocomplete="off"
-                       class="form-control bg-transparent" wire:model.lazy="password" />
+                       class="form-control bg-transparent" wire:model="password" />
 
                 @error('password')
                     <div class="fv-plugins-message-container invalid-feedback">{{ $message }}</div>
@@ -109,7 +109,7 @@ new #[Layout('layouts.auth')] class extends Component
             <!-- Confirm Password Field -->
             <div class="fv-row mb-3">
                 <input type="password" placeholder="Confirm Password" name="password_confirmation" autocomplete="off"
-                       class="form-control bg-transparent" wire:model.lazy="password_confirmation" />
+                       class="form-control bg-transparent" wire:model="password_confirmation" />
 
                 @error('password_confirmation')
                     <div class="fv-plugins-message-container invalid-feedback">{{ $message }}</div>

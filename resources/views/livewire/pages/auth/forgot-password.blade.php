@@ -4,14 +4,13 @@ use Illuminate\Support\Facades\Password;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
-new #[Layout('layouts.guest')] class extends Component
-{
+new #[Layout('layouts.auth')] class extends Component {
     public string $email = '';
 
     /**
      * Send a password reset link to the provided email address.
      */
-    public function sendPasswordResetLink(): void
+     public function sendPasswordResetLink(): void
     {
         $this->validate([
             'email' => ['required', 'string', 'email'],
@@ -34,28 +33,48 @@ new #[Layout('layouts.guest')] class extends Component
 
         session()->flash('status', __($status));
     }
-}; ?>
+
+};
+?>
 
 <div>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+    <div class="w-lg-500px p-10">
+        <!--begin::Form-->
+        <form class="form w-100 fv-plugins-bootstrap5 fv-plugins-framework" wire:submit.prevent="sendPasswordResetLink">
+            <!--begin::Heading-->
+            <div class="text-center mb-10">
+                <h1 class="text-gray-900 fw-bolder mb-3">
+                    Forgot Password ?
+                </h1>
+                <div class="text-gray-500 fw-semibold fs-6">
+                    Enter your email to reset your password.
+                </div>
+            </div>
+            <!--end::Heading-->
+
+            <!--begin::Input group--->
+            <div class="fv-row mb-8 fv-plugins-icon-container">
+                <x-auth-session-status class="mb-4" :status="session('status')" />
+                <!--begin::Email-->
+                <input type="text" placeholder="Email" name="email" autocomplete="off"
+                    class="form-control bg-transparent" wire:model.debounce.300ms="email">
+                <!--end::Email-->
+
+                @error('email')
+                    <div class="fv-plugins-message-container invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!--begin::Actions-->
+            <div class="d-flex flex-wrap justify-content-center pb-lg-0">
+                <button type="submit" id="kt_password_reset_submit" class="btn btn-primary me-4" wire:loading.attr="disabled">
+                    <span wire:loading.remove class="indicator-label">Submit</span>
+                    <span wire:loading>Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                </button>
+                <a href="/login" class="btn btn-light" wire:navigate>Cancel</a>
+            </div>
+            <!--end::Actions-->
+        </form>
+        <!--end::Form-->
     </div>
-
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form wire:submit="sendPasswordResetLink">
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
-    </form>
 </div>
