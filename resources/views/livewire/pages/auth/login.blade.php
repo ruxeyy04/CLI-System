@@ -59,7 +59,7 @@ new #[Layout('layouts.auth')] class extends Component {
             </div>
 
             <div class="fv-row mb-8">
-                <input type="text" placeholder="Email" name="email" autocomplete="off"
+                <input type="text" placeholder="Email" name="email"
                     class="form-control bg-transparent" wire:model="form.email" />
 
                 @error('form.email')

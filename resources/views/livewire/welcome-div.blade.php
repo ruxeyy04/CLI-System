@@ -48,9 +48,9 @@
 
                     <!--begin::Link-->
                     <div class="mb-0">
-                        <button class="btn btn-primary" wire:navigate href="/login">Login</button>
-
+                        <livewire:navigate-to-login>
                     </div>
+                    
                     <!--end::Link-->
 
                 </div>
