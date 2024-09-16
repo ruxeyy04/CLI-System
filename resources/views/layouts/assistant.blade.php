@@ -25,18 +25,6 @@
             window.top.location.replace(window.self.location.href);
         }
     </script>
-
-
-</head>
-<!--end::Head-->
-
-<!--begin::Body-->
-
-<body id="kt_app_body" data-kt-app-layout="dark-sidebar" data-kt-app-header-fixed="true"
-    data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-hoverable="true"
-    data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true"
-    data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" class="app-default">
-    <!--begin::Theme mode setup on page load-->
     <script>
         var defaultThemeMode = "light";
         var themeMode;
@@ -59,6 +47,18 @@
             document.documentElement.setAttribute("data-bs-theme", themeMode);
         }
     </script>
+
+
+</head>
+<!--end::Head-->
+
+<!--begin::Body-->
+
+<body id="kt_app_body" data-kt-app-layout="dark-sidebar" data-kt-app-header-fixed="true"
+    data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-hoverable="true"
+    data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true"
+    data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" class="app-default">
+    <!--begin::Theme mode setup on page load-->
 
     <!--begin::App-->
     <div class="d-flex flex-column flex-root app-root" id="kt_app_root">
@@ -87,9 +87,9 @@
                     <!--begin::Mobile logo-->
                     <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
                         <a href="../index-2.html" class="d-lg-none">
-                            <img alt="Logo" src="../build/assets/media/logos/default-small.svg"
+                            <img alt="Logo" src="../build/assets/media/logos/default-small.png"
                                 class="theme-light-show h-30px" />
-                            <img alt="Logo" src="../build/assets/media/logos/default-small-dark.svg"
+                            <img alt="Logo" src="../build/assets/media/logos/default-small-dark.png"
                                 class="theme-dark-show h-30px" />
                         </a>
                     </div>
@@ -135,7 +135,7 @@
                     <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
                         <!--begin::Logo image-->
                         <a href="../index-2.html">
-                            <img alt="Logo" src="../build/assets/media/logos/default-dark.svg"
+                            <img alt="Logo" src="../build/assets/media/logos/default-dark.png"
                                 class="h-30px app-sidebar-logo-default" />
                         </a>
                         <!--end::Logo image-->

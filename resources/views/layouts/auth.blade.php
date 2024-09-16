@@ -72,15 +72,11 @@
                 <div class="d-flex flex-column flex-center p-6 p-lg-10 w-100">
                     <!--begin::Logo-->
                     <a href="/" class="mb-0 mb-lg-20" wire:navigate>
-                        <img alt="Logo" src="../../../build/assets/media/logos/default-white.svg"
-                            class="h-40px h-lg-50px" />
+                        <img alt="Logo" src="../../../build/assets/media/logos/default-white.png"
+                           height="200" />
                     </a>
                     <!--end::Logo-->
 
-                    <!--begin::Image-->
-                    <img class="d-none d-lg-block mx-auto w-300px w-lg-75 w-xl-500px mb-10 mb-lg-20"
-                        src="../../../build/assets/media/misc/auth-screens.png" alt="" />
-                    <!--end::Image-->
 
                     <!--begin::Title-->
                     <h1 class="d-none d-lg-block text-white fs-2qx fw-bold text-center mb-7">

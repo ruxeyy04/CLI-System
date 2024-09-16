@@ -19,9 +19,9 @@
 
                     <!--begin::Logo-->
                     <div class="mb-7">
-                        <a href="../../index-2.html" class="">
-                            <img alt="Logo" src="../../build/assets/media/logos/default-small.svg"
-                                class="h-40px" />
+                        <a href="/" class="" wire:navigate>
+                            <img alt="Logo" src="../../build/assets/media/logos/default.png"
+                                height="100" />
                         </a>
                     </div>
                     <!--end::Logo-->

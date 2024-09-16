@@ -19,7 +19,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Volt::route('dashboard', 'pages.dashboard')->name('dashboard');
     Volt::route('editprofile','pages.editprofile')->name('editprofile');
-
+    Volt::route('account/settings','profile.settings')->name('account_settings');
     Volt::route('userprofile', 'pages.userprofile')->name('userprofile');
 });
 Route::view('/', 'welcome')->middleware(['guest']);
