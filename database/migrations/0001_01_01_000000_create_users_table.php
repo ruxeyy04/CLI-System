@@ -19,8 +19,10 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('phone')->nullable();
             $table->string('email')->unique();
+            $table->enum('role', ['incharge', 'assistant'])->default('assistant');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('profileimg')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

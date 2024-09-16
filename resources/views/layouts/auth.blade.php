@@ -71,7 +71,7 @@
                 <!--begin::Content-->
                 <div class="d-flex flex-column flex-center p-6 p-lg-10 w-100">
                     <!--begin::Logo-->
-                    <a href="../../../index-2.html" class="mb-0 mb-lg-20">
+                    <a href="/" class="mb-0 mb-lg-20" wire:navigate>
                         <img alt="Logo" src="../../../build/assets/media/logos/default-white.svg"
                             class="h-40px h-lg-50px" />
                     </a>
@@ -84,19 +84,14 @@
 
                     <!--begin::Title-->
                     <h1 class="d-none d-lg-block text-white fs-2qx fw-bold text-center mb-7">
-                        Fast, Efficient and Productive
+                        Proactive, Data-Driven Lab Management for Optimal Performance
                     </h1>
+                    
                     <!--end::Title-->
 
                     <!--begin::Text-->
                     <div class="d-none d-lg-block text-white fs-base text-center">
-                        In this kind of post, <a href="#"
-                            class="opacity-75-hover text-warning fw-semibold me-1">the blogger</a>
-
-                        introduces a person they’ve interviewed <br /> and provides some background information about
-
-                        <a href="#" class="opacity-75-hover text-warning fw-semibold me-1">the interviewee</a>
-                        and their <br /> work following this is a transcript of the interview.
+                        A Computer Laboratory Information System with Trend Analysis for Computer Maintenance is designed to streamline the management and upkeep of computer labs by integrating real-time monitoring and data analytics. This system tracks the performance, usage, and maintenance needs of all lab computers, providing insights through trend analysis.
                     </div>
                     <!--end::Text-->
                 </div>

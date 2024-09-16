@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use Livewire\Volt\Volt;
 
 Route::get('/session-auth-info', function () {
     $user = Auth::user();
@@ -14,15 +15,16 @@ Route::get('/session-auth-info', function () {
     ]);
 });
 
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    Volt::route('dashboard', 'pages.dashboard')->name('dashboard');
+    Volt::route('editprofile','pages.editprofile')->name('editprofile');
+
+    Volt::route('userprofile', 'pages.userprofile')->name('userprofile');
+});
 Route::view('/', 'welcome')->middleware(['guest']);
 Route::view('/test', 'test');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
 
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
 
 require __DIR__ . '/auth.php';
