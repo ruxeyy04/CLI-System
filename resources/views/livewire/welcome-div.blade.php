@@ -2,11 +2,11 @@
 
     <style>
         body {
-            background-image: url('../../build/assets/media/auth/bg17.jpg');
+            background-image: url('../../build/assets/media/auth/welcome-bg.png');
         }
 
         [data-bs-theme="dark"] body {
-            background-image: url('../../build/assets/media/auth/bg17-dark.jpg');
+            background-image: url('../../build/assets/media/auth/welcome-bg.png');
         }
     </style>
 
