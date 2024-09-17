@@ -4,7 +4,8 @@ use App\Livewire\Forms\LoginForm;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
-
+use Illuminate\Support\Facades\DB;
+use hisorange\BrowserDetect\Parser as Browser;
 new #[Layout('layouts.auth')] class extends Component {
     public LoginForm $form;
     public bool $loading = false;
@@ -37,6 +38,16 @@ new #[Layout('layouts.auth')] class extends Component {
         // Authenticate the user using the login form's method
         $this->form->authenticate();
 
+        // Update session with device information before regenerating session ID
+        $sessionId = session()->getId();
+        DB::table('sessions')
+            ->where('id', $sessionId)
+            ->update([
+                'devicefamily' => Browser::deviceFamily(),
+                'devicemodel' => Browser::deviceModel(),
+                'platformname' => Browser::platformName(),
+            ]);
+
         // Regenerate session
         Session::regenerate();
 
@@ -59,8 +70,8 @@ new #[Layout('layouts.auth')] class extends Component {
             </div>
 
             <div class="fv-row mb-8">
-                <input type="text" placeholder="Email" name="email"
-                    class="form-control bg-transparent" wire:model="form.email" />
+                <input type="text" placeholder="Email" name="email" class="form-control bg-transparent"
+                    wire:model="form.email" />
 
                 @error('form.email')
                     <div class="fv-plugins-message-container invalid-feedback">{{ $message }}</div>

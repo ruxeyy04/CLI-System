@@ -18,10 +18,18 @@ Route::get('/session-auth-info', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Volt::route('dashboard', 'pages.dashboard')->name('dashboard');
-    Volt::route('editprofile','pages.editprofile')->name('editprofile');
-    Volt::route('account/settings','profile.settings')->name('account_settings');
-    Volt::route('userprofile', 'pages.userprofile')->name('userprofile');
 });
+
+Route::middleware(['auth'])
+    ->prefix('account')
+    ->group(function () {
+        Volt::route('settings', 'pages.profile.settings')->name('account_settings');
+        Volt::route('overview', 'pages.profile.userprofile')->name('account_overview');
+        Volt::route('changepass', 'pages.profile.changepass')->name('account_changepass');
+        Volt::route('sessions', 'pages.profile.sessions')->name('account_sessions');
+    });
+
+
 Route::view('/', 'welcome')->middleware(['guest']);
 Route::view('/test', 'test');
 

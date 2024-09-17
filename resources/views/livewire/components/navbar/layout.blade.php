@@ -122,7 +122,7 @@ new class extends Component
     <div class="app-navbar-item ms-2 ms-lg-3" id="kt_header_user_menu_toggle">
         <!--begin::Menu wrapper-->
         <div class="cursor-pointer symbol symbol-35px symbol-md-40px" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
-            <img src="../build/assets/media/avatars/300-3.jpg"
+            <img src="{{ Auth::user()->profileimg ? asset('storage/profile/' . Auth::user()->id . '/' . Auth::user()->profileimg) : asset('storage/profile/default.jpg') }}"
                 alt="{{ auth()->user()->fname }} {{ auth()->user()->lname }}" />
         </div>
 
@@ -133,7 +133,7 @@ new class extends Component
                 <div class="menu-content d-flex align-items-center px-3">
                     <!--begin::Avatar-->
                     <div class="symbol symbol-50px me-5">
-                        <img alt="Logo" src="../build/assets/media/avatars/300-3.jpg" />
+                        <img alt="Logo" src="{{ Auth::user()->profileimg ? asset('storage/profile/' . Auth::user()->id . '/' . Auth::user()->profileimg) : asset('storage/profile/default.jpg') }}" />
                     </div>
                     <!--end::Avatar-->
 
@@ -166,7 +166,7 @@ new class extends Component
 
             <!--begin::Menu item-->
             <div class="menu-item px-5">
-                <a href="{{ route('userprofile') }}" class="menu-link px-5" wire:navigate>
+                <a href="{{ route('account_overview') }}" class="menu-link px-5" wire:navigate>
                     My Profile
                 </a>
             </div>
@@ -181,7 +181,7 @@ new class extends Component
 
             <!--begin::Menu item-->
             <div class="menu-item px-5 my-1">
-                <a href="{{ route('account_settings')}}" class="menu-link px-5">
+                <a href="{{ route('account_settings')}}" class="menu-link px-5" wire:navigate>
                     Account Settings
                 </a>
             </div>

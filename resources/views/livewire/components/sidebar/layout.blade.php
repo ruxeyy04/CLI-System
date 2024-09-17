@@ -37,7 +37,7 @@
                 </div>
                 <!--end:Menu item-->
                 <!--begin:Menu item-->
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion show">
+                <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ Request::segment(1) == 'account' ? 'show' : '' }}">
                     <!--begin:Menu link--><span class="menu-link">
                         <span class="menu-icon">
                             <i class="ki-duotone ki-profile-circle fs-2">
@@ -51,12 +51,39 @@
                     <div class="menu-sub menu-sub-accordion">
                         <!--begin:Menu item-->
                         <div class="menu-item">
-                            <a class="menu-link active" href="">
+                            <a class="menu-link {{ request()->routeIs('account_overview') ? 'active' : '' }}" href="{{ route('account_overview') }}" wire:navigate>
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot">
                                     </span>
                                 </span>
                                 <span class="menu-title">Overview</span>
+                            </a>
+                        </div>
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('account_settings') ? 'active' : '' }}" href="{{ route('account_settings') }}" wire:navigate>
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot">
+                                    </span>
+                                </span>
+                                <span class="menu-title">Settings</span>
+                            </a>
+                        </div>
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('account_changepass') ? 'active' : '' }}" href="{{ route('account_changepass') }}" wire:navigate>
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot">
+                                    </span>
+                                </span>
+                                <span class="menu-title">Update Password</span>
+                            </a>
+                        </div>
+                        <div class="menu-item">
+                            <a class="menu-link {{ request()->routeIs('account_sessions') ? 'active' : '' }}" href="{{ route('account_sessions') }}" wire:navigate>
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot">
+                                    </span>
+                                </span>
+                                <span class="menu-title">Sessions</span>
                             </a>
                         </div>
                         <!--end:Menu item-->

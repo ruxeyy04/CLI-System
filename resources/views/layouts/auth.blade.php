@@ -73,7 +73,7 @@
                     <!--begin::Logo-->
                     <a href="/" class="mb-0 mb-lg-20" wire:navigate>
                         <img alt="Logo" src="../../../build/assets/media/logos/default-white.png"
-                           height="200" />
+                           height="100" />
                     </a>
                     <!--end::Logo-->
 

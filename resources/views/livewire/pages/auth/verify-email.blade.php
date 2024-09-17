@@ -56,9 +56,10 @@ new #[Layout('layouts.welcome')] class extends Component {
             <div class="card card-flush w-lg-650px py-5">
                 <div class="card-body py-15 py-lg-20">
 
-                    <div class="mb-14">
-                        <a href="../../index-2.html" class="">
-                            <img alt="Logo" src="../../build/assets/media/logos/default-small.svg" class="h-40px" />
+                    <div class="mb-7">
+                        <a href="/" class="" wire:navigate>
+                            <img alt="Logo" src="../../build/assets/media/logos/default.png"
+                                height="100" />
                         </a>
                     </div>
                     <h1 class="fw-bolder text-gray-900 mb-5">
@@ -78,7 +79,7 @@ new #[Layout('layouts.welcome')] class extends Component {
 
 
                     <div class="mb-11">
-                        <button class="btn btn-sm btn-primary" wire:click="sendVerification"
+                        <button class="btn btn-sm btn-warning" wire:click="sendVerification"
                             wire:loading.attr="disabled">
                             <span wire:loading.remove class="indicator-label">Resend Verification Email</span>
                             <span wire:loading>

@@ -18,11 +18,13 @@ return new class extends Migration
             $table->string('lname');
             $table->string('username')->unique();
             $table->string('phone')->nullable();
+            $table->string('address')->nullable();
             $table->string('email')->unique();
             $table->enum('role', ['incharge', 'assistant'])->default('assistant');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('profileimg')->nullable();
+            $table->string('motto')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -38,6 +40,10 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
+            $table->string('devicefamily', 100)->nullable();
+            $table->string('devicemodel', 100)->nullable();
+            $table->string('platformname', 100)->nullable();
+            $table->string('browsername', 100)->nullable();
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });

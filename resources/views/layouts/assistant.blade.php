@@ -19,7 +19,7 @@
     <link href="../../build/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="../../build/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
 
-
+    <script src="../build/assets/plugins/global/plugins.bundle.js"></script>
     <script>
         if (window.top != window.self) {
             window.top.location.replace(window.self.location.href);
@@ -217,7 +217,7 @@
 
 
     <!--begin::Global Javascript Bundle(mandatory for all pages)-->
-    <script src="../build/assets/plugins/global/plugins.bundle.js"></script>
+
     <script src="../build/assets/js/scripts.bundle.js"></script>
     <!--end::Global Javascript Bundle-->
 </body>
