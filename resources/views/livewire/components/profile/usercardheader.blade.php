@@ -21,8 +21,13 @@ new class extends Component {
         <div class="m-0">
             <div class="d-flex flex-stack align-items-end pb-4 mt-n19">
                 <div class="symbol symbol-125px symbol-lg-150px symbol-fixed position-relative mt-n3">
-                    <img src="{{ Auth::user()->profileimg ? asset('storage/profile/' . Auth::user()->id . '/' . Auth::user()->profileimg) : asset('storage/profile/default.jpg') }}"
-                        alt="image" class="" style="border-radius: 20px; border: 4px solid #f1f1f4;">
+                    <img 
+                    x-data="{ profileimg: '{{ Auth::user()->profileimg ? asset('storage/profile/' . Auth::user()->id . '/' . Auth::user()->profileimg) : asset('storage/profile/default.jpg') }}' }"
+                    :src="profileimg"
+                    alt="Profile Image"
+                    style="border-radius: 20px; border: 4px solid #f1f1f4;"
+                    x-on:profile-updated.window="profileimg = $event.detail.profileimg">
+                
 
                 </div>
             </div>
@@ -31,13 +36,15 @@ new class extends Component {
                 <div class="d-flex flex-column">
 
                     <div class="d-flex align-items-center mb-2">
-                        <a href="#"
-                            class="text-gray-800 text-hover-primary fs-2 fw-bolder me-1">{{ Auth::user()->fname }}
-                            {{ Auth::user()->lname }}</a>
+                        <a href="#" class="text-gray-800 text-hover-primary fs-2 fw-bolder me-1"
+                            x-data="{{ json_encode(['fname' => auth()->user()->fname, 'lname' => auth()->user()->lname]) }}" x-text="`${fname} ${lname}`"
+                            x-on:profile-updated.window="fname = $event.detail.fname; lname = $event.detail.lname">
+                        </a>
+
                     </div>
 
-                    <span class="fw-bold text-gray-600 fs-6 mb-2 d-block">
-                        {{ Auth::user()->motto ?? 'Computer Laboratory Information System' }}
+                    <span class="fw-bold text-gray-600 fs-6 mb-2 d-block" x-data="{{ json_encode(['motto' => auth()->user()->motto]) }}" x-text="motto"
+                        x-on:profile-updated.window="motto = $event.detail.motto">
                     </span>
 
                     <div class="d-flex align-items-center flex-wrap fw-semibold fs-7 pe-2">

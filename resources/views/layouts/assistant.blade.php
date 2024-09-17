@@ -47,8 +47,6 @@
             document.documentElement.setAttribute("data-bs-theme", themeMode);
         }
     </script>
-
-
 </head>
 <!--end::Head-->
 
@@ -58,6 +56,7 @@
     data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-hoverable="true"
     data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true"
     data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" class="app-default">
+
     <!--begin::Theme mode setup on page load-->
 
     <!--begin::App-->
@@ -220,7 +219,40 @@
 
     <script src="../build/assets/js/scripts.bundle.js"></script>
     <!--end::Global Javascript Bundle-->
+
+
 </body>
 <!--end::Body-->
+<script>
+    Livewire.on('profile-updated', () => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Profile details have been successfully updated',
+        });
+        $('.image-input').removeClass('image-input-changed');
+        const imageInput = document.querySelector('.image-input');
+        const imageWrapper = imageInput.querySelector('.image-input-wrapper');
+
+        // Reset image to default background
+    });
+    Livewire.on('discardImageCol', () => {
+        const imageInput = document.querySelector('.image-input');
+        const imageWrapper = imageInput.querySelector('.image-input-wrapper');
+
+        // Reset image to default background
+        imageInput.style.backgroundImage = `url('{{ asset('storage/profile/default.jpg') }}')`;
+        imageWrapper.style.backgroundImage = 'none';
+        $('.image-input').addClass('image-input-empty');
+    });
+    Livewire.on('backToDefault', () => {
+        const imageInput = document.querySelector('.image-input');
+        const imageWrapper = imageInput.querySelector('.image-input-wrapper');
+
+        // Reset image to default background
+        imageWrapper.style.backgroundImage = `url('` +"{{ asset('storage/profile'.'/'.Auth::user()->id.'/'.Auth::user()->profileimg) }}"+`')`;
+        $('.image-input').removeClass('image-input-empty');
+    });
+</script>
 
 </html>
