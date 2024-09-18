@@ -13,8 +13,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="shortcut icon" href="../../assets/media/logos/favicon.ico" />
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" /> {{-- end::Fonts --}}
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    {{-- end::Fonts --}}
+    @vite(['resources/js/app.js'])
 
     <link href="../../assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="../../assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
@@ -224,6 +225,14 @@
 </body>
 {{-- end::Body --}}
 <script>
+    window.addEventListener('DOMContentLoaded', function() {
+        window.Echo.channel('numbers-channel')
+            .listen('.number.posted', (e) => {
+                console.log('Time:', e);
+            });
+    })
+</script>
+<script>
     Livewire.on('profile-updated', () => {
         Swal.fire({
             icon: 'success',
@@ -250,7 +259,8 @@
         const imageWrapper = imageInput.querySelector('.image-input-wrapper');
 
         // Reset image to default background
-        imageWrapper.style.backgroundImage = `url('` +"{{ asset('storage/profile'.'/'.Auth::user()->id.'/'.Auth::user()->profileimg) }}"+`')`;
+        imageWrapper.style.backgroundImage = `url('` +
+            "{{ asset('storage/profile' . '/' . Auth::user()->id . '/' . Auth::user()->profileimg) }}" + `')`;
         $('.image-input').removeClass('image-input-empty');
     });
 </script>

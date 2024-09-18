@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Livewire\Volt\Volt;
-
 Route::get('/session-auth-info', function () {
     $user = Auth::user();
 
