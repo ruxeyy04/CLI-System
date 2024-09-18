@@ -14,12 +14,12 @@ new class extends Component {
 <div class="card card-flush mb-9" id="kt_user_profile_panel">
 
     <div class="card-header rounded-top bgi-size-cover h-200px"
-        style="background-position: 100% 80%; background-image:url('../build/assets/media/misc/profile-head-bg.png')">
+        style="background-position: 100% 80%; background-image:url('../assets/media/misc/profile-head-bg.png')">
     </div>
 
     <div class="card-body mt-n19">
         <div class="m-0">
-            <div class="d-flex flex-stack align-items-end pb-4 mt-n19">
+            <div class="pb-4 d-flex flex-stack align-items-end mt-n19">
                 <div class="symbol symbol-125px symbol-lg-150px symbol-fixed position-relative mt-n3">
                     <img 
                     x-data="{ profileimg: '{{ Auth::user()->profileimg ? asset('storage/profile/' . Auth::user()->id . '/' . Auth::user()->profileimg) : asset('storage/profile/default.jpg') }}' }"
@@ -31,11 +31,11 @@ new class extends Component {
 
                 </div>
             </div>
-            <div class="d-flex flex-stack flex-wrap align-items-end">
+            <div class="flex-wrap d-flex flex-stack align-items-end">
 
                 <div class="d-flex flex-column">
 
-                    <div class="d-flex align-items-center mb-2">
+                    <div class="mb-2 d-flex align-items-center">
                         <a href="#" class="text-gray-800 text-hover-primary fs-2 fw-bolder me-1"
                             x-data="{{ json_encode(['fname' => auth()->user()->fname, 'lname' => auth()->user()->lname]) }}" x-text="`${fname} ${lname}`"
                             x-on:profile-updated.window="fname = $event.detail.fname; lname = $event.detail.lname">
@@ -43,12 +43,12 @@ new class extends Component {
 
                     </div>
 
-                    <span class="fw-bold text-gray-600 fs-6 mb-2 d-block" x-data="{{ json_encode(['motto' => auth()->user()->motto]) }}" x-text="motto"
+                    <span class="mb-2 text-gray-600 fw-bold fs-6 d-block" x-data="{{ json_encode(['motto' => auth()->user()->motto]) }}" x-text="motto"
                         x-on:profile-updated.window="motto = $event.detail.motto">
                     </span>
 
-                    <div class="d-flex align-items-center flex-wrap fw-semibold fs-7 pe-2">
-                        <a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary">
+                    <div class="flex-wrap d-flex align-items-center fw-semibold fs-7 pe-2">
+                        <a href="#" class="text-gray-500 d-flex align-items-center text-hover-primary">
                             {{ Str::ucfirst(Auth::user()->role) }}
                         </a>
                     </div>
@@ -62,7 +62,7 @@ new class extends Component {
                             Logout</span>
 
                         <span wire:loading wire:target="logout">
-                            Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            Please wait... <span class="align-middle spinner-border spinner-border-sm ms-2"></span>
                         </span>
                     </button>
                 </div>

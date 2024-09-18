@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -11,15 +11,15 @@
     <meta name="description" content="CLIS" />
     <meta name="keywords" content="computer, laboratory" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="../../build/assets/media/logos/favicon.ico" />
+    <link rel="shortcut icon" href="../../assets/media/logos/favicon.ico" />
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" /> <!--end::Fonts-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" /> {{-- end::Fonts --}}
 
 
-    <link href="../../build/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-    <link href="../../build/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
 
-    <script src="../build/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="../assets/plugins/global/plugins.bundle.js"></script>
     <script>
         if (window.top != window.self) {
             window.top.location.replace(window.self.location.href);
@@ -48,31 +48,31 @@
         }
     </script>
 </head>
-<!--end::Head-->
+{{-- end::Head --}}
 
-<!--begin::Body-->
+{{-- begin::Body --}}
 
 <body id="kt_app_body" data-kt-app-layout="dark-sidebar" data-kt-app-header-fixed="true"
     data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-hoverable="true"
     data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true"
     data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" class="app-default">
 
-    <!--begin::Theme mode setup on page load-->
+    {{-- begin::Theme mode setup on page load --}}
 
-    <!--begin::App-->
+    {{-- begin::App --}}
     <div class="d-flex flex-column flex-root app-root" id="kt_app_root">
-        <!--begin::Page-->
-        <div class="app-page  flex-column flex-column-fluid " id="kt_app_page">
+        {{-- begin::Page --}}
+        <div class="app-page flex-column flex-column-fluid " id="kt_app_page">
 
 
-            <!--begin::Header-->
+            {{-- begin::Header --}}
             <div id="kt_app_header" class="app-header ">
 
-                <!--begin::Header container-->
-                <div class="app-container  container-fluid d-flex align-items-stretch justify-content-between "
+                {{-- begin::Header container --}}
+                <div class="app-container container-fluid d-flex align-items-stretch justify-content-between "
                     id="kt_app_header_container">
 
-                    <!--begin::sidebar mobile toggle-->
+                    {{-- begin::sidebar mobile toggle --}}
                     <div class="d-flex align-items-center d-lg-none ms-n3 me-2" title="Show sidebar menu">
                         <div class="btn btn-icon btn-active-color-primary w-35px h-35px"
                             id="kt_app_sidebar_mobile_toggle">
@@ -80,149 +80,149 @@
                                     class="path2"></span></i>
                         </div>
                     </div>
-                    <!--end::sidebar mobile toggle-->
+                    {{-- end::sidebar mobile toggle --}}
 
 
-                    <!--begin::Mobile logo-->
+                    {{-- begin::Mobile logo --}}
                     <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
                         <a href="../index-2.html" class="d-lg-none">
-                            <img alt="Logo" src="../build/assets/media/logos/default-small.png"
+                            <img alt="Logo" src="../assets/media/logos/default-small.png"
                                 class="theme-light-show h-30px" />
-                            <img alt="Logo" src="../build/assets/media/logos/default-small-dark.png"
+                            <img alt="Logo" src="../assets/media/logos/default-small-dark.png"
                                 class="theme-dark-show h-30px" />
                         </a>
                     </div>
-                    <!--end::Mobile logo-->
+                    {{-- end::Mobile logo --}}
 
-                    <!--begin::Header wrapper-->
+                    {{-- begin::Header wrapper --}}
                     <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1"
                         id="kt_app_header_wrapper">
 
 
-                        <!--begin::Menu wrapper-->
+                        {{-- begin::Menu wrapper --}}
                         <div class="d-flex align-items-center">
-                            <h4 class="text-muted m-0 d-none d-sm-block">Computer Laboratory Information System</h4>
+                            <h4 class="m-0 text-muted d-none d-sm-block">Computer Laboratory Information System</h4>
                         </div>
-                        <!--end::Menu wrapper-->
+                        {{-- end::Menu wrapper --}}
 
 
-                        <!--begin::Navbar-->
+                        {{-- begin::Navbar --}}
                         <livewire:components.navbar.layout />
-                        <!--end::Navbar-->
+                        {{-- end::Navbar --}}
                     </div>
-                    <!--end::Header wrapper-->
+                    {{-- end::Header wrapper --}}
                 </div>
-                <!--end::Header container-->
+                {{-- end::Header container --}}
             </div>
-            <!--end::Header-->
-            <!--begin::Wrapper-->
-            <div class="app-wrapper  flex-column flex-row-fluid " id="kt_app_wrapper">
+            {{-- end::Header --}}
+            {{-- begin::Wrapper --}}
+            <div class="app-wrapper flex-column flex-row-fluid " id="kt_app_wrapper">
 
 
 
 
 
 
-                <!--begin::Sidebar-->
-                <div id="kt_app_sidebar" class="app-sidebar  flex-column " data-kt-drawer="true"
+                {{-- begin::Sidebar --}}
+                <div id="kt_app_sidebar" class="app-sidebar flex-column " data-kt-drawer="true"
                     data-kt-drawer-name="app-sidebar" data-kt-drawer-activate="{default: true, lg: false}"
                     data-kt-drawer-overlay="true" data-kt-drawer-width="225px" data-kt-drawer-direction="start"
                     data-kt-drawer-toggle="#kt_app_sidebar_mobile_toggle">
 
 
-                    <!--begin::Logo-->
-                    <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
-                        <!--begin::Logo image-->
+                    {{-- begin::Logo --}}
+                    <div class="px-6 app-sidebar-logo" id="kt_app_sidebar_logo">
+                        {{-- begin::Logo image --}}
                         <a href="../index-2.html">
-                            <img alt="Logo" src="../build/assets/media/logos/default-dark.png"
+                            <img alt="Logo" src="../assets/media/logos/default-dark.png"
                                 class="h-30px app-sidebar-logo-default" />
                         </a>
-                        <!--end::Logo image-->
+                        {{-- end::Logo image --}}
 
-                        <!--begin::Sidebar toggle-->
+                        {{-- begin::Sidebar toggle --}}
                         <div id="kt_app_sidebar_toggle"
                             class="app-sidebar-toggle btn btn-icon btn-sm h-30px w-30px rotate " data-kt-toggle="true"
                             data-kt-toggle-state="active" data-kt-toggle-target="body"
                             data-kt-toggle-name="app-sidebar-minimize">
 
-                            <i class="ki-duotone ki-double-left fs-2 rotate-180"><span class="path1"></span><span
+                            <i class="rotate-180 ki-duotone ki-double-left fs-2"><span class="path1"></span><span
                                     class="path2"></span></i>
                         </div>
-                        <!--end::Sidebar toggle-->
+                        {{-- end::Sidebar toggle --}}
                     </div>
-                    <!--end::Logo-->
-                    <!--begin::sidebar menu-->
+                    {{-- end::Logo --}}
+                    {{-- begin::sidebar menu --}}
                     <livewire:components.sidebar.layout />
-                    <!--end::sidebar menu-->
-                    <!--begin::Footer-->
+                    {{-- end::sidebar menu --}}
+                    {{-- begin::Footer --}}
                     <livewire:components.sidebar.footer />
-                    <!--end::Footer-->
+                    {{-- end::Footer --}}
                 </div>
-                <!--end::Sidebar-->
+                {{-- end::Sidebar --}}
 
 
-                <!--begin::Main-->
+                {{-- begin::Main --}}
                 <div class="app-main flex-column flex-row-fluid " id="kt_app_main">
-                    <!--begin::Content wrapper-->
+                    {{-- begin::Content wrapper --}}
                     <div class="d-flex flex-column flex-column-fluid">
 
-                        <!--begin::Toolbar-->
-                        <div id="kt_app_toolbar" class="app-toolbar  py-3 py-lg-6 ">
+                        {{-- begin::Toolbar --}}
+                        <div id="kt_app_toolbar" class="py-3 app-toolbar py-lg-6 ">
 
-                            <!--begin::Toolbar container-->
-                            <div id="kt_app_toolbar_container" class="app-container  container-xxl d-flex flex-stack ">
+                            {{-- begin::Toolbar container --}}
+                            <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack ">
 
 
 
-                                <!--begin::Page title-->
+                                {{-- begin::Page title --}}
                                 <livewire:components.breadcrumbs.layout />
-                                <!--end::Page title-->
-                                <!--begin::Actions-->
+                                {{-- end::Page title --}}
+                                {{-- begin::Actions --}}
                                 <livewire:components.breadcrumbs.filteraction />
-                                <!--end::Actions-->
+                                {{-- end::Actions --}}
                             </div>
-                            <!--end::Toolbar container-->
+                            {{-- end::Toolbar container --}}
                         </div>
-                        <!--end::Toolbar-->
+                        {{-- end::Toolbar --}}
 
-                        <!--begin::Content-->
-                        <div id="kt_app_content" class="app-content  flex-column-fluid ">
+                        {{-- begin::Content --}}
+                        <div id="kt_app_content" class="app-content flex-column-fluid ">
 
                             {{ $slot }}
                         </div>
-                        <!--end::Content-->
+                        {{-- end::Content --}}
 
                     </div>
-                    <!--end::Content wrapper-->
+                    {{-- end::Content wrapper --}}
 
 
-                    <!--begin::Footer-->
+                    {{-- begin::Footer --}}
                     <livewire:components.footer />
-                    <!--end::Footer-->
+                    {{-- end::Footer --}}
                 </div>
-                <!--end:::Main-->
+                {{-- end:::Main --}}
 
 
             </div>
-            <!--end::Wrapper-->
+            {{-- end::Wrapper --}}
 
 
         </div>
-        <!--end::Page-->
+        {{-- end::Page --}}
     </div>
-    <!--end::App-->
+    {{-- end::App --}}
 
 
 
 
-    <!--begin::Global Javascript Bundle(mandatory for all pages)-->
+    {{-- begin::Global Javascript Bundle(mandatory for all pages) --}}
 
-    <script src="../build/assets/js/scripts.bundle.js"></script>
-    <!--end::Global Javascript Bundle-->
+    <script src="../assets/js/scripts.bundle.js"></script>
+    {{-- end::Global Javascript Bundle --}}
 
 
 </body>
-<!--end::Body-->
+{{-- end::Body --}}
 <script>
     Livewire.on('profile-updated', () => {
         Swal.fire({

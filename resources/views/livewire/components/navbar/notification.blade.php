@@ -2,27 +2,27 @@
 <div class="menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px" data-kt-menu="true" id="kt_menu_notifications">
     <!--begin::Heading-->
     <div class="d-flex flex-column bgi-no-repeat rounded-top"
-        style="background-image:url('../build/assets/media/misc/menu-header-bg.jpg')">
+        style="background-image:url('../assets/media/misc/menu-header-bg.jpg')">
         <!--begin::Title-->
-        <h3 class="text-white fw-semibold px-9 mt-10 mb-6">
-            Notifications <span class="fs-8 opacity-75 ps-3">24 reports</span>
+        <h3 class="mt-10 mb-6 text-white fw-semibold px-9">
+            Notifications <span class="opacity-75 fs-8 ps-3">24 reports</span>
         </h3>
         <!--end::Title-->
 
         <!--begin::Tabs-->
         <ul class="nav nav-line-tabs nav-line-tabs-2x nav-stretch fw-semibold px-9">
             <li class="nav-item">
-                <a class="nav-link text-white opacity-75 opacity-state-100 pb-4" data-bs-toggle="tab"
+                <a class="pb-4 text-white opacity-75 nav-link opacity-state-100" data-bs-toggle="tab"
                     href="#kt_topbar_notifications_1">Alerts</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link text-white opacity-75 opacity-state-100 pb-4 active" data-bs-toggle="tab"
+                <a class="pb-4 text-white opacity-75 nav-link opacity-state-100 active" data-bs-toggle="tab"
                     href="#kt_topbar_notifications_2">Updates</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link text-white opacity-75 opacity-state-100 pb-4" data-bs-toggle="tab"
+                <a class="pb-4 text-white opacity-75 nav-link opacity-state-100" data-bs-toggle="tab"
                     href="#kt_topbar_notifications_3">Logs</a>
             </li>
         </ul>
@@ -35,9 +35,9 @@
         <!--begin::Tab panel-->
         <div class="tab-pane fade" id="kt_topbar_notifications_1" role="tabpanel">
             <!--begin::Items-->
-            <div class="scroll-y mh-325px my-5 px-8">
+            <div class="px-8 my-5 scroll-y mh-325px">
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center">
                         <!--begin::Symbol-->
@@ -51,7 +51,7 @@
 
                         <!--begin::Title-->
                         <div class="mb-0 me-2">
-                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">Project Alice</a>
+                            <a href="#" class="text-gray-800 fs-6 text-hover-primary fw-bold">Project Alice</a>
                             <div class="text-gray-500 fs-7">Phase 1 development</div>
                         </div>
                         <!--end::Title-->
@@ -64,7 +64,7 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center">
                         <!--begin::Symbol-->
@@ -78,7 +78,7 @@
 
                         <!--begin::Title-->
                         <div class="mb-0 me-2">
-                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">HR Confidential</a>
+                            <a href="#" class="text-gray-800 fs-6 text-hover-primary fw-bold">HR Confidential</a>
                             <div class="text-gray-500 fs-7">Confidential staff documents</div>
                         </div>
                         <!--end::Title-->
@@ -91,7 +91,7 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center">
                         <!--begin::Symbol-->
@@ -105,7 +105,7 @@
 
                         <!--begin::Title-->
                         <div class="mb-0 me-2">
-                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">Company HR</a>
+                            <a href="#" class="text-gray-800 fs-6 text-hover-primary fw-bold">Company HR</a>
                             <div class="text-gray-500 fs-7">Corporeate staff profiles</div>
                         </div>
                         <!--end::Title-->
@@ -118,7 +118,7 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center">
                         <!--begin::Symbol-->
@@ -132,7 +132,7 @@
 
                         <!--begin::Title-->
                         <div class="mb-0 me-2">
-                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">Project Redux</a>
+                            <a href="#" class="text-gray-800 fs-6 text-hover-primary fw-bold">Project Redux</a>
                             <div class="text-gray-500 fs-7">New frontend admin theme</div>
                         </div>
                         <!--end::Title-->
@@ -145,7 +145,7 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center">
                         <!--begin::Symbol-->
@@ -160,7 +160,7 @@
 
                         <!--begin::Title-->
                         <div class="mb-0 me-2">
-                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">Project Breafing</a>
+                            <a href="#" class="text-gray-800 fs-6 text-hover-primary fw-bold">Project Breafing</a>
                             <div class="text-gray-500 fs-7">Product launch status update</div>
                         </div>
                         <!--end::Title-->
@@ -173,21 +173,20 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center">
                         <!--begin::Symbol-->
                         <div class="symbol symbol-35px me-4">
                             <span class="symbol-label bg-light-info">
-                                <i class="ki-duotone ki-picture
- fs-2 text-info"></i>
+                                <i class="ki-duotone ki-picture fs-2 text-info"></i>
                             </span>
                         </div>
                         <!--end::Symbol-->
 
                         <!--begin::Title-->
                         <div class="mb-0 me-2">
-                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">Banner Assets</a>
+                            <a href="#" class="text-gray-800 fs-6 text-hover-primary fw-bold">Banner Assets</a>
                             <div class="text-gray-500 fs-7">Collection of banner images</div>
                         </div>
                         <!--end::Title-->
@@ -200,7 +199,7 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center">
                         <!--begin::Symbol-->
@@ -224,7 +223,7 @@
 
                         <!--begin::Title-->
                         <div class="mb-0 me-2">
-                            <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">Icon Assets</a>
+                            <a href="#" class="text-gray-800 fs-6 text-hover-primary fw-bold">Icon Assets</a>
                             <div class="text-gray-500 fs-7">Collection of SVG icons</div>
                         </div>
                         <!--end::Title-->
@@ -258,20 +257,20 @@
                 <!--begin::Section-->
                 <div class="pt-10 pb-0">
                     <!--begin::Title-->
-                    <h3 class="text-gray-900 text-center fw-bold">
+                    <h3 class="text-center text-gray-900 fw-bold">
                         Get Pro Access
                     </h3>
                     <!--end::Title-->
 
                     <!--begin::Text-->
-                    <div class="text-center text-gray-600 fw-semibold pt-1">
+                    <div class="pt-1 text-center text-gray-600 fw-semibold">
                         Outlines keep you honest. They stoping you from amazing poorly about drive
                     </div>
                     <!--end::Text-->
 
                     <!--begin::Action-->
-                    <div class="text-center mt-5 mb-9">
-                        <a href="#" class="btn btn-sm btn-primary px-6" data-bs-toggle="modal"
+                    <div class="mt-5 text-center mb-9">
+                        <a href="#" class="px-6 btn btn-sm btn-primary" data-bs-toggle="modal"
                             data-bs-target="#kt_modal_upgrade_plan">Upgrade</a>
                     </div>
                     <!--end::Action-->
@@ -279,9 +278,9 @@
                 <!--end::Section-->
 
                 <!--begin::Illustration-->
-                <div class="text-center px-4">
+                <div class="px-4 text-center">
                     <img class="mw-100 mh-200px" alt="image"
-                        src="../build/assets/media/illustrations/sketchy-1/1.png" />
+                        src="../assets/media/illustrations/sketchy-1/1.png" />
                 </div>
                 <!--end::Illustration-->
             </div>
@@ -292,9 +291,9 @@
         <!--begin::Tab panel-->
         <div class="tab-pane fade" id="kt_topbar_notifications_3" role="tabpanel">
             <!--begin::Items-->
-            <div class="scroll-y mh-325px my-5 px-8">
+            <div class="px-8 my-5 scroll-y mh-325px">
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center me-2">
                         <!--begin::Code-->
@@ -313,7 +312,7 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center me-2">
                         <!--begin::Code-->
@@ -332,7 +331,7 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center me-2">
                         <!--begin::Code-->
@@ -351,7 +350,7 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center me-2">
                         <!--begin::Code-->
@@ -370,7 +369,7 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center me-2">
                         <!--begin::Code-->
@@ -389,7 +388,7 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center me-2">
                         <!--begin::Code-->
@@ -408,7 +407,7 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center me-2">
                         <!--begin::Code-->
@@ -427,7 +426,7 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center me-2">
                         <!--begin::Code-->
@@ -446,7 +445,7 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center me-2">
                         <!--begin::Code-->
@@ -465,7 +464,7 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center me-2">
                         <!--begin::Code-->
@@ -484,7 +483,7 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center me-2">
                         <!--begin::Code-->
@@ -503,7 +502,7 @@
                 </div>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <div class="d-flex flex-stack py-4">
+                <div class="py-4 d-flex flex-stack">
                     <!--begin::Section-->
                     <div class="d-flex align-items-center me-2">
                         <!--begin::Code-->

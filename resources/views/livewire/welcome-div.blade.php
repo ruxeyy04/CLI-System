@@ -2,46 +2,46 @@
 
     <style>
         body {
-            background-image: url('../../build/assets/media/auth/welcome-bg.png');
+            background-image: url('../../assets/media/auth/welcome-bg.png');
         }
 
         [data-bs-theme="dark"] body {
-            background-image: url('../../build/assets/media/auth/welcome-bg.png');
+            background-image: url('../../assets/media/auth/welcome-bg.png');
         }
     </style>
 
     <div class="d-flex flex-column flex-center flex-column-fluid">
         <!--begin::Content-->
-        <div class="d-flex flex-column flex-center text-center p-10">
+        <div class="p-10 text-center d-flex flex-column flex-center">
             <!--begin::Wrapper-->
-            <div class="card card-flush w-md-650px py-5">
+            <div class="py-5 card card-flush w-md-650px">
                 <div class="card-body py-15 py-lg-20">
 
                     <!--begin::Logo-->
                     <div class="mb-7">
                         <a href="/" class="" wire:navigate>
-                            <img alt="Logo" src="../../build/assets/media/logos/default.png"
+                            <img alt="Logo" src="../../assets/media/logos/default.png"
                                 height="100" />
                         </a>
                     </div>
                     <!--end::Logo-->
 
                     <!--begin::Title-->
-                    <h1 class="fw-bolder text-gray-900 mb-5">
+                    <h1 class="mb-5 text-gray-900 fw-bolder">
                         Welcome to CLIS </h1>
                     <!--end::Title-->
 
                     <!--begin::Text-->
-                    <div class="fw-semibold fs-6 text-gray-500 mb-7">
+                    <div class="text-gray-500 fw-semibold fs-6 mb-7">
                         Computer Laboratory Information System
                     </div>
                     <!--end::Text-->
 
                     <!--begin::Illustration-->
                     <div class="mb-0">
-                        <img src="../../build/assets/media/auth/welcome.png"
+                        <img src="../../assets/media/auth/welcome.png"
                             class="mw-100 mh-300px theme-light-show" alt="" />
-                        <img src="../../build/assets/media/auth/welcome-dark.png"
+                        <img src="../../assets/media/auth/welcome-dark.png"
                             class="mw-100 mh-300px theme-dark-show" alt="" />
                     </div>
                     <!--end::Illustration-->

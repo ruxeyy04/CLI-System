@@ -11,13 +11,13 @@
     <meta name="description" content="CLIS" />
     <meta name="keywords" content="computer, laboratory" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="../../build/assets/media/logos/favicon.ico" />
+    <link rel="shortcut icon" href="../../assets/media/logos/favicon.ico" />
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" /> <!--end::Fonts-->
 
 
-    <link href="../../build/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-    <link href="../../build/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
 
 
     <script>
@@ -29,7 +29,7 @@
 
 </head>
 
-<body id="kt_body" class="app-blank app-blank bgi-size-cover bgi-position-center bgi-no-repeat">
+<body id="kt_body" class="app-blank bgi-size-cover bgi-position-center bgi-no-repeat">
     <script>
         var defaultThemeMode = "light";
         var themeMode;
@@ -58,8 +58,8 @@
 
     {{ $slot }}
 
-    <script src="../../build/assets/plugins/global/plugins.bundle.js"></script>
-    <script src="../../build/assets/js/scripts.bundle.js"></script>
+    <script src="../../assets/plugins/global/plugins.bundle.js"></script>
+    <script src="../../assets/js/scripts.bundle.js"></script>
 
 </body>
 
