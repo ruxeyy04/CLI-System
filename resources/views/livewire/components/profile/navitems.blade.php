@@ -6,7 +6,10 @@ new class extends Component {
     //
 }; ?>
 
-<div class="rounded bg-gray-200 d-flex flex-stack flex-wrap mb-9 p-2">
+<div id="kt_user_profile_nav" class="rounded bg-gray-200 d-flex flex-stack flex-wrap mb-9 p-2"
+    data-kt-page-scroll-position="400" data-kt-sticky="true" data-kt-sticky-name="sticky-profile-navs"
+    data-kt-sticky-offset="{default: false, lg: '200px'}" data-kt-sticky-width="{target: '#kt_user_profile_panel'}"
+    data-kt-sticky-left="auto" data-kt-sticky-top="70px" data-kt-sticky-animation="false" data-kt-sticky-zindex="95">
     <!--begin::Nav-->
     <ul class="nav flex-wrap border-transparent">
         <!--begin::Nav item-->

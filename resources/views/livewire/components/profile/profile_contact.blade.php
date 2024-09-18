@@ -146,12 +146,12 @@ new class extends Component {
     }
 }; ?>
 
-<div class="card  mb-5 mb-xl-10">
+<div class="mb-5 card mb-xl-10">
     {{-- begin::Card header --}}
-    <div class="card-header border-0 cursor-pointer" role="button" data-bs-toggle="collapse"
+    <div class="border-0 cursor-pointer card-header" role="button" data-bs-toggle="collapse"
         data-bs-target="#contactInfoContainer">
-        <div class="card-title m-0">
-            <h3 class="fw-bold m-0">Contact Information</h3>
+        <div class="m-0 card-title">
+            <h3 class="m-0 fw-bold">Contact Information</h3>
         </div>
     </div>
     {{-- end::Card header --}}
@@ -161,11 +161,11 @@ new class extends Component {
         {{-- begin::Card body --}}
         <div class="card-body border-top p-9">
             {{-- begin::Email Address --}}
-            <div class="d-flex flex-wrap align-items-center" x-data="{ showForm: @entangle('showForm') }">
+            <div class="flex-wrap d-flex align-items-center" x-data="{ showForm: @entangle('showForm') }">
                 {{-- begin::Label --}}
                 <div :class="showForm ? 'd-none' : ''">
-                    <div class="fs-6 fw-bold mb-1">Email Address</div>
-                    <div class="fw-semibold text-gray-600" x-data="{{ json_encode(['email' => auth()->user()->email]) }}"
+                    <div class="mb-1 fs-6 fw-bold">Email Address</div>
+                    <div class="text-gray-600 fw-semibold" x-data="{{ json_encode(['email' => auth()->user()->email]) }}"
                         x-on:email-update.window="email = $event.detail.email;" x-text="email"></div>
                 </div>
                 {{-- end::Label --}}
@@ -174,10 +174,10 @@ new class extends Component {
                 <div :class="showForm ? '' : 'd-none'" class="flex-row-fluid">
                     {{-- begin::Form --}}
                     <form class="form" wire:submit="updateEmailSubmit">
-                        <div class="row mb-6">
-                            <div class="col-lg-6 mb-4 mb-lg-0">
-                                <div class="fv-row mb-0">
-                                    <label for="emailaddress" class="form-label fs-6 fw-bold mb-3">Enter New
+                        <div class="mb-6 row">
+                            <div class="mb-4 col-lg-6 mb-lg-0">
+                                <div class="mb-0 fv-row">
+                                    <label for="emailaddress" class="mb-3 form-label fs-6 fw-bold">Enter New
                                         Email
                                         Address</label>
                                     <input type="text" class="form-control form-control-lg form-control-solid"
@@ -191,8 +191,8 @@ new class extends Component {
                                 </div>
                             </div>
                             <div class="col-lg-6">
-                                <div class="fv-row mb-0">
-                                    <label for="confirmemailpassword" class="form-label fs-6 fw-bold mb-3">Confirm
+                                <div class="mb-0 fv-row">
+                                    <label for="confirmemailpassword" class="mb-3 form-label fs-6 fw-bold">Confirm
                                         Password</label>
                                     <input type="password" name="current_password"
                                         class="form-control form-control-lg form-control-solid"
@@ -207,7 +207,7 @@ new class extends Component {
                             </div>
                         </div>
                         <div class="d-flex">
-                            <button type="submit" class="btn btn-primary  me-2 px-6" wire:loading.attr='disabled'
+                            <button type="submit" class="px-6 btn btn-primary me-2" wire:loading.attr='disabled'
                                 wire:target="updateEmailSubmit">
                                 <span wire:loading.remove wire:target="updateEmailSubmit">Update Email</span>
                                 <span wire:loading wire:target="updateEmailSubmit">
@@ -215,7 +215,7 @@ new class extends Component {
                                         class="align-middle spinner-border spinner-border-sm ms-2"></span>
                                 </span>
                             </button>
-                            <button type="button" class="btn btn-color-gray-500 btn-active-light-primary px-6"
+                            <button type="button" class="px-6 btn btn-color-gray-500 btn-active-light-primary"
                                 wire:click="changeEmail">Cancel</button>
                         </div>
                     </form>
@@ -233,15 +233,15 @@ new class extends Component {
             {{-- end::Email Address --}}
 
             {{-- begin::Separator --}}
-            <div class="separator separator-dashed my-6"></div>
+            <div class="my-6 separator separator-dashed"></div>
             {{-- end::Separator --}}
 
             {{-- begin::phone number --}}
-            <div class="d-flex flex-wrap align-items-center" x-data="{ showFormPhone: @entangle('showFormPhone') }">
+            <div class="flex-wrap d-flex align-items-center" x-data="{ showFormPhone: @entangle('showFormPhone') }">
                 {{-- begin::Label --}}
                 <div :class="showFormPhone ? 'd-none' : ''">
-                    <div class="fs-6 fw-bold mb-1">Phone Number</div>
-                    <div class="fw-semibold text-gray-600" x-data="{ phone: '{{ Auth::user()->phone ? Auth::user()->phone : 'None' }}' }"
+                    <div class="mb-1 fs-6 fw-bold">Phone Number</div>
+                    <div class="text-gray-600 fw-semibold" x-data="{ phone: '{{ Auth::user()->phone ? Auth::user()->phone : 'None' }}' }"
                         x-on:phone-update.window="phone = $event.detail.phone;" x-text="phone"></div>
                 </div>
                 {{-- end::Label --}}
@@ -250,10 +250,10 @@ new class extends Component {
                 <div :class="showFormPhone ? '' : 'd-none'" class="flex-row-fluid">
                     {{-- begin::Form --}}
                     <form class="form" wire:submit="updatePhoneSubmit">
-                        <div class="row mb-6">
-                            <div class="col-lg-6 mb-4 mb-lg-0">
-                                <div class="fv-row mb-0">
-                                    <label for="phone_number" class="form-label fs-6 fw-bold mb-3">Enter New Phone
+                        <div class="mb-6 row">
+                            <div class="mb-4 col-lg-6 mb-lg-0">
+                                <div class="mb-0 fv-row">
+                                    <label for="phone_number" class="mb-3 form-label fs-6 fw-bold">Enter New Phone
                                         Number</label>
                                     <input type="text" class="form-control form-control-lg form-control-solid"
                                         placeholder="Phone Number" name="phone_number" wire:model.live="phone_number" />
@@ -266,8 +266,8 @@ new class extends Component {
                                 </div>
                             </div>
                             <div class="col-lg-6">
-                                <div class="fv-row mb-0">
-                                    <label for="confirmemailpassword" class="form-label fs-6 fw-bold mb-3">Confirm
+                                <div class="mb-0 fv-row">
+                                    <label for="confirmemailpassword" class="mb-3 form-label fs-6 fw-bold">Confirm
                                         Password</label>
                                     <input type="password" name="current_password"
                                         class="form-control form-control-lg form-control-solid"
@@ -282,7 +282,7 @@ new class extends Component {
                             </div>
                         </div>
                         <div class="d-flex">
-                            <button type="submit" class="btn btn-primary  me-2 px-6" wire:loading.attr='disabled'
+                            <button type="submit" class="px-6 btn btn-primary me-2" wire:loading.attr='disabled'
                                 wire:target="updatePhoneSubmit">
                                 <span wire:loading.remove wire:target="updatePhoneSubmit">Update Phone Number</span>
                                 <span wire:loading wire:target="updatePhoneSubmit">
@@ -290,7 +290,7 @@ new class extends Component {
                                         class="align-middle spinner-border spinner-border-sm ms-2"></span>
                                 </span>
                             </button>
-                            <button type="button" class="btn btn-color-gray-500 btn-active-light-primary px-6"
+                            <button type="button" class="px-6 btn btn-color-gray-500 btn-active-light-primary"
                                 wire:click="changePhoneNumber">Cancel</button>
                         </div>
                     </form>
@@ -307,14 +307,15 @@ new class extends Component {
             </div>
             {{-- end::phone number --}}
             {{-- begin::Separator --}}
-            <div class="separator separator-dashed my-6"></div>
+            <div class="my-6 separator separator-dashed"></div>
+
             {{-- end::Separator --}}
             {{-- begin::address --}}
-            <div class="d-flex flex-wrap align-items-center" x-data="{ showFormAddress: @entangle('showFormAddress') }">
+            <div class="flex-wrap d-flex align-items-center" x-data="{ showFormAddress: @entangle('showFormAddress') }">
                 {{-- begin::Label --}}
                 <div :class="showFormAddress ? 'd-none' : ''">
-                    <div class="fs-6 fw-bold mb-1">Address</div>
-                    <div class="fw-semibold text-gray-600" x-data="{ address: '{{ Auth::user()->address ? Auth::user()->address : 'None' }}' }"
+                    <div class="mb-1 fs-6 fw-bold">Address</div>
+                    <div class="text-gray-600 fw-semibold" x-data="{ address: '{{ Auth::user()->address ? Auth::user()->address : 'None' }}' }"
                         x-on:address-update.window="address = $event.detail.address;" x-text="address"></div>
                 </div>
                 {{-- end::Label --}}
@@ -323,10 +324,10 @@ new class extends Component {
                 <div :class="showFormAddress ? '' : 'd-none'" class="flex-row-fluid">
                     {{-- begin::Form --}}
                     <form class="form" wire:submit="updateAddressSubmit">
-                        <div class="row mb-6">
-                            <div class="col-lg-6 mb-4 mb-lg-0">
-                                <div class="fv-row mb-0">
-                                    <label for="address" class="form-label fs-6 fw-bold mb-3">Enter New
+                        <div class="mb-6 row">
+                            <div class="mb-4 col-lg-6 mb-lg-0">
+                                <div class="mb-0 fv-row">
+                                    <label for="address" class="mb-3 form-label fs-6 fw-bold">Enter New
                                         Address</label>
                                     <input type="text" class="form-control form-control-lg form-control-solid"
                                         placeholder="Address" name="address" wire:model.live="address" />
@@ -339,8 +340,8 @@ new class extends Component {
                                 </div>
                             </div>
                             <div class="col-lg-6">
-                                <div class="fv-row mb-0">
-                                    <label for="confirmemailpassword" class="form-label fs-6 fw-bold mb-3">Confirm
+                                <div class="mb-0 fv-row">
+                                    <label for="confirmemailpassword" class="mb-3 form-label fs-6 fw-bold">Confirm
                                         Password</label>
                                     <input type="password" name="current_password"
                                         class="form-control form-control-lg form-control-solid"
@@ -355,7 +356,7 @@ new class extends Component {
                             </div>
                         </div>
                         <div class="d-flex">
-                            <button type="submit" class="btn btn-primary  me-2 px-6" wire:loading.attr='disabled'
+                            <button type="submit" class="px-6 btn btn-primary me-2" wire:loading.attr='disabled'
                                 wire:target="updateAddressSubmit">
                                 <span wire:loading.remove wire:target="updateAddressSubmit">Update Address</span>
                                 <span wire:loading wire:target="updateAddressSubmit">
@@ -363,7 +364,7 @@ new class extends Component {
                                         class="align-middle spinner-border spinner-border-sm ms-2"></span>
                                 </span>
                             </button>
-                            <button type="button" class="btn btn-color-gray-500 btn-active-light-primary px-6"
+                            <button type="button" class="px-6 btn btn-color-gray-500 btn-active-light-primary"
                                 wire:click="changeAddress">Cancel</button>
                         </div>
                     </form>
@@ -378,20 +379,31 @@ new class extends Component {
                 </div>
                 {{-- end::Action --}}
             </div>
+
+            <div class="my-6 separator separator-dashed"></div>
+            <x-action-message class="text-success me-3" on="email-update">
+                {{ __('Email Address is updated successfully.') }}
+            </x-action-message>
+            <x-action-message class="text-success me-3" on="phone-update">
+                {{ __('Phone Number is updated successfully.') }}
+            </x-action-message>
+            <x-action-message class="text-success me-3" on="address-update">
+                {{ __('Address is updated successfully.') }}
+            </x-action-message>
             {{-- end::address --}}
             @if (!Auth::user()->hasVerifiedEmail())
                 {{-- begin::Notice --}}
-                <div class="notice d-flex bg-light-warning rounded border-warning border border-dashed  p-6">
+                <div class="p-6 border border-dashed rounded notice d-flex bg-light-warning border-warning">
                     <i class="ki-duotone ki-information fs-2tx text-warning me-4"><span class="path1"></span><span
                             class="path2"></span><span class="path3"></span></i>
 
                     {{-- begin::Wrapper --}}
-                    <div class="d-flex flex-stack flex-grow-1 flex-wrap flex-md-nowrap">
+                    <div class="flex-wrap d-flex flex-stack flex-grow-1 flex-md-nowrap">
                         {{-- begin::Content --}}
                         <div class="mb-3 mb-md-0 fw-semibold">
                             <h4 class="text-gray-900 fw-bold">Email Not Verified!</h4>
 
-                            <div class="fs-6 text-gray-700 pe-7">Your email is not verified. To verify, please click
+                            <div class="text-gray-700 fs-6 pe-7">Your email is not verified. To verify, please click
                                 the
                                 verify button
                             </div>
@@ -399,7 +411,7 @@ new class extends Component {
                         {{-- end::Content --}}
 
                         {{-- begin::Action --}}
-                        <button class="btn btn-primary px-6 align-self-center text-nowrap"
+                        <button class="px-6 btn btn-primary align-self-center text-nowrap"
                             wire:click="sendVerification" wire:loading.attr='disabled'
                             wire:target="sendVerification">
                             <span wire:loading.remove wire:target="sendVerification">Verify</span>
@@ -413,7 +425,7 @@ new class extends Component {
                     {{-- end::Wrapper --}}
                 </div>
                 @if (session('status') == 'verification-link-sent')
-                    <div class="mb-4 fw-medium text-success text-center mt-3">
+                    <div class="mt-3 mb-4 text-center fw-medium text-success">
                         {{ __('A new verification link has been sent to the email address') }}
                     </div>
                 @endif
