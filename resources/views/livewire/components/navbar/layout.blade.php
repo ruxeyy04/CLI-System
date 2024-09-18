@@ -169,8 +169,9 @@ new class extends Component {
                             </span>
                         </div>
 
-                        <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">
-                            {{ auth()->user()->email }} </a>
+                        <a href="#" class="fw-semibold text-muted text-hover-primary fs-7" x-data="{{ json_encode(['email' => auth()->user()->email]) }}"
+                            x-on:email-update.window="email = $event.detail.email;"
+                            x-text="email"></a>
                     </div>
                     <!--end::Username-->
                 </div>
