@@ -42,31 +42,31 @@ new #[Layout('layouts.welcome')] class extends Component {
 
     <style>
         body {
-            background-image: url('../../build/assets/media/auth/bg16.jpg');
+            background-image: url('../../assets/media/auth/bg16.jpg');
         }
 
         [data-bs-theme="dark"] body {
-            background-image: url('../../build/assets/media/auth/bg16-dark.jpg');
+            background-image: url('../../assets/media/auth/bg16-dark.jpg');
         }
     </style>
 
 
     <div class="d-flex flex-column flex-center flex-column-fluid">
-        <div class="d-flex flex-column flex-center text-center p-10">
-            <div class="card card-flush w-lg-650px py-5">
+        <div class="p-10 text-center d-flex flex-column flex-center">
+            <div class="py-5 card card-flush w-lg-650px">
                 <div class="card-body py-15 py-lg-20">
 
                     <div class="mb-7">
                         <a href="/" class="" wire:navigate>
-                            <img alt="Logo" src="../../build/assets/media/logos/default.png"
+                            <img alt="Logo" src="../../assets/media/logos/default.png"
                                 height="100" />
                         </a>
                     </div>
-                    <h1 class="fw-bolder text-gray-900 mb-5">
+                    <h1 class="mb-5 text-gray-900 fw-bolder">
                         Welcome to CLIS
                     </h1>
-                    <div class="fs-6 mb-8">
-                        <span class="fw-semibold text-gray-500">Thanks for signing up! Before getting started, could
+                    <div class="mb-8 fs-6">
+                        <span class="text-gray-500 fw-semibold">Thanks for signing up! Before getting started, could
                             you verify your email address by clicking on the link we just emailed to you? If you
                             didn't receive the email, we will gladly send you another.</span>
 
@@ -83,15 +83,15 @@ new #[Layout('layouts.welcome')] class extends Component {
                             wire:loading.attr="disabled">
                             <span wire:loading.remove class="indicator-label">Resend Verification Email</span>
                             <span wire:loading>
-                                Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                Please wait... <span class="align-middle spinner-border spinner-border-sm ms-2"></span>
                             </span>
                         </button>
                         <button class="btn btn-sm btn-secondary" wire:click="logout" type="submit">Logout</button>
                     </div>
                     <div class="mb-0">
-                        <img src="../../build/assets/media/auth/verify-email.png"
+                        <img src="../../assets/media/auth/verify-email.png"
                             class="mw-100 mh-300px theme-light-show" alt="" />
-                        <img src="../../build/assets/media/auth/verify-email-dark.png"
+                        <img src="../../assets/media/auth/verify-email-dark.png"
                             class="mw-100 mh-300px theme-dark-show" alt="" />
                     </div>
 

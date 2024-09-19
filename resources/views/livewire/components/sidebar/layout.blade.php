@@ -1,19 +1,13 @@
-<div class="app-sidebar-menu overflow-hidden flex-column-fluid">
+<div class="overflow-hidden app-sidebar-menu flex-column-fluid">
     <!--begin::Menu wrapper-->
     <div id="kt_app_sidebar_menu_wrapper" class="app-sidebar-wrapper">
         <!--begin::Scroll wrapper-->
-        <div id="kt_app_sidebar_menu_scroll" class="hover-scroll-y my-5 mx-3" data-kt-scroll="true"
+        <div id="kt_app_sidebar_menu_scroll" class="mx-3 my-5 hover-scroll-y" data-kt-scroll="true"
             data-kt-scroll-activate="true" data-kt-scroll-height="auto"
             data-kt-scroll-dependencies="#kt_app_sidebar_logo, #kt_app_sidebar_footer"
             data-kt-scroll-wrappers="#kt_app_sidebar_menu" data-kt-scroll-offset="5px" data-kt-scroll-save-state="true">
             <!--begin::Menu-->
-            <div class="
-                        menu 
-                        menu-column 
-                        menu-rounded 
-                        menu-sub-indention       
-                        fw-semibold  
-                    "
+            <div class=" menu menu-column menu-rounded menu-sub-indention fw-semibold"
                 id="#kt_app_sidebar_menu" data-kt-menu="true" data-kt-menu-expand="false">
                 <div class="menu-item">
                     <a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
@@ -30,7 +24,7 @@
                     </a>
                 </div>
                 <!--begin:Menu item-->
-                <div class="menu-item pt-5">
+                <div class="pt-5 menu-item">
                     <!--begin:Menu content-->
                     <div class="menu-content"><span class="menu-heading fw-bold text-uppercase fs-7">Menu</span></div>
                     <!--end:Menu content-->
@@ -94,17 +88,7 @@
 
                 <!--end:Menu item-->
                 <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link--><a class="menu-link" href="../apps/calendar.html"><span class="menu-icon"><i
-                                class="ki-duotone ki-calendar-8 fs-2"><span class="path1"></span><span
-                                    class="path2"></span><span class="path3"></span><span class="path4"></span><span
-                                    class="path5"></span><span class="path6"></span></i></span><span
-                            class="menu-title">Calendar</span></a>
-                    <!--end:Menu link-->
-                </div>
-                <!--end:Menu item-->
-                <!--begin:Menu item-->
-                <div class="menu-item pt-5">
+                <div class="pt-5 menu-item">
                     <!--begin:Menu content-->
                     <div class="menu-content"><span class="menu-heading fw-bold text-uppercase fs-7">Management</span>
                     </div>
@@ -130,7 +114,7 @@
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link" href="">
+                    <a class="menu-link {{ request()->routeIs('user_management') ? 'active' : '' }}" href="{{ route('user_management') }}" wire:navigate>
                         <span class="menu-icon">
                             <i class="ki-duotone ki-people fs-2">
                                 <span class="path1"></span>
@@ -145,7 +129,7 @@
                 </div>
                 <!--end:Menu item-->
                 <!--begin:Menu item-->
-                <div class="menu-item pt-5">
+                <div class="pt-5 menu-item">
                     <!--begin:Menu content-->
                     <div class="menu-content"><span class="menu-heading fw-bold text-uppercase fs-7">Help</span>
                     </div>

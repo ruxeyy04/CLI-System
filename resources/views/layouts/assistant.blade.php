@@ -134,7 +134,7 @@
                     {{-- begin::Logo --}}
                     <div class="px-6 app-sidebar-logo" id="kt_app_sidebar_logo">
                         {{-- begin::Logo image --}}
-                        <a href="../index-2.html">
+                        <a href="{{ route('dashboard') }}">
                             <img alt="Logo" src="../assets/media/logos/default-dark.png"
                                 class="h-30px app-sidebar-logo-default" />
                         </a>
@@ -266,7 +266,14 @@
         const imageInput = document.querySelector('.image-input');
         const imageWrapper = imageInput.querySelector('.image-input-wrapper');
 
-        // Reset image to default background
+    });
+    Livewire.on('saved-user', () => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'New account is added successfully',
+        });
+
     });
     Livewire.on('discardImageCol', () => {
         const imageInput = document.querySelector('.image-input');

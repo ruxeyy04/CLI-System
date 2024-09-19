@@ -11,13 +11,11 @@ new #[Layout('layouts.assistant')] class extends Component {
 
     public function mount()
     {
-        // Load all sessions on first mount
         $this->loadSessions(false);
     }
 
     public function updateSelectedTime()
     {
-        // Apply time filter when user changes the selected time
         if ($this->selectedTime == 0) {
             $this->loadSessions(false);
         } else {
@@ -29,7 +27,6 @@ new #[Layout('layouts.assistant')] class extends Component {
     {
         $query = DB::table('sessions')->where('user_id', Auth::id());
 
-        // Only apply the time filter if specified
         if ($applyFilter) {
             $query->where('last_activity', '>=', now()->subHours($this->selectedTime)->timestamp);
         }
@@ -39,7 +36,6 @@ new #[Layout('layouts.assistant')] class extends Component {
 
     public function loadAll()
     {
-        // Load all sessions without any filter
         $this->sessions = DB::table('sessions')->where('user_id', Auth::id())->get();
         $this->selectedTime = 0;
     }
@@ -48,7 +44,7 @@ new #[Layout('layouts.assistant')] class extends Component {
     {
         if ($sessionId !== session()->getId()) {
             DB::table('sessions')->where('id', $sessionId)->delete();
-            $this->loadSessions(); // Reload sessions after logout
+            $this->loadSessions(); 
 
             SessionLogout::dispatch($sessionId);
         }

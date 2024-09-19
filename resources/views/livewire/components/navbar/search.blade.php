@@ -68,7 +68,7 @@
                 <a href="#" class="mb-5 text-gray-900 d-flex text-hover-primary align-items-center">
                     <!--begin::Symbol-->
                     <div class="symbol symbol-40px me-4">
-                        <img src="../assets/media/avatars/300-6.jpg" alt="" />
+                        <img src="../storage/profile/default.jpg" alt="" />
                     </div>
                     <!--end::Symbol-->
 
@@ -87,7 +87,7 @@
                 <a href="#" class="mb-5 text-gray-900 d-flex text-hover-primary align-items-center">
                     <!--begin::Symbol-->
                     <div class="symbol symbol-40px me-4">
-                        <img src="../assets/media/avatars/300-2.jpg" alt="" />
+                        <img src="../storage/profile/default.jpg" alt="" />
                     </div>
                     <!--end::Symbol-->
 
@@ -106,7 +106,7 @@
                 <a href="#" class="mb-5 text-gray-900 d-flex text-hover-primary align-items-center">
                     <!--begin::Symbol-->
                     <div class="symbol symbol-40px me-4">
-                        <img src="../assets/media/avatars/300-9.jpg" alt="" />
+                        <img src="../storage/profile/default.jpg" alt="" />
                     </div>
                     <!--end::Symbol-->
 
@@ -125,7 +125,7 @@
                 <a href="#" class="mb-5 text-gray-900 d-flex text-hover-primary align-items-center">
                     <!--begin::Symbol-->
                     <div class="symbol symbol-40px me-4">
-                        <img src="../assets/media/avatars/300-14.jpg" alt="" />
+                        <img src="../storage/profile/default.jpg" alt="" />
                     </div>
                     <!--end::Symbol-->
 
@@ -144,7 +144,7 @@
                 <a href="#" class="mb-5 text-gray-900 d-flex text-hover-primary align-items-center">
                     <!--begin::Symbol-->
                     <div class="symbol symbol-40px me-4">
-                        <img src="../assets/media/avatars/300-11.jpg" alt="" />
+                        <img src="../storage/profile/default.jpg" alt="" />
                     </div>
                     <!--end::Symbol-->
 
