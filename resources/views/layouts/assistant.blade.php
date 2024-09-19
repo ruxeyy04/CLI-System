@@ -20,7 +20,7 @@
     <link href="../../assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="../../assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
 
-    <script src="../assets/plugins/global/plugins.bundle.js"></script>
+
     <script>
         if (window.top != window.self) {
             window.top.location.replace(window.self.location.href);
@@ -217,7 +217,7 @@
 
 
     {{-- begin::Global Javascript Bundle(mandatory for all pages) --}}
-
+    <script src="../assets/plugins/global/plugins.bundle.js"></script>
     <script src="../assets/js/scripts.bundle.js"></script>
     {{-- end::Global Javascript Bundle --}}
 
@@ -225,12 +225,35 @@
 </body>
 {{-- end::Body --}}
 <script>
-    window.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function() {
         window.Echo.channel('numbers-channel')
             .listen('.number.posted', (e) => {
-                console.log('Time:', e);
+                // Extract values from the event object
+                const number = e.number;
+                const word = e.word;
+
+                // Log them to the console
+                console.log(`Number: ${number}`);
+                console.log(`Word: ${word}`);
             });
-    })
+        window.Echo.private('user-session.{{ session()->getId() }}')
+            .listen('.session.logout', (e) => {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Logging out...',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    timer: 5000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    willClose: () => {
+                        window.location.href = "{{ route('login') }}";
+                    }
+                });
+            });
+
+
+    });
 </script>
 <script>
     Livewire.on('profile-updated', () => {

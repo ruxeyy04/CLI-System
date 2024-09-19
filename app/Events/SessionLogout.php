@@ -3,30 +3,31 @@
 namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
 
-class NumberPosted implements ShouldBroadcast
+class SessionLogout implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    
-    public $number;
-    public $word;
-    public function __construct($number, $word)
+
+    public $sessionId;
+
+    public function __construct($sessionId)
     {
-        $this->number = $number;
-        $this->word = $word;
+        $this->sessionId = $sessionId;
     }
 
     public function broadcastOn()
     {
-        return new Channel('numbers-channel');
+        return new PrivateChannel('user-session.' . $this->sessionId);
     }
+    
 
     public function broadcastAs()
     {
-        return 'number.posted';
+        return 'session.logout';
     }
 }

@@ -19,7 +19,7 @@
     <link href="../../assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="../../assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
 
-
+    @vite(['resources/js/app.js'])
     <script>
         if (window.top != window.self) {
             window.top.location.replace(window.self.location.href);
@@ -115,5 +115,6 @@
 
 
 </body>
-
+<script src="../assets/plugins/global/plugins.bundle.js"></script>
+<script src="../assets/js/scripts.bundle.js"></script>
 </html>

@@ -11,6 +11,7 @@ Route::get('/session-auth-info', function () {
         'user' => $user,
         'email_verified' => $user ? !is_null($user->email_verified_at) : null,
         'session' => Session::all(),
+        'session_id' => session()->getId()
     ]);
 });
 
