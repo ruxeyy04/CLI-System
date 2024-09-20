@@ -228,11 +228,9 @@
     $(document).ready(function() {
         window.Echo.channel('numbers-channel')
             .listen('.number.posted', (e) => {
-                // Extract values from the event object
                 const number = e.number;
                 const word = e.word;
 
-                // Log them to the console
                 console.log(`Number: ${number}`);
                 console.log(`Word: ${word}`);
             });
@@ -279,7 +277,6 @@
         const imageInput = document.querySelector('.image-input');
         const imageWrapper = imageInput.querySelector('.image-input-wrapper');
 
-        // Reset image to default background
         imageInput.style.backgroundImage = `url('{{ asset('storage/profile/default.jpg') }}')`;
         imageWrapper.style.backgroundImage = 'none';
         $('.image-input').addClass('image-input-empty');
@@ -288,12 +285,63 @@
         const imageInput = document.querySelector('.image-input');
         const imageWrapper = imageInput.querySelector('.image-input-wrapper');
 
-        // Reset image to default background
         imageWrapper.style.backgroundImage = `url('` +
             "{{ asset('storage/profile' . '/' . Auth::user()->id . '/' . Auth::user()->profileimg) }}" + `')`;
         $('.image-input').removeClass('image-input-empty');
     });
-
+     var $backdrops = $('.modal-backdrop');
+    
+    if ($backdrops.length > 1) {
+        $backdrops.slice(0, -1).remove();
+    }
+    Livewire.on('confirm-reset-password', (e) => {
+        const userId = event.detail.userId;
+        console.log(userId)
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will reset the password for this user!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, reset it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.dispatch('reset-password', { userId: userId })
+                Livewire.on('reset-password-success', () => {
+                    Swal.fire('Reset!', 'The password has been reset.', 'success');
+                })
+                
+            }
+        });
+    })
+    Livewire.on('confirm-delete-user', (e) => {
+        const userId = event.detail.userId;
+        console.log(userId)
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will delete the account of the user!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.dispatch('delete-user', { userId: userId })
+                Livewire.on('delete-user-alert', (e) => {
+                    const status = event.detail.status;
+                    if (status == 'success') {
+                        Swal.fire('Deleted!', 'The user account has been deleted.', 'success');
+                    } else {
+                        Swal.fire('Error!', 'The account deletion has been failed', 'error');
+                    }
+                   
+                })
+                
+            }
+        });
+    })
 </script>
 
 </html>
