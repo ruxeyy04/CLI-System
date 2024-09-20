@@ -41,25 +41,25 @@ new #[Layout('layouts.auth')] class extends Component
         Auth::login($user);
 
         // Redirect to the dashboard
-        $this->redirect(route('dashboard', absolute: false), navigate: true);
+        $this->redirect(route('dashboard'));
     }
 
 };
 ?>
 
 <div>
-    <div class="w-lg-500px p-10">
+    <div class="p-10 w-lg-500px">
         <form class="form w-100" wire:submit.prevent="register">
 
             <!-- Heading -->
             <div class="text-center mb-11">
-                <h1 class="text-gray-900 fw-bolder mb-3">Sign Up</h1>
+                <h1 class="mb-3 text-gray-900 fw-bolder">Sign Up</h1>
             </div>
 
             <!-- First Name Field -->
-            <div class="fv-row mb-8">
+            <div class="mb-8 fv-row">
                 <input type="text" placeholder="First Name" name="fname" autocomplete="off"
-                       class="form-control bg-transparent" wire:model="fname" />
+                       class="bg-transparent form-control" wire:model="fname" />
 
                 @error('fname')
                     <div class="fv-plugins-message-container invalid-feedback">{{ $message }}</div>
@@ -67,9 +67,9 @@ new #[Layout('layouts.auth')] class extends Component
             </div>
 
             <!-- Last Name Field -->
-            <div class="fv-row mb-8">
+            <div class="mb-8 fv-row">
                 <input type="text" placeholder="Last Name" name="lname" autocomplete="off"
-                       class="form-control bg-transparent" wire:model="lname" />
+                       class="bg-transparent form-control" wire:model="lname" />
 
                 @error('lname')
                     <div class="fv-plugins-message-container invalid-feedback">{{ $message }}</div>
@@ -77,9 +77,9 @@ new #[Layout('layouts.auth')] class extends Component
             </div>
 
             <!-- Username Field -->
-            <div class="fv-row mb-8">
+            <div class="mb-8 fv-row">
                 <input type="text" placeholder="Username" name="username" autocomplete="off"
-                       class="form-control bg-transparent" wire:model="username" />
+                       class="bg-transparent form-control" wire:model="username" />
 
                 @error('username')
                     <div class="fv-plugins-message-container invalid-feedback">{{ $message }}</div>
@@ -87,9 +87,9 @@ new #[Layout('layouts.auth')] class extends Component
             </div>
 
             <!-- Email Field -->
-            <div class="fv-row mb-8">
+            <div class="mb-8 fv-row">
                 <input type="text" placeholder="Email" name="email" autocomplete="off"
-                       class="form-control bg-transparent" wire:model="email" />
+                       class="bg-transparent form-control" wire:model="email" />
 
                 @error('email')
                     <div class="fv-plugins-message-container invalid-feedback">{{ $message }}</div>
@@ -97,9 +97,9 @@ new #[Layout('layouts.auth')] class extends Component
             </div>
 
             <!-- Password Field -->
-            <div class="fv-row mb-8">
+            <div class="mb-8 fv-row">
                 <input type="password" placeholder="Password" name="password" autocomplete="off"
-                       class="form-control bg-transparent" wire:model="password" />
+                       class="bg-transparent form-control" wire:model="password" />
 
                 @error('password')
                     <div class="fv-plugins-message-container invalid-feedback">{{ $message }}</div>
@@ -107,9 +107,9 @@ new #[Layout('layouts.auth')] class extends Component
             </div>
 
             <!-- Confirm Password Field -->
-            <div class="fv-row mb-3">
+            <div class="mb-3 fv-row">
                 <input type="password" placeholder="Confirm Password" name="password_confirmation" autocomplete="off"
-                       class="form-control bg-transparent" wire:model="password_confirmation" />
+                       class="bg-transparent form-control" wire:model="password_confirmation" />
 
                 @error('password_confirmation')
                     <div class="fv-plugins-message-container invalid-feedback">{{ $message }}</div>
@@ -117,20 +117,20 @@ new #[Layout('layouts.auth')] class extends Component
             </div>
 
             <!-- Submit Button -->
-            <div class="d-grid mb-10">
+            <div class="mb-10 d-grid">
                 <button type="submit" id="kt_sign_in_submit" class="btn btn-primary" 
                         wire:loading.attr="disabled">
                     <!-- Loading spinner during form submission -->
                     <span wire:loading.remove class="indicator-label">Sign Up</span>
                     <span wire:loading>
-                        Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        Please wait... <span class="align-middle spinner-border spinner-border-sm ms-2"></span>
                     </span>
                 </button>
             </div>
         </form>
 
         <!-- Sign In Link -->
-        <div class="text-gray-500 text-center fw-semibold fs-6">
+        <div class="text-center text-gray-500 fw-semibold fs-6">
             Already have an Account?
             <a href="/login" class="link-primary" wire:navigate>
                 Sign in

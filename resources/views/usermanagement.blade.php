@@ -24,4 +24,5 @@
         </div>
     </div>
     <livewire:components.users.addusermodal>
+    <livewire:components.users.editusermodal>
 </x-assistant-layout>

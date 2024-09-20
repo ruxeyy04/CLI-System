@@ -11,20 +11,20 @@ class Userstable extends Component
 {
     use WithPagination, WithoutUrlPagination;
 
-    public $searchVal = ''; // Store the search value
+    public $searchVal = ''; 
     protected $paginationTheme = 'bootstrap';
     public $useridForPassword = '';
     protected function getListeners()
     {
         return [
             'saved-user' => 'reloadUsers',
+            'updated-user' => 'reloadUsers',
             'search-user' => 'searchUser',
             'reset-password' => 'resetPassword',
             'delete-user' => 'deleteUser'
         ];
     }
 
-    // This method is invoked when search-user event is dispatched
     public function searchUser($searchVal)
     {
         $this->searchVal = $searchVal;
@@ -69,7 +69,10 @@ class Userstable extends Component
         }
 
     }
-
+// Open Edit Modal
+    public function openEditModal($userId) {
+        $this->dispatch('openEditUserModal', userId: $userId);
+    }
     public function render()
     {
         // Split searchVal into individual words

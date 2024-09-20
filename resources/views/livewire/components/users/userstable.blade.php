@@ -72,14 +72,14 @@
                                     Actions
                                     <i class="ki-duotone ki-down fs-5 ms-1"></i>
                                 </a>
-                                <div class="py-4 dropdown-menu dropdown-menu-end menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px">             
+                                <div class="py-4 dropdown-menu dropdown-menu-end menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px" wire:ignore>             
                                     <div class="px-3 menu-item">
                                         <a href="#" class="px-3 menu-link" wire:click='resetPasswordConfirmation({{$user->id}})'>
                                             Reset Password
                                         </a>
                                     </div>
                                     <div class="px-3 menu-item">
-                                        <a href="#" class="px-3 menu-link">
+                                        <a href="#" class="px-3 menu-link" wire:click='openEditModal({{$user->id}})'>
                                             Edit
                                         </a>
                                     </div>
