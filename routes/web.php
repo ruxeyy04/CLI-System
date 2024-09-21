@@ -15,7 +15,7 @@ Route::get('/session-auth-info', function () {
     ]);
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'isNoPassword','verified'])->group(function () {
 
     Volt::route('dashboard', 'pages.dashboard')->name('dashboard');
     Route::view('user-management', 'usermanagement')->name('user_management');

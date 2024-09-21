@@ -67,7 +67,7 @@
                         <td class="text-end">
                             @if ($user->id != Auth::id())
                                 <a href="#"
-                                    class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm"
+                                    class="dropdown-btn btn btn-light btn-active-light-primary btn-flex btn-center btn-sm"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                     Actions
                                     <i class="ki-duotone ki-down fs-5 ms-1"></i>

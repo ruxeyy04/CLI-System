@@ -3,6 +3,7 @@ use App\Models\User;
 use Livewire\Volt\Component;
 use Livewire\Attributes\Validate;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 new class extends Component {
     #[Validate] 
     public $first_name;
@@ -44,6 +45,7 @@ new class extends Component {
         $user->role = $validated['user_role'];
         $user->username = $validated['username'];
         $user->email = $validated['email'];
+        $user->password = Hash::make('12345678');
 
         $user->save();
         $this->dispatch('saved-user');

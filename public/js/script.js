@@ -105,3 +105,4 @@ Livewire.on("openEditUserModal", () => {
         });
     });
 });
+

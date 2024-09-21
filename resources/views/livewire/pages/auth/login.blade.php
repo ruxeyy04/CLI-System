@@ -52,7 +52,7 @@ new #[Layout('layouts.auth')] class extends Component {
         Session::regenerate();
 
         // Redirect to the intended page
-        $this->redirectIntended(default: route('dashboard'));
+        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
 
         // Stop loading state
         $this->loading = false;

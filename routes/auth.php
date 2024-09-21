@@ -22,6 +22,9 @@ Route::middleware('auth')->group(function () {
     Volt::route('verify-email', 'pages.auth.verify-email')
         ->name('verification.notice');
 
+    Volt::route('new-password', 'pages.auth.new-password')
+        ->name('new-password');
+
     Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
         ->middleware(['signed', 'throttle:6,1'])
         ->name('verification.verify');

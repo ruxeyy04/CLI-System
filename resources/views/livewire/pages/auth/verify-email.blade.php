@@ -80,13 +80,18 @@ new #[Layout('layouts.welcome')] class extends Component {
 
                     <div class="mb-11">
                         <button class="btn btn-sm btn-warning" wire:click="sendVerification"
-                            wire:loading.attr="disabled">
-                            <span wire:loading.remove class="indicator-label">Resend Verification Email</span>
-                            <span wire:loading>
+                            wire:loading.attr="disabled" wire:target='sendVerification'>
+                            <span wire:loading.remove class="indicator-label" wire:target='sendVerification'>Resend Verification Email</span>
+                            <span wire:loading wire:target='sendVerification'>
                                 Please wait... <span class="align-middle spinner-border spinner-border-sm ms-2"></span>
                             </span>
                         </button>
-                        <button class="btn btn-sm btn-secondary" wire:click="logout" type="submit">Logout</button>
+                        <button class="btn btn-sm btn-secondary" wire:click="logout" type="submit" wire:loading.attr="disabled" wire:target='logout'>
+                            <span wire:loading.remove wire:target='logout'>Logout</span>
+                            <span wire:loading wire:target='logout'>
+                                Please wait... <span class="align-middle spinner-border spinner-border-sm ms-2"></span>
+                            </span>
+                        </button>
                     </div>
                     <div class="mb-0">
                         <img src="../../assets/media/auth/verify-email.png"
