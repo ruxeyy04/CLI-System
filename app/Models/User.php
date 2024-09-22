@@ -30,6 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'profileimg',
         'last_login',
         'motto',
+        'laboratory_id',
         'password',
         'created_at'
     ];
@@ -56,5 +57,9 @@ class User extends Authenticatable implements MustVerifyEmail
             'last_login' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function laboratory()
+    {
+        return $this->belongsTo(Laboratory::class);
     }
 }

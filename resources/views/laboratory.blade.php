@@ -4,15 +4,10 @@
         <div class="mb-4 card">
             <div class="py-3 border-0 card-header">
                 <livewire:components.laboratory.search />
-                <div class="card-toolbar">
-                    <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-primary" >
-                            <i class="ki-duotone ki-plus fs-2"></i> Add Laboratory
-                        </button>
-                    </div>
-                </div>
+                <livewire:components.laboratory.card-toolbar />
             </div>
         </div>
-        <livewire:components.laboratory.table>
+        <livewire:components.laboratory.list>
     </div>
+    <livewire:components.laboratory.add-modal>
 </x-assistant-layout>

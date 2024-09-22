@@ -33,11 +33,7 @@ Livewire.on("backToDefault", () => {
         `')`;
     $(".image-input").removeClass("image-input-empty");
 });
-var $backdrops = $(".modal-backdrop");
 
-if ($backdrops.length > 1) {
-    $backdrops.slice(0, -1).remove();
-}
 Livewire.on("confirm-reset-password", (e) => {
     const userId = event.detail.userId;
     Swal.fire({
@@ -106,3 +102,18 @@ Livewire.on("openEditUserModal", () => {
     });
 });
 
+Livewire.on('add-laboratory-modal', () => {
+    $("#addlab_modal").modal("show");
+    Livewire.on("add-laboratory-success", () => {
+        $("#addlab_modal").modal("hide");
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Laboratory is created successfully',
+        });
+    });
+})
+Livewire.on('add-user-modal', () => {
+    $("#adduser_modal").modal("show");
+
+})

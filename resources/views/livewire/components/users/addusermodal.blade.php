@@ -5,17 +5,17 @@ use Livewire\Attributes\Validate;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 new class extends Component {
-    #[Validate] 
+    #[Validate]
     public $first_name;
-    #[Validate] 
+    #[Validate]
     public $last_name;
-    #[Validate] 
+    #[Validate]
     public $username;
-    #[Validate] 
+    #[Validate]
     public $email;
-    #[Validate] 
+    #[Validate]
     public $user_role;
-    
+
     public function rules()
     {
         return [
@@ -26,13 +26,13 @@ new class extends Component {
             'user_role' => ['required', 'string', 'in:assistant,incharge'],
         ];
     }
-    public function discardForm (): void
+    public function discardForm(): void
     {
         $this->reset();
     }
     public function saveUser(): void
     {
-        $user = new User;
+        $user = new User();
         $validated = $this->validate([
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
@@ -49,7 +49,7 @@ new class extends Component {
 
         $user->save();
         $this->dispatch('saved-user');
-        $this->reset(); 
+        $this->reset();
     }
 }; ?>
 
@@ -62,9 +62,11 @@ new class extends Component {
                     <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
                 </div>
             </div>
-                <div class="px-5 modal-body my-7">
-                    <div class="px-5 d-flex flex-column scroll-y px-lg-10" id="kt_modal_add_user_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header" data-kt-scroll-wrappers="#kt_modal_add_user_scroll"
-                    data-kt-scroll-offset="300px" wire:ignore.self>
+            <div class="px-5 modal-body my-7">
+                <div class="px-5 d-flex flex-column scroll-y px-lg-10" id="kt_modal_add_user_scroll"
+                    data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto"
+                    data-kt-scroll-dependencies="#kt_modal_add_user_header"
+                    data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px" wire:ignore.self>
                     <form action="">
                         <div class="fv-row mb-7">
                             <label class="mb-2 required fw-semibold fs-6">First Name</label>
@@ -139,21 +141,24 @@ new class extends Component {
                                     {{ $message }}
                                 </div>
                             @enderror
-                    </form>
-                       
                         </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" wire:click='discardForm'>Discard</button>
-                    <button type="button" class="btn btn-primary" wire:click='saveUser' wire:loading.attr='disabled' wire:target="saveUser">
-                        <span wire:loading.remove wire:target="saveUser">Save User</span>
-                        <span wire:loading wire:target="saveUser">
-                            Please wait... <span class="align-middle spinner-border spinner-border-sm ms-2"></span>
-                        </span>
+                    </form>
 
-                    </button>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    wire:click='discardForm'>Discard</button>
+                <button type="button" class="btn btn-primary" wire:click='saveUser' wire:loading.attr='disabled'
+                    wire:target="saveUser">
+                    <span wire:loading.remove wire:target="saveUser">Save User</span>
+                    <span wire:loading wire:target="saveUser">
+                        Please wait... <span class="align-middle spinner-border spinner-border-sm ms-2"></span>
+                    </span>
+    
+                </button>
+            </div>
         </div>
     </div>
+</div>
 </div>
