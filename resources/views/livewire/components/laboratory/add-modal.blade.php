@@ -40,6 +40,7 @@ new class extends Component {
         $this->capacity = '';
         $this->laboratory_name = '';
         $this->selectedUsers = [];
+        $this->resetValidation();
     }
     public function updatedSearchVal()
     {
@@ -77,7 +78,6 @@ new class extends Component {
         }
         $this->dispatch('add-laboratory-success');
         $this->discardForm();
-
     }
 };
 ?>
@@ -121,6 +121,11 @@ new class extends Component {
                             <input type="text" autocomplete="off"
                                 class="mb-4 form-control form-control-solid flex-grow-1" name="search"
                                 placeholder="Search User" wire:model.live='searchVal'>
+                            @error('selectedUsers')
+                                <div class="fv-plugins-message-container invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                             <div class="mh-250px scroll-y">
                                 @php
                                     $colors = [
@@ -195,5 +200,4 @@ new class extends Component {
         </div>
 
     </div>
-</div>
 </div>

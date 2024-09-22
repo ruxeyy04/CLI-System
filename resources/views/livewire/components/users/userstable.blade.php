@@ -25,7 +25,7 @@
                     @php
                         $randomColor = $colors[array_rand($colors)];
                     @endphp
-                    <tr>
+                    <tr wire:key="user-{{ $user->id }}">
                         <td class="d-flex align-items-center">
                             <div class="overflow-hidden symbol symbol-circle symbol-50px me-3">
                                 <a href="#!">
@@ -64,25 +64,29 @@
                         </td>
                         <td class="text-end">
                             @if ($user->id != Auth::id())
-                                <a href="#"
-                                    class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                <button class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm"
+                                    data-bs-toggle="dropdown" aria-expanded="false"
+                                    wire:key="user-{{ $user->id }}">
                                     Actions
                                     <i class="ki-duotone ki-down fs-5 ms-1"></i>
-                                </a>
-                                <div class="py-4 dropdown-menu dropdown-menu-end menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px" wire:ignore>             
+                                </button>
+                                <div class="py-4 dropdown-menu dropdown-menu-end menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px"
+                                    wire:ignore>
                                     <div class="px-3 menu-item">
-                                        <a href="#" class="px-3 menu-link" wire:click='resetPasswordConfirmation({{$user->id}})'>
+                                        <a href="#" class="px-3 menu-link"
+                                            wire:click='resetPasswordConfirmation({{ $user->id }})'>
                                             Reset Password
                                         </a>
                                     </div>
                                     <div class="px-3 menu-item">
-                                        <a href="#" class="px-3 menu-link" wire:click='openEditModal({{$user->id}})'>
+                                        <a href="#" class="px-3 menu-link"
+                                            wire:click='openEditModal({{ $user->id }})'>
                                             Edit
                                         </a>
                                     </div>
                                     <div class="px-3 menu-item">
-                                        <a href="#" class="px-3 menu-link" wire:click='deleteUserConfirmation({{$user->id}})'>
+                                        <a href="#" class="px-3 menu-link"
+                                            wire:click='deleteUserConfirmation({{ $user->id }})'>
                                             Delete
                                         </a>
                                     </div>

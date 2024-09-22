@@ -7,7 +7,7 @@
                 <livewire:components.laboratory.card-toolbar />
             </div>
         </div>
-        <livewire:components.laboratory.list>
+        <livewire:components.laboratory.card-list>
     </div>
     <livewire:components.laboratory.add-modal>
 </x-assistant-layout>

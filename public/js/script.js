@@ -113,6 +113,39 @@ Livewire.on('add-laboratory-modal', () => {
         });
     });
 })
+Livewire.on("delete-lab-confirmation", () => {
+    const lab_id = event.detail.lab_id;
+    Swal.fire({
+        title: "Are you sure?",
+        text: "This will delete the laboratory",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Livewire.dispatch("delete-laboratory", { lab_id: lab_id });
+            Livewire.on("delete-laboratory-alert", (e) => {
+                const status = event.detail.status;
+                if (status == "success") {
+                    Swal.fire(
+                        "Deleted!",
+                        "The laboratory has been deleted.",
+                        "success"
+                    );
+                } else {
+                    Swal.fire(
+                        "Error!",
+                        "The laboratory deletion has been failed",
+                        "error"
+                    );
+                }
+            });
+        }
+    });
+});
+
 Livewire.on('add-user-modal', () => {
     $("#adduser_modal").modal("show");
 
