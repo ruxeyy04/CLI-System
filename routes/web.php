@@ -19,6 +19,7 @@ Route::middleware(['auth', 'isNoPassword','verified'])->group(function () {
 
     Volt::route('dashboard', 'pages.dashboard')->name('dashboard');
     Route::view('user-management', 'usermanagement')->name('user_management');
+    Route::view('laboratory', 'laboratory')->name('laboratory');
 });
 
 Route::middleware(['auth'])

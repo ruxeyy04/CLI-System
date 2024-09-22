@@ -14,6 +14,8 @@
             @endif
         @elseif(Route::currentRouteName() == 'user_management')
             User Management
+        @elseif(Route::currentRouteName() == 'laboratory')
+            Laboratory
         @else
             Welcome!
         @endif
@@ -50,6 +52,10 @@
         @elseif(Route::currentRouteName() == 'user_management')
             <li class="breadcrumb-item text-muted">
                 User Management
+            </li>
+        @elseif(Route::currentRouteName() == 'laboratory')
+            <li class="breadcrumb-item text-muted">
+                Laboratory
             </li>
         @else
             <li class="breadcrumb-item text-muted">

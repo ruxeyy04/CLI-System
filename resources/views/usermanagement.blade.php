@@ -1,9 +1,4 @@
 <x-assistant-layout>
-    <style>
-        .dt-empty {
-            text-align: center;
-        }
-    </style>
     <div id="kt_app_content_container" class="app-container container-xxl ">
         <!--begin::Card-->
         <div class="card">

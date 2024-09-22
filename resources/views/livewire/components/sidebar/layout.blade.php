@@ -97,7 +97,7 @@
                 <!--end:Menu item-->
                 <!--begin:Menu item-->
                 <div class="menu-item">
-                    <!--begin:Menu link--><a class="menu-link" href=""><span class="menu-icon"><i
+                    <!--begin:Menu link--><a class="menu-link {{ request()->routeIs('laboratory') ? 'active' : '' }}" href="{{ route('laboratory')}}" wire:navigate><span class="menu-icon"><i
                                 class="ki-duotone ki-abstract-13 fs-2"><span class="path1"></span><span
                                     class="path2"></span></i></span><span class="menu-title">Laboratory</span></a>
                     <!--end:Menu link-->
