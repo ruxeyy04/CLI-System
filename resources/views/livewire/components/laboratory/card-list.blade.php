@@ -10,6 +10,7 @@ new class extends Component {
             'delete-laboratory' => 'deleteLab',
             'search-lab' => 'searchLab',
             'add-laboratory-success' => 'reloadData',
+            'update-laboratory-success' => 'reloadData',
         ];
     }
     public function mount()
@@ -70,13 +71,13 @@ new class extends Component {
                         </div>
                         <div class="py-2 d-flex align-items-center">
                             <span
-                                class="bullet bg-primary me-3"></span>{{ $lab->updated_at != $lab->created_at ? 'Updated at ' . $lab->created_at->format('d M Y, h:i a') : 'Not Yet Updated' }}
+                                class="bullet bg-primary me-3"></span>{{ $lab->updated_at != $lab->created_at ? 'Updated at ' . $lab->updated_at->format('d M Y, h:i a') : 'Not Yet Updated' }}
                         </div>
                     </div>
                 </div>
                 <div class="flex-wrap pt-0 card-footer">
-                    <button class="my-1 btn btn-light btn-active-primary">View</button>
-
+                    <button class="my-1 btn btn-light btn-active-primary"
+                        wire:click="$dispatch('viewlab_modal', {'lab_id': {{ $lab->id }}})">View</button>
                     <button type="button" class="my-1 btn btn-light btn-active-light-primary"
                         wire:click="$dispatch('editlab_modal', {'lab_id': {{ $lab->id }}})">Edit</button>
                     <button type="button" class="my-1 btn btn-light btn-active-light-danger"

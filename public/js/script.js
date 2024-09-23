@@ -171,3 +171,10 @@ Livewire.on('editlab_modal', () => {
         );
     })
 });
+Livewire.on('viewlab_modal', () => {
+    const lab_id = event.detail.lab_id;
+    Livewire.dispatch('view_lab', { lab_id: lab_id });
+    Livewire.on('view_lab_done', () => {
+        $("#viewlab_modal").modal("show");
+    });
+})

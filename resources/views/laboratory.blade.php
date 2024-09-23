@@ -11,4 +11,5 @@
     </div>
     <livewire:components.laboratory.add-modal>
         <livewire:components.laboratory.edit-modal>
+            <livewire:components.laboratory.viewmodal>
 </x-assistant-layout>

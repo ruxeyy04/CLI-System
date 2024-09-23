@@ -7,7 +7,7 @@ use Livewire\Attributes\Validate;
 use Illuminate\Validation\Rule;
 
 new class extends Component {
-    public $laboratoryId; // For storing the laboratory being edited
+    public $laboratoryId; 
     #[Validate]
     public $laboratory_name;
     #[Validate]
@@ -52,9 +52,9 @@ new class extends Component {
         $this->selectedUsers = $laboratory->users()->pluck('id')->toArray();
         $this->loadAssistant($lab_id);
         $this->dispatch('edit_lab_done');
-       
     }
-    public function mount () {
+    public function mount()
+    {
         $this->loadAssistant($lab_id = null);
     }
     public function loadAssistant($laboratoryId)
@@ -100,15 +100,26 @@ new class extends Component {
     // Update or create laboratory
     public function updateLaboratory()
     {
+        // Validate the input data
         $validated = $this->validate();
 
-        $laboratory = Laboratory::updateOrCreate(
-            ['id' => $this->laboratoryId], // Check if the laboratory exists
-            [
+        // Check if the laboratory exists
+        $laboratory = Laboratory::find($this->laboratoryId);
+
+        if ($laboratory) {
+            // Update existing laboratory
+            $laboratory->laboratory_name = $this->laboratory_name;
+            $laboratory->capacity = $this->capacity;
+        } else {
+            // Create a new laboratory
+            $laboratory = new Laboratory([
                 'laboratory_name' => $this->laboratory_name,
                 'capacity' => $this->capacity,
-            ],
-        );
+            ]);
+        }
+
+        // Save the laboratory
+        $laboratory->save();
 
         // Update user assignments
         foreach ($this->selectedUsers as $userId) {
@@ -124,7 +135,10 @@ new class extends Component {
             ->whereNotIn('id', $this->selectedUsers)
             ->update(['laboratory_id' => null]);
 
+        // Dispatch success event
         $this->dispatch('update-laboratory-success');
+
+        // Reset the form
         $this->discardForm();
     }
 };
