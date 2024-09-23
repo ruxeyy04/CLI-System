@@ -1,20 +1,20 @@
 toastr.options = {
-    "closeButton": false,
-    "debug": false,
-    "newestOnTop": false,
-    "progressBar": false,
-    "positionClass": "toastr-top-right",
-    "preventDuplicates": false,
-    "onclick": null,
-    "showDuration": "300",
-    "hideDuration": "1000",
-    "timeOut": "5000",
-    "extendedTimeOut": "1000",
-    "showEasing": "swing",
-    "hideEasing": "linear",
-    "showMethod": "fadeIn",
-    "hideMethod": "fadeOut"
-  };
+    closeButton: false,
+    debug: false,
+    newestOnTop: false,
+    progressBar: false,
+    positionClass: "toastr-top-right",
+    preventDuplicates: false,
+    onclick: null,
+    showDuration: "300",
+    hideDuration: "1000",
+    timeOut: "5000",
+    extendedTimeOut: "1000",
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",
+    hideMethod: "fadeOut",
+};
 
 Livewire.on("profile-updated", () => {
     Swal.fire({
@@ -112,25 +112,25 @@ Livewire.on("openEditUserModal", () => {
         Livewire.on("updated-user", () => {
             $("#edituser_modal").modal("hide");
             Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: 'User account is updated successfully',
+                icon: "success",
+                title: "Success",
+                text: "User account is updated successfully",
             });
         });
     });
 });
 
-Livewire.on('add-laboratory-modal', () => {
+Livewire.on("add-laboratory-modal", () => {
     $("#addlab_modal").modal("show");
     Livewire.on("add-laboratory-success", () => {
         $("#addlab_modal").modal("hide");
         Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'Laboratory is created successfully',
+            icon: "success",
+            title: "Success",
+            text: "Laboratory is created successfully",
         });
     });
-})
+});
 Livewire.on("delete-lab-confirmation", () => {
     const lab_id = event.detail.lab_id;
     Swal.fire({
@@ -164,38 +164,126 @@ Livewire.on("delete-lab-confirmation", () => {
     });
 });
 
-Livewire.on('add-user-modal', () => {
+Livewire.on("add-user-modal", () => {
     $("#adduser_modal").modal("show");
+});
 
-})
-
-Livewire.on('editlab_modal', () => {
+Livewire.on("editlab_modal", () => {
     const lab_id = event.detail.lab_id;
-    
-    Livewire.dispatch('edit_lab', { lab_id: lab_id });
 
-    Livewire.on('edit_lab_done', () => {
+    Livewire.dispatch("edit_lab", { lab_id: lab_id });
+
+    Livewire.on("edit_lab_done", () => {
         $("#edit_lab_modal").modal("show");
     });
-    Livewire.on('update-laboratory-success', () => {
+    Livewire.on("update-laboratory-success", () => {
         $("#edit_lab_modal").modal("hide");
-        Swal.fire(
-            "Success!",
-            "The laboratory has been updated.",
-            "success"
-        );
-    })
+        Swal.fire("Success!", "The laboratory has been updated.", "success");
+    });
 });
-Livewire.on('viewlab_modal', () => {
+Livewire.on("viewlab_modal", () => {
     const lab_id = event.detail.lab_id;
-    Livewire.dispatch('view_lab', { lab_id: lab_id });
-    Livewire.on('view_lab_done', () => {
+    Livewire.dispatch("view_lab", { lab_id: lab_id });
+    Livewire.on("view_lab_done", () => {
         $("#viewlab_modal").modal("show");
     });
-})
+});
 
-
-Livewire.on('add-device-modal', () => {
+Livewire.on("add-device-modal", () => {
     $("#add_device_modal").modal("show");
-})
-  
+    Livewire.on("add-device-success", () => {
+        $("#add_device_modal").modal("hide");
+        Swal.fire("Success!", "The computer device has been added.", "success");
+    });
+});
+
+$(".lab_select").change(function (e) {
+    e.preventDefault();
+    Livewire.dispatch("lab_select", { lab_id: $(this).val() });
+});
+
+Livewire.on("deleteDeviceConfirmation", () => {
+    const dev_id = event.detail.dev_id;
+    Swal.fire({
+        title: "Are you sure?",
+        text: "This will delete the computer device",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Livewire.dispatch("delete-device", { dev_id: dev_id });
+            Livewire.on("delete-device-alert", (e) => {
+                const status = event.detail.status;
+                if (status == "success") {
+                    Swal.fire(
+                        "Deleted!",
+                        "The computer device has been deleted.",
+                        "success"
+                    );
+                } else {
+                    Swal.fire(
+                        "Error!",
+                        "The computer device deletion has been failed",
+                        "error"
+                    );
+                }
+            });
+        }
+    });
+});
+
+Livewire.on("openEditDeviceModal", () => {
+    const dev_id = event.detail.dev_id;
+
+    Livewire.dispatch("edit_device", { dev_id: dev_id });
+
+    Livewire.on("edit_device_done", () => {
+        const select2Value = event.detail.select2;
+        $(".lab_select").val(select2Value).trigger("change"); // Update and trigger change
+        $("#edit_device_modal").modal("show");
+    });
+    Livewire.on("update-device-success", () => {
+        $("#edit_device_modal").modal("hide");
+        Swal.fire(
+            "Success!",
+            "The computer device has been updated.",
+            "success"
+        );
+    });
+});
+
+Livewire.on("removePatchConfirmation", () => {
+    const dev_id = event.detail.dev_id;
+    Swal.fire({
+        title: "Are you sure?",
+        text: "This will remove the patch of the device",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, remove it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Livewire.dispatch("remove-patch", { dev_id: dev_id });
+            Livewire.on("remove-patch-alert", (e) => {
+                const status = event.detail.status;
+                if (status == "success") {
+                    Swal.fire(
+                        "Removed Patch!",
+                        "The patch has been removed from the device",
+                        "success"
+                    );
+                } else {
+                    Swal.fire(
+                        "Error!",
+                        "The patch removal has been failed",
+                        "error"
+                    );
+                }
+            });
+        }
+    });
+});

@@ -227,4 +227,5 @@
 <script src="{{ asset('js/script.js') }}"></script>
 <script src="{{ asset('js/channels.js') }}"></script>
 
+
 </html>

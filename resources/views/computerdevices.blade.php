@@ -12,4 +12,5 @@
         </div>
     </div>
     <livewire:components.device.addmodal>
+    <livewire:components.device.editmodal>
 </x-assistant-layout>

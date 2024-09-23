@@ -21,8 +21,19 @@
                             @enderror
                         </div>
                         <div class="fv-row mb-7">
+                            <label class="mb-2 required fw-semibold fs-6">Serial Number</label>
+                            <input type="text" name="serial_number"
+                                class="mb-3 form-control form-control-solid mb-lg-0" placeholder="Serial Number"
+                                wire:model.live='serial_number' autocomplete="off" />
+                            @error('serial_number')
+                                <div class="fv-plugins-message-container invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="fv-row mb-7">
                             <label class="mb-2 required fw-semibold fs-6">Device Name</label>
-                            <input type="text" name="laboratory_name"
+                            <input type="text" name="device_name"
                                 class="mb-3 form-control form-control-solid mb-lg-0" placeholder="Device Name"
                                 wire:model.live='device_name' autocomplete="off" />
                             @error('device_name')
@@ -32,24 +43,25 @@
                             @enderror
                         </div>
 
-                        <div class="fv-row mb-7" wire:ignore>
+                        <div class="fv-row mb-7">
                             <label class="mb-2 required fw-semibold fs-6">Laboratory</label>
-                            <select class="form-select form-select-solid" data-control="select2"
-                                data-placeholder="Select an option" data-hide-search="true" name="laboratory"
-                                wire:model.live="laboratory">
-                                <option></option>
-                                @foreach ($laboratory as $lab)
-                                    <option value="{{ $lab->id }}">{{ $lab->laboratory_name }}</option>
-                                @endforeach
-                            </select>
+                            <div wire:ignore>
+                                <select class="lab_select form-select form-select-solid" name="lab_id" data-control="select2"
+                                    data-placeholder="Select an option" data-hide-search="true"
+                                    wire:model.live="lab_id">
+                                    <option></option>
+                                    @foreach ($laboratory as $lab)
+                                        <option value="{{ $lab->id }}">{{ $lab->laboratory_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                            @error('capacity')
+                            @error('lab_id')
                                 <div class="fv-plugins-message-container invalid-feedback">
                                     {{ $message }}
                                 </div>
                             @enderror
                         </div>
-
 
                     </form>
 

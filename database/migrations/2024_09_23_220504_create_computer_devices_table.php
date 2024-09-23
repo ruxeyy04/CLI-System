@@ -15,8 +15,9 @@ return new class extends Migration
             // Using string for id to make it a VARCHAR
             $table->string('id')->primary();
             $table->string('device_name');
-            $table->string('patch_id');
-            $table->string('token');
+            $table->string('serial_number');
+            $table->string('patch_id')->nullable();
+            $table->string('token')->nullable();
             $table->foreignId('laboratory_id')->constrained('laboratories')->onDelete('set null');
             $table->dateTime('patched_date');
             $table->timestamps();
