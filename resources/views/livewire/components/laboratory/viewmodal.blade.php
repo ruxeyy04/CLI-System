@@ -22,6 +22,24 @@ new class extends Component {
         $this->laboratory = [];
         $this->assistants = [];
     }
+    public function updatedSearchVal()
+    {
+        $searchTerms = explode(' ', $this->searchVal);
+
+        $users = User::where('role', 'assistant')->where('laboratory_id', $this->laboratoryId);
+
+        foreach ($searchTerms as $term) {
+            $users->where(function ($query) use ($term) {
+                $query
+                    ->where('fname', 'like', '%' . $term . '%')
+                    ->orWhere('lname', 'like', '%' . $term . '%')
+                    ->orWhere('username', 'like', '%' . $term . '%')
+                    ->orWhere('email', 'like', '%' . $term . '%');
+            });
+        }
+
+        $this->assistants = $users->get();
+    }
     public function loadLaboratory($lab_id)
     {
         $this->laboratory = Laboratory::withCount('users')->where('id', $lab_id)->first();
@@ -122,7 +140,8 @@ new class extends Component {
                                             class="dt-container dt-bootstrap5 dt-empty-footer">
                                             <div id="" class="table-responsive">
                                                 <table
-                                                    class="table mb-0 align-middle table-row-dashed fs-6 gy-5 dataTable" style="width: 100%;">
+                                                    class="table mb-0 align-middle table-row-dashed fs-6 gy-5 dataTable"
+                                                    style="width: 100%;">
                                                     <thead>
                                                         <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0"
                                                             role="row">
@@ -220,7 +239,7 @@ new class extends Component {
                                                 <i class="ki-duotone ki-magnifier fs-1 position-absolute ms-6"><span
                                                         class="path1"></span><span class="path2"></span></i> <input
                                                     type="text" class="form-control form-control-solid w-250px ps-15"
-                                                    placeholder="Search Users">
+                                                    placeholder="Search Device">
                                             </div>
                                             <!--end::Search-->
 
