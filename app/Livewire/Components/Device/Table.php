@@ -18,7 +18,8 @@ class Table extends Component
             'add-device-success' => 'loadDevice',
             'delete-device' => 'deleteDevice',
             'update-device-success' => 'loadDevice',
-            'remove-patch' => 'removePatch'
+            'remove-patch' => 'removePatch',
+            'search-user' => 'searchUser',
         ];
     }
 
@@ -36,6 +37,11 @@ class Table extends Component
         }
         $this->resetPage();
     }
+    public function searchUser($searchVal)
+    {
+        $this->searchVal = $searchVal;
+        $this->resetPage();
+    }
     public function removePatch($dev_id)
     {
         $dev = ComputerDevice::find($dev_id);
@@ -43,36 +49,38 @@ class Table extends Component
             $dev->patch_id = null;
             $dev->token = null;
             $dev->patched_date = null;
-            $dev->save(); 
-    
+            $dev->save();
+
             $this->dispatch('remove-patch-alert', status: 'success');
         } else {
             $this->dispatch('remove-patch-alert', status: 'fail');
         }
         $this->resetPage();
     }
-    
+
     public function render()
     {
         $searchTerms = explode(' ', $this->searchVal);
-
-        // Eager load the 'laboratory' relationship
+    
         $devices = ComputerDevice::with('laboratory');
-
+    
         foreach ($searchTerms as $term) {
             $devices->where(function ($query) use ($term) {
                 $query->where('id', 'like', '%' . $term . '%')
                     ->orWhere('device_name', 'like', '%' . $term . '%')
                     ->orWhere('serial_number', 'like', '%' . $term . '%')
-                    ->orWhere('patch_id', 'like', '%' . $term . '%');
+                    ->orWhere('patch_id', 'like', '%' . $term . '%')
+                    ->orWhereHas('laboratory', function ($query) use ($term) {
+                        $query->where('laboratory_name', 'like', '%' . $term . '%');
+                    });
             });
         }
-
-        // Paginate the result
+    
         $devices = $devices->paginate(5);
-
+    
         return view('livewire.components.device.table', [
             'devices' => $devices
         ]);
     }
+    
 }
