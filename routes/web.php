@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Livewire\Volt\Volt;
+
 Route::get('/session-auth-info', function () {
     $user = Auth::user();
 
@@ -15,11 +16,12 @@ Route::get('/session-auth-info', function () {
     ]);
 });
 
-Route::middleware(['auth', 'isNoPassword','verified'])->group(function () {
+Route::middleware(['auth', 'isNoPassword', 'verified'])->group(function () {
 
     Volt::route('dashboard', 'pages.dashboard')->name('dashboard');
     Route::view('user-management', 'usermanagement')->name('user_management');
     Route::view('laboratory', 'laboratory')->name('laboratory');
+    Route::view('computer-devices', 'computerdevices')->name('computerdevices');
 });
 
 Route::middleware(['auth'])

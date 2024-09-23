@@ -26,4 +26,8 @@ class Laboratory extends Model
     {
         return $this->hasMany(User::class);
     }
+    public function computerDevices()
+    {
+        return $this->hasMany(ComputerDevice::class);
+    }
 }

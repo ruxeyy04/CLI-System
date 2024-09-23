@@ -108,8 +108,8 @@ new class extends Component {
 
                         <div class="fv-row mb-7">
                             <label class="mb-2 required fw-semibold fs-6">Capacity</label>
-                            <input type="text" name="capacity" class="mb-3 form-control form-control-solid mb-lg-0"
-                                placeholder="Capacity" wire:model.live='capacity' />
+                            <input type="number" name="capacity" class="mb-3 form-control form-control-solid mb-lg-0"
+                                placeholder="Capacity" wire:model.live='capacity' autocomplete="off"/>
                             @error('capacity')
                                 <div class="fv-plugins-message-container invalid-feedback">
                                     {{ $message }}
@@ -145,7 +145,7 @@ new class extends Component {
                                         <!--begin::Details-->
                                         <div class="d-flex align-items-center">
                                             <!--begin::Avatar-->
-                                            <div class="symbol symbol-35px symbol-circle">
+                                            <div class="symbol symbol-35px symbol-circle" wire:ignore>
                                                 @if ($assistant->profileimg)
                                                     <img alt="{{ $assistant->fname }} {{ $assistant->lname }}"
                                                         src="{{ asset('storage/profile/' . $assistant->id . '/' . $assistant->profileimg) }}">

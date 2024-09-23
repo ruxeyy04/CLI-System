@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('computer_devices', function (Blueprint $table) {
+            // Using string for id to make it a VARCHAR
+            $table->string('id')->primary();
+            $table->string('device_name');
+            $table->string('patch_id');
+            $table->string('token');
+            $table->foreignId('laboratory_id')->constrained('laboratories')->onDelete('set null');
+            $table->dateTime('patched_date');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('computer_devices');
+    }
+};

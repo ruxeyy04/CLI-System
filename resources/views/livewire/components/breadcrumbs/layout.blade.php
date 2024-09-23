@@ -16,6 +16,8 @@
             User Management
         @elseif(Route::currentRouteName() == 'laboratory')
             Laboratory
+        @elseif(Route::currentRouteName() == 'computerdevices')
+            Computer Devices
         @else
             Welcome!
         @endif
@@ -56,6 +58,10 @@
         @elseif(Route::currentRouteName() == 'laboratory')
             <li class="breadcrumb-item text-muted">
                 Laboratory
+            </li>
+        @elseif(Route::currentRouteName() == 'computerdevices')
+            <li class="breadcrumb-item text-muted">
+                Computer Devices
             </li>
         @else
             <li class="breadcrumb-item text-muted">

@@ -1,3 +1,21 @@
+toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toastr-top-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+  };
+
 Livewire.on("profile-updated", () => {
     Swal.fire({
         icon: "success",
@@ -154,12 +172,9 @@ Livewire.on('add-user-modal', () => {
 Livewire.on('editlab_modal', () => {
     const lab_id = event.detail.lab_id;
     
-    // Dispatch the Livewire event with lab_id
     Livewire.dispatch('edit_lab', { lab_id: lab_id });
 
-    // Wait for the Livewire component to finish updating
     Livewire.on('edit_lab_done', () => {
-        // Show the modal after the edit_lab event is handled
         $("#edit_lab_modal").modal("show");
     });
     Livewire.on('update-laboratory-success', () => {
@@ -180,22 +195,7 @@ Livewire.on('viewlab_modal', () => {
 })
 
 
-toastr.options = {
-    "closeButton": false,
-    "debug": false,
-    "newestOnTop": false,
-    "progressBar": false,
-    "positionClass": "toastr-top-right",
-    "preventDuplicates": false,
-    "onclick": null,
-    "showDuration": "300",
-    "hideDuration": "1000",
-    "timeOut": "5000",
-    "extendedTimeOut": "1000",
-    "showEasing": "swing",
-    "hideEasing": "linear",
-    "showMethod": "fadeIn",
-    "hideMethod": "fadeOut"
-  };
+Livewire.on('add-device-modal', () => {
+    $("#add_device_modal").modal("show");
+})
   
-  toastr.success("New order has been placed!");
