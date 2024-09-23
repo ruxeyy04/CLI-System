@@ -5,7 +5,9 @@ use App\Models\User;
 use App\Models\Laboratory;
 use Livewire\Attributes\Validate;
 use Illuminate\Validation\Rule;
+
 new class extends Component {
+    public $laboratoryId; // For storing the laboratory being edited
     #[Validate]
     public $laboratory_name;
     #[Validate]
@@ -15,33 +17,67 @@ new class extends Component {
     #[Validate]
     public $selectedUsers = [];
 
+    protected function getListeners()
+    {
+        return [
+            'edit_lab' => 'loadLaboratory',
+        ];
+    }
+
     public function rules()
     {
         return [
-            'laboratory_name' => ['required', 'string', 'max:255', 'unique:' . Laboratory::class],
+            'laboratory_name' => ['required', 'string', 'max:255', Rule::unique(Laboratory::class)->ignore($this->laboratoryId)],
             'capacity' => ['required', 'integer', 'max:255'],
             'selectedUsers' => ['required', 'array', 'min:1'],
         ];
     }
+
     public function messages()
     {
         return [
             'selectedUsers.required' => 'You should assign a laboratory assistant.',
             'selectedUsers.min' => 'You should assign at least one laboratory assistant.',
+            'capacity.integer' => 'The capacity field must be a number.',
         ];
     }
-    public function mount()
+
+    // Load existing laboratory data
+    public function loadLaboratory($lab_id)
     {
-        $this->assistants = User::where('role', 'assistant')->whereNull('laboratory_id')->get();
+        $laboratory = Laboratory::findOrFail($lab_id);
+        $this->laboratoryId = $laboratory->id;
+        $this->laboratory_name = $laboratory->laboratory_name;
+        $this->capacity = $laboratory->capacity;
+        $this->selectedUsers = $laboratory->users()->pluck('id')->toArray();
+        $this->loadAssistant($lab_id);
+        $this->dispatch('edit_lab_done');
+       
     }
+    public function mount () {
+        $this->loadAssistant($lab_id = null);
+    }
+    public function loadAssistant($laboratoryId)
+    {
+        $this->laboratoryId = $laboratoryId;
+
+        $this->assistants = User::where('role', 'assistant')
+            ->where(function ($query) {
+                $query->where('laboratory_id', $this->laboratoryId)->orWhereNull('laboratory_id');
+            })
+            ->get();
+    }
+
     public function discardForm(): void
     {
+        $this->laboratoryId = null;
         $this->searchVal = '';
         $this->capacity = '';
         $this->laboratory_name = '';
         $this->selectedUsers = [];
         $this->resetValidation();
     }
+
     public function updatedSearchVal()
     {
         $searchTerms = explode(' ', $this->searchVal);
@@ -60,15 +96,21 @@ new class extends Component {
 
         $this->assistants = $users->get();
     }
-    public function saveLaboratory()
+
+    // Update or create laboratory
+    public function updateLaboratory()
     {
         $validated = $this->validate();
 
-        $laboratory = Laboratory::create([
-            'laboratory_name' => $this->laboratory_name,
-            'capacity' => $this->capacity,
-        ]);
+        $laboratory = Laboratory::updateOrCreate(
+            ['id' => $this->laboratoryId], // Check if the laboratory exists
+            [
+                'laboratory_name' => $this->laboratory_name,
+                'capacity' => $this->capacity,
+            ],
+        );
 
+        // Update user assignments
         foreach ($this->selectedUsers as $userId) {
             $user = User::find($userId);
             if ($user) {
@@ -76,17 +118,24 @@ new class extends Component {
                 $user->save();
             }
         }
-        $this->dispatch('add-laboratory-success');
+
+        // Unassign users not selected anymore
+        User::where('laboratory_id', $laboratory->id)
+            ->whereNotIn('id', $this->selectedUsers)
+            ->update(['laboratory_id' => null]);
+
+        $this->dispatch('update-laboratory-success');
         $this->discardForm();
     }
 };
+
 ?>
 
-<div class="modal fade" id="addlab_modal" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="edit_lab_modal" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <div class="modal-dialog mw-500px">
         <div class="modal-content">
-            <div class="modal-header" id="addlab_modal_header">
-                <h2 class="fw-bold">Add Laboratory</h2>
+            <div class="modal-header" id="edit_lab_modal_header">
+                <h2 class="fw-bold">Edit Laboratory</h2>
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
                     <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
                 </div>
@@ -150,8 +199,8 @@ new class extends Component {
                                                     <img alt="{{ $assistant->fname }} {{ $assistant->lname }}"
                                                         src="{{ asset('storage/profile/' . $assistant->id . '/' . $assistant->profileimg) }}">
                                                 @else
-                                                    <div
-                                                        class="symbol-label fs-3 {{ $randomColor[0] }} {{ $randomColor[1] }}">
+                                                    <div class="symbol-label fs-3 {{ $randomColor[0] }} {{ $randomColor[1] }}"
+                                                        wire:ignore>
                                                         {{ strtoupper($assistant->fname[0]) }}
                                                     </div>
                                                 @endif
@@ -188,10 +237,10 @@ new class extends Component {
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                     wire:click='discardForm'>Discard</button>
-                <button type="button" class="btn btn-primary" wire:click='saveLaboratory' wire:loading.attr='disabled'
-                    wire:target="saveLaboratory">
-                    <span wire:loading.remove wire:target="saveLaboratory">Save Laboratory</span>
-                    <span wire:loading wire:target="saveLaboratory">
+                <button type="button" class="btn btn-primary" wire:click='updateLaboratory'
+                    wire:loading.attr='disabled' wire:target="updateLaboratory">
+                    <span wire:loading.remove wire:target="updateLaboratory">Save Changes</span>
+                    <span wire:loading wire:target="updateLaboratory">
                         Please wait... <span class="align-middle spinner-border spinner-border-sm ms-2"></span>
                     </span>
 

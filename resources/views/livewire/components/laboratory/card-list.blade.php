@@ -9,14 +9,15 @@ new class extends Component {
         return [
             'delete-laboratory' => 'deleteLab',
             'search-lab' => 'searchLab',
-            'add-laboratory-success' => 'reloadData'
+            'add-laboratory-success' => 'reloadData',
         ];
     }
     public function mount()
     {
         $this->labs = Laboratory::withCount('users')->get();
     }
-    public function reloadData() {
+    public function reloadData()
+    {
         $this->labs = Laboratory::withCount('users')->get();
     }
     public function deleteLab($lab_id)
@@ -35,9 +36,7 @@ new class extends Component {
     {
         $this->labs = Laboratory::withCount('users')
             ->where(function ($query) use ($searchVal) {
-                $query
-                    ->where('laboratory_name', 'like', '%' . $searchVal . '%')
-                    ->orWhere('capacity', 'like', '%' . $searchVal . '%');
+                $query->where('laboratory_name', 'like', '%' . $searchVal . '%')->orWhere('capacity', 'like', '%' . $searchVal . '%');
             })
             ->get();
     }
@@ -78,8 +77,9 @@ new class extends Component {
                 <div class="flex-wrap pt-0 card-footer">
                     <button class="my-1 btn btn-light btn-active-primary">View</button>
 
-                    <button type="button" class="my-1 btn btn-light btn-active-light-primary">Edit</button>
-                    <button class="my-1 btn btn-light btn-active-light-danger"
+                    <button type="button" class="my-1 btn btn-light btn-active-light-primary"
+                        wire:click="$dispatch('editlab_modal', {'lab_id': {{ $lab->id }}})">Edit</button>
+                    <button type="button" class="my-1 btn btn-light btn-active-light-danger"
                         wire:click="$dispatch('delete-lab-confirmation', {'lab_id': {{ $lab->id }}})">Delete</button>
 
                 </div>

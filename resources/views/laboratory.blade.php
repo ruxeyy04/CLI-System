@@ -10,4 +10,5 @@
         <livewire:components.laboratory.card-list>
     </div>
     <livewire:components.laboratory.add-modal>
+        <livewire:components.laboratory.edit-modal>
 </x-assistant-layout>

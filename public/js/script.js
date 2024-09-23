@@ -150,3 +150,24 @@ Livewire.on('add-user-modal', () => {
     $("#adduser_modal").modal("show");
 
 })
+
+Livewire.on('editlab_modal', () => {
+    const lab_id = event.detail.lab_id;
+    
+    // Dispatch the Livewire event with lab_id
+    Livewire.dispatch('edit_lab', { lab_id: lab_id });
+
+    // Wait for the Livewire component to finish updating
+    Livewire.on('edit_lab_done', () => {
+        // Show the modal after the edit_lab event is handled
+        $("#edit_lab_modal").modal("show");
+    });
+    Livewire.on('update-laboratory-success', () => {
+        $("#edit_lab_modal").modal("hide");
+        Swal.fire(
+            "Success!",
+            "The laboratory has been updated.",
+            "success"
+        );
+    })
+});
