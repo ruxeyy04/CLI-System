@@ -25,7 +25,11 @@ class Table extends Component
 
     protected $paginationTheme = 'bootstrap';
     public $searchVal = '';
-
+    #[On('echo:device-updates,.patch.saved')]
+    public function reloadTable()
+    {
+        $this->resetPage();
+    }
     public function deleteDevice($dev_id)
     {
         $dev = ComputerDevice::find($dev_id);

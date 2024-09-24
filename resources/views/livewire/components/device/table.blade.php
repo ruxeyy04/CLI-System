@@ -3,8 +3,9 @@
         <table class="table align-middle table-row-dashed fs-6 gy-5" id="table_data_users" wire:ignore.self>
             <thead wire:ignore>
                 <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
-                    <th class="min-w-100px">Device ID</th>
+                    <th class="w-100px">Device ID</th>
                     <th class="min-w-125px">Name</th>
+                    <th class="min-w-125px">Serial Number</th>
                     <th class="min-w-125px">Laboratory</th>
                     <th class="min-w-125px">Patch</th>
                     <th class="min-w-125px">Date Patched</th>
@@ -17,6 +18,7 @@
                     <tr>
                         <td>{{ $dev->id }}</td>
                         <td>{{ $dev->device_name }}</td>
+                        <td>{{ $dev->serial_number }}</td>
                         <td>{{ $dev->laboratory->laboratory_name ?? 'Not Assigned' }}</td>
                         <td>
                             <div class="badge badge-light-{{ $dev->patch_id ? 'success' : 'danger' }} fw-bold">
@@ -34,7 +36,7 @@
                                 <i class="ki-duotone ki-down fs-5 ms-1"></i>
                             </button>
                             <div class="py-4 dropdown-menu dropdown-menu-end menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-150px"
-                                wire:ignore>
+                               >
                                 @if ($dev->patch_id)
                                     <div class="px-3 menu-item">
                                         <a href="#" class="px-3 menu-link"

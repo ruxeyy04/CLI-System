@@ -17,4 +17,4 @@ Route::post('/post-number', function (Request $request) {
     return response()->json(['message' => 'Number received and broadcasted', 'number' => $number]);
 });
 
-Route::put('/devices', [DeviceController::class, 'verify']);
+Route::put('/device', [DeviceController::class, 'verify']);

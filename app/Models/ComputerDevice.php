@@ -22,7 +22,7 @@ class ComputerDevice extends Model
         'patched_date',
     ];
     protected $casts = [
-        'patched_date' => 'datetime', // This will ensure it's treated as a Carbon instance
+        'patched_date' => 'datetime', 
     ];
     public function laboratory()
     {

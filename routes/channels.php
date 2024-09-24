@@ -12,3 +12,4 @@ Broadcast::channel('user-session.{sessionId}', function ($user, $sessionId) {
 
     return $session && $session->user_id === $user->id;
 });
+
