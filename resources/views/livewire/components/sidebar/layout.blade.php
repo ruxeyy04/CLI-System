@@ -7,8 +7,8 @@
             data-kt-scroll-dependencies="#kt_app_sidebar_logo, #kt_app_sidebar_footer"
             data-kt-scroll-wrappers="#kt_app_sidebar_menu" data-kt-scroll-offset="5px" data-kt-scroll-save-state="true">
             <!--begin::Menu-->
-            <div class=" menu menu-column menu-rounded menu-sub-indention fw-semibold"
-                id="#kt_app_sidebar_menu" data-kt-menu="true" data-kt-menu-expand="false">
+            <div class=" menu menu-column menu-rounded menu-sub-indention fw-semibold" id="#kt_app_sidebar_menu"
+                data-kt-menu="true" data-kt-menu-expand="false">
                 <div class="menu-item">
                     <a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
                         href="{{ route('dashboard') }}" wire:navigate>
@@ -31,7 +31,8 @@
                 </div>
                 <!--end:Menu item-->
                 <!--begin:Menu item-->
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ Request::segment(1) == 'account' ? 'show' : '' }}">
+                <div data-kt-menu-trigger="click"
+                    class="menu-item menu-accordion {{ Request::segment(1) == 'account' ? 'show' : '' }}">
                     <!--begin:Menu link--><span class="menu-link">
                         <span class="menu-icon">
                             <i class="ki-duotone ki-profile-circle fs-2">
@@ -45,7 +46,8 @@
                     <div class="menu-sub menu-sub-accordion">
                         <!--begin:Menu item-->
                         <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('account_overview') ? 'active' : '' }}" href="{{ route('account_overview') }}" wire:navigate>
+                            <a class="menu-link {{ request()->routeIs('account_overview') ? 'active' : '' }}"
+                                href="{{ route('account_overview') }}" wire:navigate>
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot">
                                     </span>
@@ -54,7 +56,8 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('account_settings') ? 'active' : '' }}" href="{{ route('account_settings') }}" wire:navigate>
+                            <a class="menu-link {{ request()->routeIs('account_settings') ? 'active' : '' }}"
+                                href="{{ route('account_settings') }}" wire:navigate>
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot">
                                     </span>
@@ -63,7 +66,8 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('account_changepass') ? 'active' : '' }}" href="{{ route('account_changepass') }}" wire:navigate>
+                            <a class="menu-link {{ request()->routeIs('account_changepass') ? 'active' : '' }}"
+                                href="{{ route('account_changepass') }}" wire:navigate>
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot">
                                     </span>
@@ -72,7 +76,8 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link {{ request()->routeIs('account_sessions') ? 'active' : '' }}" href="{{ route('account_sessions') }}" wire:navigate>
+                            <a class="menu-link {{ request()->routeIs('account_sessions') ? 'active' : '' }}"
+                                href="{{ route('account_sessions') }}" wire:navigate>
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot">
                                     </span>
@@ -85,6 +90,63 @@
                     <!--end:Menu sub-->
                 </div>
                 <!--end:Menu item-->
+                <div class="pt-5 menu-item">
+                    <!--begin:Menu content-->
+                    <div class="menu-content">
+                        <span class="menu-heading fw-bold text-uppercase fs-7">Laboratory</span>
+                    </div>
+                    <!--end:Menu content-->
+                </div>
+
+                @foreach ($laboratories as $laboratory)
+                    @php
+                        $currentDeviceId = request()->route('id');
+                    @endphp
+
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item menu-accordion {{ $laboratory->computerDevices->contains('id', $currentDeviceId) ? 'show' : '' }}">
+                        <span class="menu-link">
+                            <span class="menu-icon">
+                                <i class="ki-duotone ki-element-8 fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </i>
+                            </span>
+                            <span class="menu-title">{{ $laboratory->laboratory_name }}</span>
+                            <span class="menu-arrow"></span>
+                        </span>
+
+                        <div class="menu-sub menu-sub-accordion">
+                            @if ($laboratory->computerDevices->isEmpty())
+                                <div class="menu-item">
+                                    <span class="menu-link">
+                                        <span class="menu-title">No Device Yet</span>
+                                    </span>
+                                </div>
+                            @else
+                                @foreach ($laboratory->computerDevices as $device)
+                                    <div class="menu-item">
+                                        <a class="menu-link {{ $device->id == $currentDeviceId ? 'active' : '' }}"
+                                            href="{{ route('devicegraph', ['id' => $device->id]) }}" wire:navigate>
+                                            <span class="menu-icon">
+                                                <i class="ki-duotone ki-screen fs-4">
+                                                    <span class="path1"></span>
+                                                    <span class="path2"></span>
+                                                    <span class="path3"></span>
+                                                    <span class="path4"></span>
+                                                </i>
+                                            </span>
+                                            <span class="menu-title">{{ $device->device_name }}</span>
+                                        </a>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+
+
+
 
                 <!--end:Menu item-->
                 <!--begin:Menu item-->
@@ -97,13 +159,15 @@
                 <!--end:Menu item-->
                 <!--begin:Menu item-->
                 <div class="menu-item">
-                    <!--begin:Menu link--><a class="menu-link {{ request()->routeIs('laboratory') ? 'active' : '' }}" href="{{ route('laboratory')}}" wire:navigate><span class="menu-icon"><i
+                    <!--begin:Menu link--><a class="menu-link {{ request()->routeIs('laboratory') ? 'active' : '' }}"
+                        href="{{ route('laboratory') }}" wire:navigate><span class="menu-icon"><i
                                 class="ki-duotone ki-abstract-13 fs-2"><span class="path1"></span><span
                                     class="path2"></span></i></span><span class="menu-title">Laboratory</span></a>
                     <!--end:Menu link-->
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ request()->routeIs('computerdevices') ? 'active' : '' }}" href="{{route('computerdevices')}}" wire:navigate>
+                    <a class="menu-link {{ request()->routeIs('computerdevices') ? 'active' : '' }}"
+                        href="{{ route('computerdevices') }}" wire:navigate>
                         <span class="menu-icon">
                             <i class="ki-duotone ki-monitor-mobile fs-2">
                                 <span class="path1"></span>
@@ -114,7 +178,8 @@
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ request()->routeIs('user_management') ? 'active' : '' }}" href="{{ route('user_management') }}" wire:navigate>
+                    <a class="menu-link {{ request()->routeIs('user_management') ? 'active' : '' }}"
+                        href="{{ route('user_management') }}" wire:navigate>
                         <span class="menu-icon">
                             <i class="ki-duotone ki-people fs-2">
                                 <span class="path1"></span>

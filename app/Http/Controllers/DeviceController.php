@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\DeviceSaved;
 use App\Events\PatchSaved;
 use App\Models\ComputerDevice;
 use Illuminate\Http\Request;
@@ -36,4 +35,11 @@ class DeviceController extends Controller
             return response()->json(['success' => true, 'data' => "Patched Successfully"]);
         }
     }
+
+    public function show($id)
+    {
+        $device = ComputerDevice::findOrFail($id);
+        return view('devicegraph', compact('device'));
+    }
+    
 }

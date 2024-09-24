@@ -7,6 +7,7 @@ use App\Models\Laboratory;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\Attributes\Validate;
+
 class Addmodal extends Component
 {
     protected function getListeners()
@@ -26,7 +27,8 @@ class Addmodal extends Component
 
     public $laboratory;
 
-    public function mount() {
+    public function mount()
+    {
         $user = Auth::user();
 
         if ($user->role === 'incharge') {
@@ -44,11 +46,22 @@ class Addmodal extends Component
     {
         return [
             'device_id' => ['required', 'string', 'max:255', 'unique:computer_devices,id'],
-            'device_name' => ['required', 'string', 'max:255', 'unique:' . ComputerDevice::class],
-            'serial_number' => ['required', 'string', 'max:255', 'unique:' . ComputerDevice::class],
+            'device_name' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:computer_devices,device_name,NULL,id,laboratory_id,' . $this->lab_id
+            ],
+            'serial_number' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:computer_devices,serial_number,NULL,id,laboratory_id,' . $this->lab_id
+            ],
             'lab_id' => ['required'],
         ];
     }
+
     public function messages()
     {
         return [

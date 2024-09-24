@@ -59,7 +59,15 @@
     data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-hoverable="true"
     data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true"
     data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" class="app-default">
-
+    {{-- begin::Global Javascript Bundle(mandatory for all pages) --}}
+    <script src="../assets/plugins/global/plugins.bundle.js"></script>
+    <script src="../assets/js/scripts.bundle.js"></script>
+    <script>
+        var currentDeviceId = ''
+        var cpu_util = {}
+        var cpu_temp = {}
+        var timestamps = {}
+    </script>
     {{-- begin::Theme mode setup on page load --}}
 
     {{-- begin::App --}}
@@ -218,14 +226,12 @@
 
 
 
-    {{-- begin::Global Javascript Bundle(mandatory for all pages) --}}
-    <script src="../assets/plugins/global/plugins.bundle.js"></script>
-    <script src="../assets/js/scripts.bundle.js"></script>
 
 </body>
 {{-- end::Body --}}
 <script src="{{ asset('js/script.js') }}"></script>
 <script src="{{ asset('js/channels.js') }}"></script>
 
+<script src="{{ asset('js/charts.js') }}"></script>
 
 </html>

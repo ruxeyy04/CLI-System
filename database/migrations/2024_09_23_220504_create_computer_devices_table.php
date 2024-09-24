@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('serial_number');
             $table->string('patch_id')->nullable();
             $table->string('token')->nullable();
-            $table->foreignId('laboratory_id')->constrained('laboratories')->onDelete('set null');
-            $table->dateTime('patched_date');
+            $table->foreignId('laboratory_id')->nullable()->constrained('laboratories')->onDelete('set null');
+            $table->dateTime('patched_date')->nullable();
             $table->timestamps();
         });
     }

@@ -18,6 +18,8 @@
             Laboratory
         @elseif(Route::currentRouteName() == 'computerdevices')
             Computer Devices
+        @elseif(Route::currentRouteName() == 'devicegraph')
+            Computer Device Real-Time Information
         @else
             Welcome!
         @endif
@@ -33,7 +35,24 @@
             <span class="bg-gray-500 bullet w-5px h-2px"></span>
         </li>
 
-        @if (Request::segment(1) == 'account')
+        @if (Route::currentRouteName() == 'devicegraph')
+            @php
+                $deviceId = request()->route('id'); 
+                $device = \App\Models\ComputerDevice::find($deviceId);
+                $laboratory = $device ? $device->laboratory : null;
+            @endphp
+            @if ($laboratory)
+                <li class="breadcrumb-item text-muted">
+                    <a href="{{ route('laboratory') }}" class="text-muted text-hover-primary">{{ $laboratory->laboratory_name }}</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="bg-gray-500 bullet w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-muted">
+                    {{ $device->device_name }}
+                </li>
+            @endif
+        @elseif (Request::segment(1) == 'account')
             <li class="breadcrumb-item text-muted">
                 <a href="{{ route('account_overview') }}" class="text-muted text-hover-primary">Account</a>
             </li>
