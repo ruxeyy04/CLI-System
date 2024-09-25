@@ -2,14 +2,17 @@
 
 use Livewire\Volt\Component;
 use App\Models\RamInfo;
-use Livewire\Attributes\On;
 
 new class extends Component {
     public $device; 
     public $ramInfo; 
     public $usedPercentage; // Add a property for the used percentage
-
-    #[On('echo:device-updates,.patch.saved')]
+    public function getListeners()
+    {
+        return [
+            "echo-private:ram-graph.{$this->device->id},.ram.graph.update" => 'reloadData',
+        ];
+    }
     public function reloadData()
     {
         $this->ramInfo = RamInfo::where('device_id', $this->device->id)->first(); 

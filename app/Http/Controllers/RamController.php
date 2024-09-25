@@ -7,6 +7,7 @@ use App\Events\RamGraphUpdate;
 use App\Models\RamInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+
 class RamController extends Controller
 {
     public function store(Request $request)
@@ -32,7 +33,11 @@ class RamController extends Controller
             'speed' => $ramInfoData['speed'] ?? null,
         ];
         $ramInfo = RamInfo::updateOrCreate(['device_id' => $data['device_id']], $data);
+        $hasChanges = false;
+        if ($ramInfo->wasRecentlyCreated ||  $ramInfo->wasChanged()) {
 
+            $hasChanges = true;
+        }
         $lastUsage = $ramInfo->ramUsage()->latest()->first();
         if ($request->has('usage')) {
 
@@ -41,9 +46,10 @@ class RamController extends Controller
                 RamGraphUpdate::dispatch($request->usage, $request->input('device_id'));
             }
         }
-
-        RamGraphUpdate::dispatch($request->usage, $request->input('device_id'));
-        PatchSaved::dispatch($request->input('device_id'));
+        if ($hasChanges) {
+            PatchSaved::dispatch($request->input('device_id'));
+        }
+       
         return response()->json(['success' => true, 'data' => $request->all()]);
     }
 }
