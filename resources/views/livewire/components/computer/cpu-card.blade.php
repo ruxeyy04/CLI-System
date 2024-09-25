@@ -2,12 +2,13 @@
 
 use Livewire\Volt\Component;
 use App\Models\CpuInfo;
+use Livewire\Attributes\On;
 new class extends Component {
     public $device; 
     public $cpuInfo; 
 
 
-
+    #[On('echo:device-updates,.patch.saved')]
     public function reloadData()
     {
         $this->cpuInfo = CpuInfo::where('device_id', $this->device->id)->first(); 

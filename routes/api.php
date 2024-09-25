@@ -3,6 +3,7 @@
 use App\Events\NumberPosted;
 use App\Http\Controllers\CpuController;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\RamController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +22,4 @@ Route::post('/post-number', function (Request $request) {
 Route::put('/device', [DeviceController::class, 'verify']);
 
 Route::post('/cpu', [CpuController::class, 'store']);
+Route::post('/ram', [RamController::class, 'store']);

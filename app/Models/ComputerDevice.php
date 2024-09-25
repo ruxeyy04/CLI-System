@@ -28,4 +28,11 @@ class ComputerDevice extends Model
     {
         return $this->belongsTo(Laboratory::class);
     }
+
+    public function cpuInfo() {
+        return $this->hasMany(CpuInfo::class, 'device_id');
+    }
+    public function ramInfo() {
+        return $this->hasMany(RamInfo::class, 'device_id');
+    }
 }

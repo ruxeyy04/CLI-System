@@ -4,7 +4,6 @@ use Livewire\Volt\Component;
 use App\Models\CpuInfo;
 use App\Models\CpuTemp;
 use App\Models\CpuUtilization;
-use Livewire\Attributes\On;
 
 new class extends Component {
     public $device;
@@ -21,9 +20,13 @@ new class extends Component {
         if ($cpuInfo) {
             $cpuId = $cpuInfo->id;
 
-            // Use eager loading to reduce database queries
-            $cpuTempRecords = CpuTemp::where('cpu_id', $cpuId)->get(['temp', 'created_at']);
-            $cpuUtilRecords = CpuUtilization::where('cpu_id', $cpuId)->get(['util', 'created_at']);
+            $cpuTempRecords = CpuTemp::where('cpu_id', $cpuId)
+                ->whereDate('created_at', now()->toDateString())
+                ->get(['temp', 'created_at']);
+
+            $cpuUtilRecords = CpuUtilization::where('cpu_id', $cpuId)
+                ->whereDate('created_at', now()->toDateString())
+                ->get(['util', 'created_at']);
 
             $this->cpu_temp_data = $cpuTempRecords->pluck('temp')->toArray();
             $cpu_temp_timestamps = $cpuTempRecords->pluck('created_at')->toArray();
@@ -31,10 +34,8 @@ new class extends Component {
             $this->cpu_util_data = $cpuUtilRecords->pluck('util')->toArray();
             $cpu_util_timestamps = $cpuUtilRecords->pluck('created_at')->toArray();
 
-            // Determine the longer timestamps array
             $this->timestamps = count($cpu_temp_timestamps) > count($cpu_util_timestamps) ? $cpu_temp_timestamps : $cpu_util_timestamps;
 
-            // Sync both arrays in length
             $this->equalizeDataArrays();
         }
     }
@@ -75,22 +76,21 @@ new class extends Component {
     </div>
 
     <script>
-         cpu_util = {
+        cpu_util = {
             name: "Utilization",
             data: {!! json_encode($cpu_util_data) !!}
         };
-         cpu_temp = {
+        cpu_temp = {
             name: "Temperature",
             data: {!! json_encode($cpu_temp_data) !!}
         };
-         timestamps = {!! json_encode($timestamps) !!};
+        timestamps = {!! json_encode($timestamps) !!};
 
-        // Final cpu_temp and cpu_util arrays after adjustment
         cpu_temp.data = {!! json_encode($cpu_temp_data) !!};
         cpu_util.data = {!! json_encode($cpu_util_data) !!};
     </script>
 
     <script>
-     currentDeviceId = '{{ $device->id }}';
+        currentDeviceId = '{{ $device->id }}';
     </script>
 </div>

@@ -64,9 +64,22 @@
     <script src="../assets/js/scripts.bundle.js"></script>
     <script>
         var currentDeviceId = ''
-        var cpu_util = {}
-        var cpu_temp = {}
-        var timestamps = {}
+        var cpu_util = {
+            name: "Utilization",
+            data: []
+        }
+        var cpu_temp = {
+            name: "Temperature",
+            data: []
+        }
+        var timestamps = []
+
+        var ram_usage = {
+            name: "RAM Usage",
+            data: [],
+            timestamps: []
+            
+        }
     </script>
     {{-- begin::Theme mode setup on page load --}}
 
