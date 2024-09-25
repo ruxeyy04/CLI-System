@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cpu_utilizations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('cpu_id')->nullable()->constrained('cpu_infos')->onDelete('cascade');
-            $table->decimal('util', 10, 2);
+            $table->decimal('util', 10, 1);
             $table->timestamps();
         });
     }

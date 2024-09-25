@@ -1,9 +1,22 @@
 <?php
 
 use Livewire\Volt\Component;
-
+use App\Models\GpuInfo;
+use Livewire\Attributes\On;
 new class extends Component {
-    //
+    public $device;
+    public $gpuInfo;
+
+    #[On('echo:device-updates,.patch.saved')]
+    public function reloadData()
+    {
+        $this->gpuInfo = GpuInfo::where('device_id', $this->device->id)->first();
+    }
+    public function mount($device)
+    {
+        $this->device = $device;
+        $this->gpuInfo = GpuInfo::where('device_id', $this->device->id)->first();
+    }
 }; ?>
 
 <div class="card card-flush h-md-50 mb-xl-10">
@@ -14,32 +27,39 @@ new class extends Component {
         </div>
     </div>
     <div class="pt-2 pb-4 card-body d-flex align-items-center">
-        <div class="d-flex flex-column content-justify-center w-100">
-            <div class="d-flex fs-6 fw-semibold align-items-center">
-                <div class="bullet w-8px h-6px rounded-2 bg-success me-3"></div>
-                <div class="text-gray-500 flex-grow-1 me-4">Brand</div>
-                <div class="text-gray-700 fw-bolder text-xxl-end"></div>
+        @if ($gpuInfo)
+            <div class="d-flex flex-column content-justify-center w-100">
+                <div class="d-flex fs-6 fw-semibold align-items-center">
+                    <div class="bullet w-8px h-6px rounded-2 bg-success me-3"></div>
+                    <div class="text-gray-500 flex-grow-1 me-4">Brand</div>
+                    <div class="text-gray-700 fw-bolder text-xxl-end">{{ $gpuInfo->brand }}</div>
+                </div>
+                <div class="d-flex fs-6 fw-semibold align-items-center">
+                    <div class="bullet w-8px h-6px rounded-2 bg-danger me-3"></div>
+                    <div class="text-gray-500 flex-grow-1 me-4">Temperature</div>
+                    <div class="text-gray-700 fw-bolder text-xxl-end">{{ $gpuInfo->temp }} °C</div>
+                </div>
+                <div class="d-flex fs-6 fw-semibold align-items-center">
+                    <div class="bullet w-8px h-6px rounded-2 bg-warning me-3"></div>
+                    <div class="text-gray-500 flex-grow-1 me-4">Usage</div>
+                    <div class="text-gray-700 fw-bolder text-xxl-end">{{ $gpuInfo->usage }} %</div>
+                </div>
+                <div class="d-flex fs-6 fw-semibold align-items-center">
+                    <div class="bullet w-8px h-6px rounded-2 bg-primary me-3"></div>
+                    <div class="text-gray-500 flex-grow-1 me-4">Power</div>
+                    <div class="text-gray-700 fw-bolder text-xxl-end">{{ $gpuInfo->power }}W</div>
+                </div>
+                <div class="d-flex fs-6 fw-semibold align-items-center">
+                    <div class="bullet w-8px h-6px rounded-2 bg-success me-3"></div>
+                    <div class="text-gray-500 flex-grow-1 me-4">GPU Memory</div>
+                    <div class="text-gray-700 fw-bolder text-xxl-end">{{ $gpuInfo->memory }} MB</div>
+                </div>
             </div>
-            <div class="d-flex fs-6 fw-semibold align-items-center">
-                <div class="bullet w-8px h-6px rounded-2 bg-danger me-3"></div>
-                <div class="text-gray-500 flex-grow-1 me-4">Temperature</div>
-                <div class="text-gray-700 fw-bolder text-xxl-end"></div>
+        @else
+            <div class="d-flex flex-column content-justify-center w-100">
+                <h4>No Data</h4>
             </div>
-            <div class="d-flex fs-6 fw-semibold align-items-center">
-                <div class="bullet w-8px h-6px rounded-2 bg-warning me-3"></div>
-                <div class="text-gray-500 flex-grow-1 me-4">Usage</div>
-                <div class="text-gray-700 fw-bolder text-xxl-end"></div>
-            </div>
-            <div class="d-flex fs-6 fw-semibold align-items-center">
-                <div class="bullet w-8px h-6px rounded-2 bg-primary me-3"></div>
-                <div class="text-gray-500 flex-grow-1 me-4">Power</div>
-                <div class="text-gray-700 fw-bolder text-xxl-end"></div>
-            </div>
-            <div class="d-flex fs-6 fw-semibold align-items-center">
-                <div class="bullet w-8px h-6px rounded-2 bg-success me-3"></div>
-                <div class="text-gray-500 flex-grow-1 me-4">GPU Memory</div>
-                <div class="text-gray-700 fw-bolder text-xxl-end"></div>
-            </div>
-        </div>
+        @endif
+
     </div>
 </div>

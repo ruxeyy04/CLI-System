@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('gpu_temps', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('gpu_id')->nullable()->constrained('gpu_infos')->onDelete('cascade');
+            $table->decimal('temp', 10, 1);
             $table->timestamps();
         });
     }

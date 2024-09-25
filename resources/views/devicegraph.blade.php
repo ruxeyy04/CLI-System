@@ -89,6 +89,9 @@
             <div class="mb-5 col-lg-12 col-xl-12 col-xxl-6 mb-xl-0">
                 <livewire:components.computer.ramgraph :device="$device" />
             </div>
+            <div class="mb-5 col-lg-12 col-xl-12 col-xxl-6 mb-xl-0">
+                <livewire:components.computer.gpugraph :device="$device" />
+            </div>
         </div>
         <!--end::Row-->
     </div>

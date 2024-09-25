@@ -46,7 +46,6 @@ class CpuController extends Controller
 
             if (!$lastTemp || $lastTemp->temp !== $request->temp) {
                 $cpuInfo->cpuTemps()->create(['temp' => $request->temp]);
-                // Assuming you're dispatching single values
                 CpuGraphUpdate::dispatch([$request->temp], [$request->util], $request->input('device_id'));
             }
         }
@@ -55,7 +54,6 @@ class CpuController extends Controller
 
             if (!$lastUtilization || $lastUtilization->util !== $request->util) {
                 $cpuInfo->cpuUtilizations()->create(['util' => $request->util]);
-                // Assuming you're dispatching single values
                 CpuGraphUpdate::dispatch($request->temp, $request->util, $request->input('device_id'));
             }
         }

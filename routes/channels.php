@@ -26,3 +26,9 @@ Broadcast::channel('ram-graph.{deviceId}', function ($user, $deviceId) {
 
     return $deviceExists;
 });
+
+Broadcast::channel('gpu-graph.{deviceId}', function ($user, $deviceId) {
+    $deviceExists = ComputerDevice::where('id', $deviceId)->exists();
+
+    return $deviceExists;
+});

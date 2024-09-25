@@ -80,6 +80,15 @@
             timestamps: []
             
         }
+        var gpu_usage = {
+            name: "Usage",
+            data: []
+        }
+        var gpu_temp = {
+            name: "Temperature",
+            data: []
+        }
+        var gpu_timestamps = []
     </script>
     {{-- begin::Theme mode setup on page load --}}
 
