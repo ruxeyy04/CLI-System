@@ -32,3 +32,9 @@ Broadcast::channel('gpu-graph.{deviceId}', function ($user, $deviceId) {
 
     return $deviceExists;
 });
+
+Broadcast::channel('disk-update.{deviceId}', function ($user, $deviceId) {
+    $deviceExists = ComputerDevice::where('id', $deviceId)->exists();
+
+    return $deviceExists;
+});

@@ -27,43 +27,7 @@
                     <!--end::Header-->
 
                     <!--begin::Card body-->
-                    <div class="pt-0 card-body">
-                        <!--begin::Progress-->
-                        <div class="mt-3 d-flex align-items-center flex-column w-100">
-                            <div class="mt-auto mb-2 d-flex justify-content-between w-100">
-                                <span class="text-gray-900 fw-bolder fs-6">Local Disk (C:)</span>
-                                <span class="text-gray-500 fw-bold fs-6">62%</span>
-                            </div>
-
-                            <div class="mx-3 rounded h-8px w-100 bg-light-success">
-                                <div class="rounded bg-success h-8px" role="progressbar" style="width: 70%;"
-                                    aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                        <div class="mt-3 d-flex align-items-center flex-column w-100">
-                            <div class="mt-auto mb-2 d-flex justify-content-between w-100">
-                                <span class="text-gray-900 fw-bolder fs-6">Local Disk (D:)</span>
-                                <span class="text-gray-500 fw-bold fs-6">62%</span>
-                            </div>
-
-                            <div class="mx-3 rounded h-8px w-100 bg-light-danger">
-                                <div class="rounded bg-danger h-8px" role="progressbar" style="width: 90%;"
-                                    aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                        <div class="mt-3 d-flex align-items-center flex-column w-100">
-                            <div class="mt-auto mb-2 d-flex justify-content-between w-100">
-                                <span class="text-gray-900 fw-bolder fs-6">Local Disk (E:)</span>
-                                <span class="text-gray-500 fw-bold fs-6">62%</span>
-                            </div>
-
-                            <div class="mx-3 rounded h-8px w-100 bg-light-success">
-                                <div class="rounded bg-success h-8px" role="progressbar" style="width: 30%;"
-                                    aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                        <!--end::Progress-->
-                    </div>
+                    <livewire:components.computer.disk-card-summary :device="$device" />
                     <!--end::Card body-->
                 </div>
                 <!--end::Card widget 5-->
@@ -75,7 +39,7 @@
                 <!--begin::Card widget 6-->
                 <livewire:components.computer.ram-card :device="$device" />
                 <livewire:components.computer.gpu-card :device="$device" />
-                
+
             </div>
             <!--end::Col-->
 
@@ -91,6 +55,11 @@
             </div>
             <div class="mb-5 col-lg-12 col-xl-12 col-xxl-6 mb-xl-0">
                 <livewire:components.computer.gpugraph :device="$device" />
+            </div>
+        </div>
+        <div class="row gx-5 gx-xl-10 mb-xl-10">
+            <div class="col-md-6">
+                <livewire:components.computer.disk-cards :device="$device" />
             </div>
         </div>
         <!--end::Row-->

@@ -353,16 +353,20 @@ document.addEventListener("livewire:navigate", () => {
 });
 
 if (currentDeviceId) {
+    // CPU
     var chart = new ApexCharts(
         document.querySelector("#cpu_temp_utilGraph"),
         options
     );
     chart.render();
+    // RAM
     var chart1 = new ApexCharts(
         document.querySelector("#ram_usage_graph"),
         options1
     );
+
     chart1.render();
+    // GPU
     var chart2 = new ApexCharts(
         document.querySelector("#gpu_usage_graph"),
         options2
@@ -473,12 +477,9 @@ if (currentDeviceId) {
                 ramUsage.push(e.usage);
                 ramTimestamps.push(isoTime);
 
-                chart1.updateSeries([
-                    {
-                        name: "RAM Usage",
-                        data: ramUsage,
-                    },
-                ]);
+                chart1.updateSeries([{
+                    data: ramUsage
+                }]);
 
                 const maxDataPoints = 20;
                 if (ramUsage.length > maxDataPoints) {

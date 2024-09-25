@@ -3,6 +3,7 @@
 use App\Events\NumberPosted;
 use App\Http\Controllers\CpuController;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\DiskController;
 use App\Http\Controllers\GpuController;
 use App\Http\Controllers\RamController;
 use Illuminate\Http\Request;
@@ -25,3 +26,4 @@ Route::put('/device', [DeviceController::class, 'verify']);
 Route::post('/cpu', [CpuController::class, 'store']);
 Route::post('/ram', [RamController::class, 'store']);
 Route::post('/gpu', [GpuController::class, 'store']);
+Route::post('/disk', [DiskController::class, 'store']);

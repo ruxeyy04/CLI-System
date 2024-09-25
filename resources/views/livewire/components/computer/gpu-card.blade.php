@@ -7,7 +7,12 @@ new class extends Component {
     public $device;
     public $gpuInfo;
 
-    #[On('echo:device-updates,.patch.saved')]
+    public function getListeners()
+    {
+        return [
+            "echo-private:gpu-graph.{$this->device->id},.gpu.graph.update" => 'reloadData',
+        ];
+    }
     public function reloadData()
     {
         $this->gpuInfo = GpuInfo::where('device_id', $this->device->id)->first();
