@@ -49,6 +49,7 @@ class GpuController extends Controller
         if ($request->has('temp')) {
             if (!$lastTemp || $lastTemp->temp !== $request->temp) {
                 $gpuInfo->gpuTemps()->create(['temp' => $request->temp]);
+                $gpuInfo->gpuUsage()->create(['usage' => $request->usage]);
                 GpuGraphUpdate::dispatch($request->temp, $request->usage, $request->input('device_id'));
             }
         }
@@ -57,6 +58,7 @@ class GpuController extends Controller
         $lastUsage = $gpuInfo->gpuUsage()->latest()->first();
         if ($request->has('usage')) {
             if (!$lastUsage || $lastUsage->usage !== $request->usage) {
+                $gpuInfo->gpuTemps()->create(['temp' => $request->temp]);
                 $gpuInfo->gpuUsage()->create(['usage' => $request->usage]);
                 GpuGraphUpdate::dispatch($request->temp, $request->usage, $request->input('device_id'));
             }

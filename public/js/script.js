@@ -287,3 +287,27 @@ Livewire.on("removePatchConfirmation", () => {
         }
     });
 });
+Livewire.on("update-data-modal-input", () => {
+    let id = event.detail.id;
+    let type = event.detail.type;
+    console.log(id, type)
+    Livewire.on('open-update-modal', () => {
+        $("#updateinput_modal").modal("show");
+    })
+    Livewire.on('close-modal', () => {
+        $("#updateinput_modal").modal("hide");
+        Swal.fire(
+            "Success!",
+            "The information is successfully saved",
+            "success"
+        );
+    })
+    Livewire.on('error', () => {
+        let msg = event.detail.message
+        Swal.fire(
+            "Error!",
+            msg,
+            "error"
+        );
+    })
+})

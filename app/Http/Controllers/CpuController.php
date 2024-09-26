@@ -16,13 +16,13 @@ class CpuController extends Controller
             'device_id' => 'required|string',
             'cpu_info.brand' => 'string',
             'cpu_info.arch' => 'string',
-            'cpu_info.bits' => 'integer',
-            'cpu_info.cores' => 'integer',
-            'cpu_info.threads' => 'integer',
-            'cpu_info.frequency' => 'numeric',
-            'cpu_info.base_speed' => 'numeric',
-            'temp' => 'required|numeric',
-            'util' => 'required|numeric',
+            'cpu_info.bits' => 'string',
+            'cpu_info.cores' => 'string',
+            'cpu_info.threads' => 'string',
+            'cpu_info.frequency' => 'string',
+            'cpu_info.base_speed' => 'string',
+            'temp' => 'required|string',
+            'util' => 'required|string',
         ]);
         if ($validator->fails()) {
             return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
@@ -40,13 +40,18 @@ class CpuController extends Controller
             'base_speed' => $cpuInfoData['base_speed'] ?? null,
         ];
         $cpuInfo = CpuInfo::updateOrCreate(['device_id' => $data['device_id']], $data);
-
+        $hasChanges = false;
+        if ($cpuInfo->wasRecentlyCreated ||  $cpuInfo->wasChanged()) {
+            
+            $hasChanges = true;
+        }
         $lastTemp = $cpuInfo->cpuTemps()->latest()->first();
         if ($request->has('temp')) {
 
             if (!$lastTemp || $lastTemp->temp !== $request->temp) {
                 $cpuInfo->cpuTemps()->create(['temp' => $request->temp]);
-                CpuGraphUpdate::dispatch([$request->temp], [$request->util], $request->input('device_id'));
+                $cpuInfo->cpuUtilizations()->create(['util' => $request->util]);
+                CpuGraphUpdate::dispatch($request->temp, $request->util, $request->input('device_id'));
             }
         }
         $lastUtilization = $cpuInfo->cpuUtilizations()->latest()->first();
@@ -54,11 +59,13 @@ class CpuController extends Controller
 
             if (!$lastUtilization || $lastUtilization->util !== $request->util) {
                 $cpuInfo->cpuUtilizations()->create(['util' => $request->util]);
+                $cpuInfo->cpuTemps()->create(['temp' => $request->temp]);
                 CpuGraphUpdate::dispatch($request->temp, $request->util, $request->input('device_id'));
             }
         }
-        CpuGraphUpdate::dispatch($request->temp, $request->util, $request->input('device_id'));
-        PatchSaved::dispatch($request->input('device_id'));
+        if ($hasChanges) {
+            PatchSaved::dispatch($request->input('device_id'));
+        }
         return response()->json(['success' => true, 'data' => $request->all()]);
     }
 }

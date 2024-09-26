@@ -58,11 +58,14 @@
             </div>
         </div>
         <div class="row gx-5 gx-xl-10 mb-xl-10">
-            <div class="col-md-6">
+            <div class="mb-5 col-lg-12 col-xl-12 col-xxl-6 mb-xl-0">
                 <livewire:components.computer.disk-cards :device="$device" />
+            </div>
+            <div class="mb-5 col-lg-12 col-xl-12 col-xxl-6 mb-xl-0">
+                <livewire:components.computer.input-devices :device="$device" />
             </div>
         </div>
         <!--end::Row-->
     </div>
-
-    </x-assisant-layout>
+    <livewire:components.computer.modal />
+</x-assisant-layout>

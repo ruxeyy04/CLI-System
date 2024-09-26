@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log; 
 use App\Models\ComputerDevice;
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
@@ -34,6 +33,12 @@ Broadcast::channel('gpu-graph.{deviceId}', function ($user, $deviceId) {
 });
 
 Broadcast::channel('disk-update.{deviceId}', function ($user, $deviceId) {
+    $deviceExists = ComputerDevice::where('id', $deviceId)->exists();
+
+    return $deviceExists;
+});
+
+Broadcast::channel('input-update.{deviceId}', function ($user, $deviceId) {
     $deviceExists = ComputerDevice::where('id', $deviceId)->exists();
 
     return $deviceExists;

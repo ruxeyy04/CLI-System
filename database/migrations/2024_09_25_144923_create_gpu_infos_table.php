@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('temp')->nullable();
             $table->string('usage')->nullable();
             $table->string('memory')->nullable();
-            $table->string('power')->nullable();
+            $table->string('power', 50)->nullable();
             $table->timestamps();
 
             $table->foreign('device_id')->references('id')->on('computer_devices')->onDelete('cascade');

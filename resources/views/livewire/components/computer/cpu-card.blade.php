@@ -52,7 +52,7 @@ new class extends Component {
                 <div class="d-flex fs-6 fw-semibold align-items-center">
                     <div class="bullet w-8px h-6px rounded-2 bg-primary me-3"></div>
                     <div class="text-gray-500 flex-grow-1 me-4">Base Speed</div>
-                    <div class="text-gray-700 fw-bolder text-xxl-end">{{ $cpuInfo->base_speed }} GHz</div>
+                    <div class="text-gray-700 fw-bolder text-xxl-end">{{ $cpuInfo->base_speed }}</div>
                 </div>
             </div>
         @else
