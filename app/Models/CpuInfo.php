@@ -19,7 +19,10 @@ class CpuInfo extends Model
         'frequency',
         'base_speed',
     ];
-
+    public function device()
+    {
+        return $this->belongsTo(ComputerDevice::class, 'device_id');
+    }
     public function cpuTemps()
     {
         return $this->hasMany(CpuTemp::class, 'cpu_id'); 

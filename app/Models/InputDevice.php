@@ -31,5 +31,8 @@ class InputDevice extends Model
         'note_added' => 'datetime', 
         'removed_on' => 'datetime'
     ];
-
+    public function device()
+    {
+        return $this->belongsTo(ComputerDevice::class, 'device_id');
+    }
 }

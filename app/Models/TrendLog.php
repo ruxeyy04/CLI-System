@@ -5,28 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DiskInfo extends Model
+class TrendLog extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'device_id',
-        'volume_label',
-        'mountpoint',
-        'total',
-        'used',
-        'free',
-        'health',
-        'temperature',
-        'drive_type',
-        'model',
-        'serial_number',
-        'status',
-        'ejected_on'
+        'type',
+        'component',
+        'start_datetime',
+        'end_datetime',
+        'description',
     ];
-
     protected $casts = [
-        'ejected_on' => 'datetime', 
+        'start_datetime' => 'datetime', 
+        'end_datetime' => 'datetime', 
     ];
     public function device()
     {

@@ -68,4 +68,5 @@
         <!--end::Row-->
     </div>
     <livewire:components.computer.modal />
+    <livewire:components.computer.trend-modal :device="$device"/>
 </x-assisant-layout>

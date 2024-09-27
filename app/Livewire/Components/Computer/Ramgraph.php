@@ -10,7 +10,7 @@ class Ramgraph extends Component
     public $device;
     public $ram_usage_data = [];
     public $timestamps = [];
-
+    public $ram_id;
     public function mount($device)
     {
         $this->device = $device;
@@ -19,7 +19,7 @@ class Ramgraph extends Component
 
         if ($ramInfo) {
             $ramId = $ramInfo->id;
-
+            $this->ram_id = $ramId;
             $ramUsageRecords = RamUsage::where('ram_id', $ramId)
                 ->whereDate('created_at', now()->toDateString())
                 ->get(['usage', 'created_at']);

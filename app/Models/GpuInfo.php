@@ -27,4 +27,8 @@ class GpuInfo extends Model
     {
         return $this->hasMany(GpuUsage::class, 'gpu_id'); 
     }
+    public function device()
+    {
+        return $this->belongsTo(ComputerDevice::class, 'device_id');
+    }
 }

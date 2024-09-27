@@ -13,16 +13,16 @@ class Gpugraph extends Component
     public $gpu_temp_data = [];
     public $gpu_usage_data = [];
     public $timestamps = [];
-
+    public $gpu_id;
     public function mount($device)
     {
         $this->device = $device;
-
+      
         $gpuInfo = GpuInfo::where('device_id', $this->device->id)->first();
 
         if ($gpuInfo) {
             $gpuId = $gpuInfo->id;
-
+            $this->gpu_id = $gpuId;
             $gpuTempRecords = GpuTemp::where('gpu_id', $gpuId)
                 ->whereDate('created_at', now()->toDateString())
                 ->get(['temp', 'created_at']);
