@@ -52,7 +52,7 @@ new class extends Component {
                 <div class="d-flex fs-6 fw-semibold align-items-center">
                     <div class="bullet w-8px h-6px rounded-2 bg-primary me-3"></div>
                     <div class="text-gray-500 flex-grow-1 me-4">Power</div>
-                    <div class="text-gray-700 fw-bolder text-xxl-end">{{ $gpuInfo->power }}W</div>
+                    <div class="text-gray-700 fw-bolder text-xxl-end">{{ round($gpuInfo->power, 2) }}W</div>
                 </div>
                 <div class="d-flex fs-6 fw-semibold align-items-center">
                     <div class="bullet w-8px h-6px rounded-2 bg-success me-3"></div>
