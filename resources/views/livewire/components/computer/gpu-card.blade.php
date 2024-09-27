@@ -37,7 +37,13 @@ new class extends Component {
                 <div class="d-flex fs-6 fw-semibold align-items-center">
                     <div class="bullet w-8px h-6px rounded-2 bg-success me-3"></div>
                     <div class="text-gray-500 flex-grow-1 me-4">Brand</div>
-                    <div class="text-gray-700 fw-bolder text-xxl-end">{{ $gpuInfo->brand }}</div>
+                    <div class="text-gray-700 fw-bolder text-xxl-end">@php
+                        $brand = $gpuInfo->brand;
+                        $uniqueBrand = implode(' ', array_unique(explode(' ', $brand)));
+                    @endphp
+                    
+                    {{ $uniqueBrand }}
+                    </div>
                 </div>
                 <div class="d-flex fs-6 fw-semibold align-items-center">
                     <div class="bullet w-8px h-6px rounded-2 bg-danger me-3"></div>
