@@ -39,10 +39,12 @@
                         <span wire:loading wire:target='generateTrend'>Please wait... <span class="spinner-border spinner-border-sm ms-2"></span></span>
                     </button>
                 </div>
+                <h4 class="text-center">Trend Analysis</h4>
                 <div id="trend_graph" class="min-h-auto ps-4 pe-6" style="height: 350px" wire:ignore></div>
+                <h3 class="text-center mt-4">{{$description}}</h3>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" wire:click='discardForm'>Discard</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
                 <button type="button" class="btn btn-primary" wire:click="save" wire:loading.attr='disabled' wire:target='save'>
                     <span wire:loading.remove wire:target='save'>Save</span>
                     <span wire:loading wire:target='save'>Please wait... <span class="spinner-border spinner-border-sm ms-2"></span></span>

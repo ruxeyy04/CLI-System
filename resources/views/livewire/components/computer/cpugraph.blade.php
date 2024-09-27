@@ -85,6 +85,9 @@ new class extends Component {
                     <a href="#!" class="px-3 menu-link" wire:click="$dispatch('generate-trend-modal', {id: {{$cpu_id}}, type: 'cpu'})">
                         Generate Trend Analysis
                     </a>
+                    <a href="#!" class="px-3 menu-link" wire:click="$dispatch('view-saved-trend', {id: {{$cpu_id}}, type: 'cpu'})">
+                        View Saved Trend Data
+                    </a>
                 </div>
 
             </div>

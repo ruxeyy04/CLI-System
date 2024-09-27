@@ -25,6 +25,9 @@
                     <a href="#!" class="px-3 menu-link" wire:click="$dispatch('generate-trend-modal', {id: {{$ram_id}}, type: 'ram'})">
                         Generate Trend Analysis
                     </a>
+                    <a href="#!" class="px-3 menu-link" wire:click="$dispatch('view-saved-trend', {id: {{$ram_id}}, type: 'ram'})">
+                        View Saved Trend Data
+                    </a>
                 </div>
 
             </div>

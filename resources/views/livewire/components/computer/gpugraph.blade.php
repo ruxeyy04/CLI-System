@@ -24,6 +24,9 @@
                     <a href="#!" class="px-3 menu-link" wire:click="$dispatch('generate-trend-modal', {id: {{$gpu_id}}, type: 'gpu'})">
                         Generate Trend Analysis
                     </a>
+                    <a href="#!" class="px-3 menu-link" wire:click="$dispatch('view-saved-trend', {id: {{$gpu_id}}, type: 'gpu'})">
+                        View Saved Trend Data
+                    </a>
                 </div>
 
             </div>

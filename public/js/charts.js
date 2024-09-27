@@ -109,8 +109,8 @@ var options = {
         {
             opposite: true,
             tickAmount: 8,
-            min: 0, 
-            max: 100, 
+            min: 0,
+            max: 100,
             labels: {
                 style: {
                     colors: "#9fa7bc",
@@ -122,8 +122,8 @@ var options = {
             },
         },
     ],
-    
-    
+
+
     axisBorder: {
         show: false,
     },
@@ -270,11 +270,11 @@ var options2 = {
     series: [
         {
             name: "Usage",
-            data: gpuUsage, 
+            data: gpuUsage,
         },
         {
             name: "Temperature",
-            data: gpuTemp,  
+            data: gpuTemp,
         },
     ],
     chart: {
@@ -304,7 +304,7 @@ var options2 = {
     },
     xaxis: {
         type: "datetime",
-        categories: gpuTimestamps, 
+        categories: gpuTimestamps,
         labels: {
             formatter: function (value) {
                 return new Date(value).toLocaleTimeString([], {
@@ -316,8 +316,8 @@ var options2 = {
     },
     yaxis: [
         {
-            min: 0, 
-            max: 100, 
+            min: 0,
+            max: 100,
             tickAmount: 5,  // Adjust this to fit your design
             labels: {
                 style: {
@@ -476,8 +476,6 @@ if (currentDeviceId) {
                 }
             }
         );
-    });
-    $(document).ready(function () {
         window.Echo.private("ram-graph." + currentDeviceId).listen(
             ".ram.graph.update",
             (e) => {
@@ -510,5 +508,109 @@ if (currentDeviceId) {
             }
         );
     });
+    Livewire.on('openModalTrend', () => {
+        $('#generate_trend_modal').modal('show')
+        chart4.updateSeries([ {
+            data: []
+        },
+        {
+            data: []
+        }]);
+    })
+
+    // Initialize the chart
+    var chart4 = new ApexCharts(document.querySelector("#trend_graph"), {
+        chart: {
+            fontFamily: "inherit",
+            height: 350,
+            toolbar: {
+                show: true,
+            },
+        },
+        series: [
+            {
+                data: []
+            },
+            {
+                name: 'Trend Line',
+                data: [],
+                stroke: {
+                    curve: "straight"
+                },
+            }
+        ],
+        xaxis: {
+            type: 'datetime'
+        },
+        stroke: {
+            curve: "smooth",
+            show: true,
+            width: 3,
+        },
+        labels: {
+            rotate: 0,
+            rotateAlways: true,
+            style: {
+                colors: "#f1f3f7",
+                fontSize: "12px",
+            },
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        crosshairs: {
+            position: "front",
+            stroke: {
+                color: "#f1f3f7",
+                width: 1,
+                dashArray: 3,
+            },
+        },
+        grid: {
+            borderColor: borderColor,
+            strokeDashArray: 4,
+            yaxis: {
+                lines: {
+                    show: true,
+                },
+            },
+        },
+    });
+
+    chart4.render();
+
+    Livewire.on('refreshCharts', () => {
+        const rawData = event.detail.raw_data;
+        const trend_line = event.detail.trend_line;
+        const raw_label = event.detail.raw_data_label;
+        console.log(rawData, trend_line,raw_label)
+        const cpuTemperatureData = rawData.map(item => ({
+            x: new Date(item.created_at).getTime(),
+            y: parseFloat(item.data).toFixed(2)
+        }));
+
+        const trendLineData = trend_line.map(item => ({
+            x: new Date(item.x).getTime(),
+            y: parseFloat(item.y).toFixed(2)
+        }));
+        chart4.updateSeries([
+            {
+                name: raw_label,
+                data: cpuTemperatureData
+            },
+            {
+                name: 'Trend Line',
+                data: trendLineData
+            }
+        ]);
+    });
+    Livewire.on('closeModalTrend', () => {
+        Swal.fire(
+            "Saved!",
+            "The Trend Analysis Data has been saved",
+            "success"
+        );
+        $('#generate_trend_modal').modal('hide')
+    })
 }
 
