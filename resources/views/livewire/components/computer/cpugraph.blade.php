@@ -65,6 +65,7 @@ new class extends Component {
             <span class="text-gray-900 card-label fw-bold">CPU Graph Real-Time</span>
             <span class="mt-1 text-gray-500 fw-semibold fs-6">Shows the Graph of the CPU Real-Time</span>
         </h3>
+        @if ($cpu_id)
         <div class="card-toolbar">
             <button class="btn btn-icon btn-color-gray-500 btn-active-color-primary justify-content-end"
                 data-bs-toggle="dropdown" aria-expanded="false">
@@ -91,7 +92,9 @@ new class extends Component {
                 </div>
 
             </div>
-        </div>
+        </div>  
+        @endif
+
     </div>
     <div class="px-0 pb-1 card-body d-flex justify-content-between flex-column">
         <div class="mb-5 px-9">

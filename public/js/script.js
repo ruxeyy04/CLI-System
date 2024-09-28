@@ -290,26 +290,142 @@ Livewire.on("removePatchConfirmation", () => {
 Livewire.on("update-data-modal-input", () => {
     let id = event.detail.id;
     let type = event.detail.type;
-    console.log(id, type)
-    Livewire.on('open-update-modal', () => {
+    console.log(id, type);
+    Livewire.on("open-update-modal", () => {
         $("#updateinput_modal").modal("show");
-    })
-    Livewire.on('close-modal', () => {
+    });
+    Livewire.on("close-modal", () => {
         $("#updateinput_modal").modal("hide");
         Swal.fire(
             "Success!",
             "The information is successfully saved",
             "success"
         );
-    })
-    Livewire.on('error', () => {
-        let msg = event.detail.message
-        Swal.fire(
-            "Error!",
-            msg,
-            "error"
-        );
-    })
-})
+    });
+    Livewire.on("error", () => {
+        let msg = event.detail.message;
+        Swal.fire("Error!", msg, "error");
+    });
+});
 
+Livewire.on("openSavedTrendModal", () => {
+    $("#view_trend_logs").modal("show");
+});
+Livewire.on("delete-trend-confirmation", () => {
+    const id = event.detail.id;
+    Swal.fire({
+        title: "Are you sure?",
+        text: "This will delete the trend log",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Livewire.dispatch("delete-trend", { id: id });
+            Livewire.on("delete-trend-alert", (e) => {
+                const status = event.detail.status;
+                if (status == "success") {
+                    Swal.fire(
+                        "Deleted!",
+                        "The trend log has been deleted.",
+                        "success"
+                    );
+                } else {
+                    Swal.fire(
+                        "Error!",
+                        "The trend log deletion has been failed",
+                        "error"
+                    );
+                }
+            });
+        }
+    });
+});
 
+Livewire.on("viewTrendChart", () => {
+    const rawData = event.detail.raw_data;
+    const trend_line = event.detail.trend_line;
+    const raw_label = event.detail.raw_data_label;
+    // Initialize the chart
+    var chart = new ApexCharts(document.querySelector("#view_trend_graph"), {
+        chart: {
+            fontFamily: "inherit",
+            height: 500,
+            toolbar: {
+                show: true,
+            },
+        },
+        series: [
+            {
+                data: []
+            },
+            {
+                name: 'Trend Line',
+                data: [],
+                stroke: {
+                    curve: "straight"
+                },
+            }
+        ],
+        xaxis: {
+            type: 'datetime'
+        },
+        stroke: {
+            curve: ["smooth", "straight"],
+            show: true,
+            width: 3,
+        },
+        labels: {
+            rotate: 0,
+            rotateAlways: true,
+            style: {
+                colors: "#f1f3f7",
+                fontSize: "12px",
+            },
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        crosshairs: {
+            position: "front",
+            stroke: {
+                color: "#f1f3f7",
+                width: 1,
+                dashArray: 3,
+            },
+        },
+        grid: {
+            borderColor: borderColor,
+            strokeDashArray: 4,
+            yaxis: {
+                lines: {
+                    show: true,
+                },
+            },
+        },
+    });
+
+    chart.render();
+
+    const cpuTemperatureData = rawData.map(item => ({
+        x: new Date(item.created_at).getTime(),
+        y: parseFloat(item.data).toFixed(2)
+    }));
+
+    const trendLineData = trend_line.map(item => ({
+        x: new Date(item.x).getTime(),
+        y: parseFloat(item.y).toFixed(2)
+    }));
+    chart.updateSeries([
+        {
+            name: raw_label,
+            data: cpuTemperatureData
+        },
+        {
+            name: 'Trend Line',
+            data: trendLineData
+        }
+    ]);
+});

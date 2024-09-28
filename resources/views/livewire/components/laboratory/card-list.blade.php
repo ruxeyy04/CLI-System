@@ -4,6 +4,7 @@ use Livewire\Volt\Component;
 use App\Models\Laboratory;
 new class extends Component {
     public $labs;
+    
     protected function getListeners()
     {
         return [
@@ -15,11 +16,11 @@ new class extends Component {
     }
     public function mount()
     {
-        $this->labs = Laboratory::withCount('users')->get();
+        $this->labs = Laboratory::withCount('users')->withCount('computerDevices')->get();
     }
     public function reloadData()
     {
-        $this->labs = Laboratory::withCount('users')->get();
+        $this->labs = Laboratory::withCount('users')->withCount('computerDevices')->get();
     }
     public function deleteLab($lab_id)
     {
@@ -60,8 +61,11 @@ new class extends Component {
                     </div>
                     <div class="text-gray-600 d-flex flex-column">
                         <div class="py-2 d-flex align-items-center">
-                            <span class="bullet bg-primary me-3"></span> 24 Computers
+                            <span class="bullet bg-primary me-3"></span>
+                            {{ $lab->computer_devices_count }} 
+                            {{ Str::plural('Computer', $lab->computer_devices_count) }}
                         </div>
+                        
                         <div class="py-2 d-flex align-items-center">
                             <span class="bullet bg-primary me-3"></span> {{ $lab->capacity }} Capacity
                         </div>

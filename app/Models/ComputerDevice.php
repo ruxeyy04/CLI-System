@@ -32,6 +32,9 @@ class ComputerDevice extends Model
     public function cpuInfo() {
         return $this->hasMany(CpuInfo::class, 'device_id');
     }
+    public function gpuInfo() {
+        return $this->hasMany(GpuInfo::class, 'device_id');
+    }
     public function ramInfo() {
         return $this->hasMany(RamInfo::class, 'device_id');
     }

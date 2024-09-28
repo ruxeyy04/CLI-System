@@ -583,7 +583,6 @@ if (currentDeviceId) {
         const rawData = event.detail.raw_data;
         const trend_line = event.detail.trend_line;
         const raw_label = event.detail.raw_data_label;
-        console.log(rawData, trend_line,raw_label)
         const cpuTemperatureData = rawData.map(item => ({
             x: new Date(item.created_at).getTime(),
             y: parseFloat(item.data).toFixed(2)

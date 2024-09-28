@@ -4,33 +4,38 @@
             <span class="text-gray-900 card-label fw-bold">GPU Graph Real-Time</span>
             <span class="mt-1 text-gray-500 fw-semibold fs-6">Shows the Graph of the GPU Real-Time</span>
         </h3>
-        <div class="card-toolbar">
-            <button class="btn btn-icon btn-color-gray-500 btn-active-color-primary justify-content-end"
-                data-bs-toggle="dropdown" aria-expanded="false">
+        @if ($gpu_id)
+            <div class="card-toolbar">
+                <button class="btn btn-icon btn-color-gray-500 btn-active-color-primary justify-content-end"
+                    data-bs-toggle="dropdown" aria-expanded="false">
 
-                <i class="ki-duotone ki-dots-square fs-1"><span class="path1"></span><span class="path2"></span><span
-                        class="path3"></span><span class="path4"></span></i>
-            </button>
+                    <i class="ki-duotone ki-dots-square fs-1"><span class="path1"></span><span
+                            class="path2"></span><span class="path3"></span><span class="path4"></span></i>
+                </button>
 
-            <div
-                class="dropdown-menu dropdown-menu-end menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px">
-                <div class="px-3 menu-item">
-                    <div class="px-3 py-4 text-gray-900 menu-content fs-6 fw-bold">Quick
-                        Actions</div>
+                <div
+                    class="dropdown-menu dropdown-menu-end menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px">
+                    <div class="px-3 menu-item">
+                        <div class="px-3 py-4 text-gray-900 menu-content fs-6 fw-bold">Quick
+                            Actions</div>
+                    </div>
+                    <div class="mb-3 opacity-75 separator"></div>
+                    <div class="px-3 mb-3 menu-item">
+
+                        <a href="#!" class="px-3 menu-link"
+                            wire:click="$dispatch('generate-trend-modal', {id: {{ $gpu_id }}, type: 'gpu'})">
+                            Generate Trend Analysis
+                        </a>
+                        <a href="#!" class="px-3 menu-link"
+                            wire:click="$dispatch('view-saved-trend', {id: {{ $gpu_id }}, type: 'gpu'})">
+                            View Saved Trend Data
+                        </a>
+                    </div>
+
                 </div>
-                <div class="mb-3 opacity-75 separator"></div>
-                <div class="px-3 mb-3 menu-item">
-
-                    <a href="#!" class="px-3 menu-link" wire:click="$dispatch('generate-trend-modal', {id: {{$gpu_id}}, type: 'gpu'})">
-                        Generate Trend Analysis
-                    </a>
-                    <a href="#!" class="px-3 menu-link" wire:click="$dispatch('view-saved-trend', {id: {{$gpu_id}}, type: 'gpu'})">
-                        View Saved Trend Data
-                    </a>
-                </div>
-
             </div>
-        </div>
+        @endif
+
     </div>
     <div class="px-0 pb-1 card-body d-flex justify-content-between flex-column">
         <div class="mb-5 px-9">

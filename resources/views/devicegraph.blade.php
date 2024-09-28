@@ -69,4 +69,5 @@
     </div>
     <livewire:components.computer.modal />
     <livewire:components.computer.trend-modal :device="$device"/>
+    <livewire:components.computer.view-trend-modal />
 </x-assisant-layout>
