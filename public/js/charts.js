@@ -540,10 +540,19 @@ if (currentDeviceId) {
             }
         ],
         xaxis: {
-            type: 'datetime'
+            type: 'datetime',
+            labels: {
+                formatter: function (value) {
+                    return new Date(value).toLocaleTimeString('en-US', {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true,
+                    });
+                }
+            }
         },
         stroke: {
-            curve: "smooth",
+            curve: ["smooth", "straight"],
             show: true,
             width: 3,
         },
@@ -575,6 +584,20 @@ if (currentDeviceId) {
                 },
             },
         },
+        tooltip: {
+            x: {
+                formatter: function (val) {
+                    return new Date(val).toLocaleString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true,
+                    });
+                }
+            }
+        }
     });
 
     chart4.render();

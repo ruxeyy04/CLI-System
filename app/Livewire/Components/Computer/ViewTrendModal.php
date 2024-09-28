@@ -222,7 +222,6 @@ class ViewTrendModal extends Component
         $this->hardware_type = $type;
         $this->description = '';
     
-        // Reset the pagination for both trend data
         $this->resetPage('page1');
         $this->resetPage('page2');
         
@@ -233,40 +232,35 @@ class ViewTrendModal extends Component
     public function render()
     {
         if ($this->hardware_type === 'cpu') {
-            // Fetch paginated data for CPU utilization
             $trend_data1 = TrendLog::where('component', $this->hardware_type)
                 ->where('type', 'utilization')
                 ->orderBy('created_at', 'desc')
-                ->paginate(5, ['*'], 'page1'); // Custom pagination for trend_data1
+                ->paginate(5, ['*'], 'page1'); 
     
-            // Fetch paginated data for CPU temperature
             $trend_data2 = TrendLog::where('component', $this->hardware_type)
                 ->where('type', 'temp')
-                ->orderBy('created_at')
-                ->paginate(5, ['*'], 'page2'); // Custom pagination for trend_data2
+                ->orderBy('created_at', 'desc')
+                ->paginate(5, ['*'], 'page2');
         } elseif ($this->hardware_type === 'ram') {
-            // Fetch paginated data for RAM usage
             $trend_data1 = TrendLog::where('component', $this->hardware_type)
                 ->where('type', 'usage')
-                ->orderBy('created_at')
+                ->orderBy('created_at', 'desc')
                 ->paginate(5, ['*'], 'page1');
     
-            $trend_data2 = null; // No second trend data for RAM
+            $trend_data2 = null; 
         } elseif ($this->hardware_type === 'gpu') {
-            // Fetch paginated data for GPU usage
             $trend_data1 = TrendLog::where('component', $this->hardware_type)
                 ->where('type', 'usage')
-                ->orderBy('created_at')
+                ->orderBy('created_at', 'desc')
                 ->paginate(5, ['*'], 'page1');
     
-            // Fetch paginated data for GPU temperature
             $trend_data2 = TrendLog::where('component', $this->hardware_type)
                 ->where('type', 'temp')
-                ->orderBy('created_at')
+                ->orderBy('created_at', 'desc')
                 ->paginate(5, ['*'], 'page2');
         } else {
-            $trend_data1 = collect(); // Fallback empty collection
-            $trend_data2 = collect(); // Fallback empty collection
+            $trend_data1 = collect(); 
+            $trend_data2 = collect(); 
         }
     
         return view('livewire.components.computer.view-trend-modal', [

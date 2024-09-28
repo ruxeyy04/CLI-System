@@ -363,14 +363,20 @@ Livewire.on("viewTrendChart", () => {
             },
             {
                 name: 'Trend Line',
-                data: [],
-                stroke: {
-                    curve: "straight"
-                },
+                data: []
             }
         ],
         xaxis: {
-            type: 'datetime'
+            type: 'datetime',
+            labels: {
+                formatter: function (value) {
+                    return new Date(value).toLocaleTimeString('en-US', {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true,
+                    });
+                }
+            }
         },
         stroke: {
             curve: ["smooth", "straight"],
@@ -405,6 +411,20 @@ Livewire.on("viewTrendChart", () => {
                 },
             },
         },
+                tooltip: {
+            x: {
+                formatter: function (val) {
+                    return new Date(val).toLocaleString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true,
+                    });
+                }
+            }
+        }
     });
 
     chart.render();
@@ -418,6 +438,7 @@ Livewire.on("viewTrendChart", () => {
         x: new Date(item.x).getTime(),
         y: parseFloat(item.y).toFixed(2)
     }));
+    console.log(cpuTemperatureData, trendLineData)
     chart.updateSeries([
         {
             name: raw_label,
