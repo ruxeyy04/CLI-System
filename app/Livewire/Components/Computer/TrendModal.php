@@ -223,22 +223,32 @@ class TrendModal extends Component
         if (count($trendLine) < 2) {
             return "No sufficient data to determine trend.";
         }
-
+    
         $firstPoint = reset($trendLine);
         $lastPoint = end($trendLine);
-
+    
         $startDate = date('M d, Y \a\t h:iA', strtotime($firstPoint['x']));
         $endDate = date('M d, Y \a\t h:iA', strtotime($lastPoint['x']));
         $this->trend_start_date = $startDate;
         $this->trend_end_date = $endDate;
-        if ($lastPoint['y'] > $firstPoint['y']) {
+    
+        $change = $lastPoint['y'] - $firstPoint['y'];
+        $threshold = 10; // Define what constitutes a 'slight' change
+    
+        if ($change > $threshold) {
             return "The {$this->raw_label} is showing an increase from $startDate to $endDate.";
-        } elseif ($lastPoint['y'] < $firstPoint['y']) {
+        } elseif ($change > 0 && $change <= $threshold) {
+            return "The {$this->raw_label} is showing a slight increase from $startDate to $endDate.";
+        } elseif ($change < 0 && $change >= -$threshold) {
+            return "The {$this->raw_label} is showing a slight decrease from $startDate to $endDate.";
+        } elseif ($change < -$threshold) {
             return "The {$this->raw_label} is showing a decrease from $startDate to $endDate.";
         } else {
             return "The {$this->raw_label} shows no significant change from $startDate to $endDate.";
         }
     }
+    
+    
 
     public function save()
     {
