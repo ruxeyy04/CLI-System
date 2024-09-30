@@ -64,4 +64,35 @@ class InputDeviceController extends Controller
             return response()->json(['success' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
         }
     }
+    public function get(Request $request)
+    {
+        $deviceId = $request->input('device_id');
+
+        $inputDevices = InputDevice::where('device_id', $deviceId)->whereNull('removed_on')->get();
+
+        $groupedDevices = $inputDevices->groupBy('device_type');
+
+        $response = [];
+
+        foreach ($groupedDevices as $deviceType => $devices) {
+            $response[$deviceType] = $devices->map(function ($device) {
+                return [
+                    'brand' => $device->brand,
+                    'model' => $device->model,
+                    'serial_number' => $device->serial_number,
+                    'manufacturer' => $device->manufacturer,
+                    'description' => $device->description,
+                    'input_id' => $device->input_id,
+                    'input_status' => $device->input_status,
+                    'physical_status' => $device->physical_status,
+                    'note' => $device->note,
+                    'note_added' => $device->note_added ? $device->note_added->format('Y-m-d H:i:s') : null,
+                    'removed_on' => $device->removed_on ? $device->removed_on->format('Y-m-d H:i:s') : null,
+                    'creation_class_name' => $device->creation_class_name,
+                ];
+            });
+        }
+
+        return response()->json($response);
+    }
 }

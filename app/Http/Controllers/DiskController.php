@@ -68,5 +68,37 @@ class DiskController extends Controller
             return response()->json(['success' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
         }
     }
-    
+    public function get(Request $request)
+    {
+        $validated = $request->validate([
+            'device_id' => 'required',
+        ]);
+
+        $deviceId = $validated['device_id'];
+
+        $diskInfos = DiskInfo::where('device_id', $deviceId)->whereNull('ejected_on')->get();
+
+        if ($diskInfos->isEmpty()) {
+            return response()->json(['message' => 'No disk information found for the specified device_id.'], 404);
+        }
+
+        $response = $diskInfos->map(function ($diskInfo) {
+            return [
+                'volume_label' => $diskInfo->volume_label,
+                'mountpoint' => $diskInfo->mountpoint,
+                'total' => $diskInfo->total,
+                'used' => $diskInfo->used,
+                'free' => $diskInfo->free,
+                'health' => $diskInfo->health,
+                'temperature' => $diskInfo->temperature,
+                'drive_type' => $diskInfo->drive_type,
+                'model' => $diskInfo->model,
+                'serial_number' => $diskInfo->serial_number,
+                'status' => $diskInfo->status,
+                'ejected_on' => $diskInfo->ejected_on ? $diskInfo->ejected_on->format('Y-m-d H:i:s') : null,
+            ];
+        });
+
+        return response()->json($response);
+    }
 }

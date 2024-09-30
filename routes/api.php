@@ -29,3 +29,6 @@ Route::post('/ram', [RamController::class, 'store']);
 Route::post('/gpu', [GpuController::class, 'store']);
 Route::post('/disk', [DiskController::class, 'store']);
 Route::post('/input-devices', [InputDeviceController::class, 'store']);
+
+Route::get('/get-input-devices', [InputDeviceController::class, 'get']);
+Route::get('/get-disk', [DiskController::class, 'get']);
