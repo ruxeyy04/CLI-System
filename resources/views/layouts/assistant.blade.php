@@ -63,7 +63,7 @@
     <script src="../assets/plugins/global/plugins.bundle.js"></script>
     <script src="../assets/js/scripts.bundle.js"></script>
     <script>
-        var currentDeviceId = ''
+        var currentDeviceId = null
         var cpu_util = {
             name: "Utilization",
             data: []

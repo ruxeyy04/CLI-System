@@ -127,7 +127,7 @@
                                 @foreach ($laboratory->computerDevices as $device)
                                     <div class="menu-item">
                                         <a class="menu-link {{ $device->id == $currentDeviceId ? 'active' : '' }}"
-                                            href="{{ route('devicegraph', ['id' => $device->id]) }}" wire:navigate>
+                                            href="{{ route('devicegraph', ['id' => $device->id]) }}">
                                             <span class="menu-icon">
                                                 <i class="ki-duotone ki-screen fs-4">
                                                     <span class="path1"></span>

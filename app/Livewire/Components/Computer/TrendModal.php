@@ -2,12 +2,15 @@
 
 namespace App\Livewire\Components\Computer;
 
+use App\Models\CpuInfo;
 use Livewire\Component;
 use App\Models\TrendLog;
 use App\Models\CpuTemp;
 use App\Models\CpuUtilization;
+use App\Models\GpuInfo;
 use App\Models\GpuTemp;
 use App\Models\GpuUsage;
+use App\Models\RamInfo;
 use App\Models\RamUsage;
 
 class TrendModal extends Component
@@ -42,24 +45,28 @@ class TrendModal extends Component
         $this->id = $id;
         $this->type = $type;
         $this->description = '';
+        $cpuInfo = CpuInfo::where('device_id', $this->device_id)->first();
+        $ramInfo = RamInfo::where('device_id', $this->device_id)->first();
+        $gpuInfo = GpuInfo::where('device_id', $this->device_id)->first();
+
         if ($type === 'cpu') {
             $this->trend_type = 'utilization';
-            $this->min_date = CpuUtilization::min('created_at');
-            $this->max_date = CpuUtilization::max('created_at');
+            $this->min_date = CpuUtilization::where('cpu_id', $cpuInfo->id)->min('created_at');
+            $this->max_date = CpuUtilization::where('cpu_id', $cpuInfo->id)->max('created_at');
             $this->raw_label = "CPU Utilization";
             $this->start_datetime = now()->format('Y-m-d H:i');
             $this->end_datetime = now()->addHour()->format('Y-m-d H:i');
         } elseif ($type === 'ram') {
             $this->trend_type = 'usage';
-            $this->min_date = RamUsage::min('created_at');
-            $this->max_date = RamUsage::max('created_at');
+            $this->min_date = RamUsage::where('cpu_id', $ramInfo->id)->min('created_at');
+            $this->max_date = RamUsage::where('cpu_id', $ramInfo->id)->max('created_at');
             $this->raw_label = "RAM Usage";
             $this->start_datetime = now()->format('Y-m-d H:i');
             $this->end_datetime = now()->addHour()->format('Y-m-d H:i');
         } elseif ($type === 'gpu') {
             $this->trend_type = 'usage';
-            $this->min_date = GpuUsage::min('created_at');
-            $this->max_date = GpuUsage::max('created_at');
+            $this->min_date = GpuUsage::where('cpu_id', $gpuInfo->id)->min('created_at');
+            $this->max_date = GpuUsage::where('cpu_id', $gpuInfo->id)->max('created_at');
             $this->raw_label = "GPU Usage";
             $this->start_datetime = now()->format('Y-m-d H:i');
             $this->end_datetime = now()->addHour()->format('Y-m-d H:i');

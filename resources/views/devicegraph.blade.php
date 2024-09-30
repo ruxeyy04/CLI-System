@@ -1,6 +1,14 @@
 <x-assistant-layout>
     <div id="kt_app_content_container" class="app-container container-xxl ">
-
+        @if ($device->patch_id)
+        <script>
+             currentDeviceId = '{{ $device->id }}';
+        </script>
+        @else
+        <script>
+             currentDeviceId = null;
+        </script>
+        @endif
         <div class="row gx-5 gx-xl-10 mb-xl-10">
             <!--begin::Col-->
             <div class="mb-10 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
@@ -70,4 +78,5 @@
     <livewire:components.computer.modal />
     <livewire:components.computer.trend-modal :device="$device"/>
     <livewire:components.computer.view-trend-modal />
+   
 </x-assisant-layout>

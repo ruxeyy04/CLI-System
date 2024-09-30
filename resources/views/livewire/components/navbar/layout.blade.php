@@ -16,8 +16,8 @@ new class extends Component {
 }; ?>
 
 
-<div class="app-navbar flex-shrink-0">
-    <!--begin::Search-->
+<div class="flex-shrink-0 app-navbar">
+    {{-- <!--begin::Search-->
     <div class="app-navbar-item align-items-stretch ms-1 ms-lg-3">
 
         <!--begin::Search-->
@@ -58,7 +58,7 @@ new class extends Component {
         <livewire:components.navbar.notification />
         <!--end::Menu wrapper-->
     </div>
-    <!--end::Notifications-->
+    <!--end::Notifications--> --}}
 
 
 
@@ -80,11 +80,11 @@ new class extends Component {
 
 
         <!--begin::Menu-->
-        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-title-gray-700 menu-icon-gray-500 menu-active-bg menu-state-color fw-semibold py-4 fs-base w-150px"
+        <div class="py-4 menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-title-gray-700 menu-icon-gray-500 menu-active-bg menu-state-color fw-semibold fs-base w-150px"
             data-kt-menu="true" data-kt-element="theme-mode-menu">
             <!--begin::Menu item-->
-            <div class="menu-item px-3 my-0" data-kt-element="mode" data-kt-value="light">
-                <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="light">
+            <div class="px-3 my-0 menu-item" data-kt-element="mode" data-kt-value="light">
+                <a href="#" class="px-3 py-2 menu-link" data-kt-element="mode" data-kt-value="light">
                     <span class="menu-icon" data-kt-element="icon">
                         <i class="ki-duotone ki-night-day fs-2"><span class="path1"></span><span
                                 class="path2"></span><span class="path3"></span><span class="path4"></span><span
@@ -99,8 +99,8 @@ new class extends Component {
             <!--end::Menu item-->
 
             <!--begin::Menu item-->
-            <div class="menu-item px-3 my-0">
-                <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="dark">
+            <div class="px-3 my-0 menu-item">
+                <a href="#" class="px-3 py-2 menu-link" data-kt-element="mode" data-kt-value="dark">
                     <span class="menu-icon" data-kt-element="icon">
                         <i class="ki-duotone ki-moon fs-2"><span class="path1"></span><span class="path2"></span></i>
                     </span>
@@ -112,8 +112,8 @@ new class extends Component {
             <!--end::Menu item-->
 
             <!--begin::Menu item-->
-            <div class="menu-item px-3 my-0">
-                <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="system">
+            <div class="px-3 my-0 menu-item">
+                <a href="#" class="px-3 py-2 menu-link" data-kt-element="mode" data-kt-value="system">
                     <span class="menu-icon" data-kt-element="icon">
                         <i class="ki-duotone ki-screen fs-2"><span class="path1"></span><span
                                 class="path2"></span><span class="path3"></span><span class="path4"></span></i>
@@ -141,11 +141,11 @@ new class extends Component {
         </div>
 
         <!--begin::User account menu-->
-        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px"
+        <div class="py-4 menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold fs-6 w-275px"
             data-kt-menu="true">
             <!--begin::Menu item-->
-            <div class="menu-item px-3">
-                <div class="menu-content d-flex align-items-center px-3">
+            <div class="px-3 menu-item">
+                <div class="px-3 menu-content d-flex align-items-center">
                     <!--begin::Avatar-->
                     <div class="symbol symbol-50px me-5">
                         <img x-data="{ profileimg: '{{ Auth::user()->profileimg ? asset('storage/profile/' . Auth::user()->id . '/' . Auth::user()->profileimg) : asset('storage/profile/default.jpg') }}' }" :src="profileimg" alt="Profile Image"
@@ -179,12 +179,12 @@ new class extends Component {
             <!--end::Menu item-->
 
             <!--begin::Menu separator-->
-            <div class="separator my-2"></div>
+            <div class="my-2 separator"></div>
             <!--end::Menu separator-->
 
             <!--begin::Menu item-->
-            <div class="menu-item px-5">
-                <a href="{{ route('account_overview') }}" class="menu-link px-5" wire:navigate>
+            <div class="px-5 menu-item">
+                <a href="{{ route('account_overview') }}" class="px-5 menu-link" wire:navigate>
                     My Profile
                 </a>
             </div>
@@ -192,22 +192,22 @@ new class extends Component {
 
 
             <!--begin::Menu separator-->
-            <div class="separator my-2"></div>
+            <div class="my-2 separator"></div>
             <!--end::Menu separator-->
 
 
 
             <!--begin::Menu item-->
-            <div class="menu-item px-5 my-1">
-                <a href="{{ route('account_settings') }}" class="menu-link px-5" wire:navigate>
+            <div class="px-5 my-1 menu-item">
+                <a href="{{ route('account_settings') }}" class="px-5 menu-link" wire:navigate>
                     Account Settings
                 </a>
             </div>
             <!--end::Menu item-->
 
             <!--begin::Menu item-->
-            <div class="menu-item px-5">
-                <a class="menu-link px-5" wire:click='logout'>
+            <div class="px-5 menu-item">
+                <a class="px-5 menu-link" wire:click='logout'>
                     Logout
                 </a>
             </div>

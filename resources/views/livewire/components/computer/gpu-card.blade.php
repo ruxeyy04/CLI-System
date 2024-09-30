@@ -22,6 +22,7 @@ new class extends Component {
         $this->device = $device;
         $this->gpuInfo = GpuInfo::where('device_id', $this->device->id)->first();
     }
+    
 }; ?>
 
 <div class="card card-flush h-md-50 mb-xl-10">

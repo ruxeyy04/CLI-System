@@ -121,7 +121,5 @@ new class extends Component {
         cpu_util.data = {!! json_encode($cpu_util_data) !!};
     </script>
 
-    <script>
-        currentDeviceId = '{{ $device->id }}';
-    </script>
+
 </div>
