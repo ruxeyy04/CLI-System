@@ -58,15 +58,15 @@ class TrendModal extends Component
             $this->end_datetime = now()->addHour()->format('Y-m-d H:i');
         } elseif ($type === 'ram') {
             $this->trend_type = 'usage';
-            $this->min_date = RamUsage::where('cpu_id', $ramInfo->id)->min('created_at');
-            $this->max_date = RamUsage::where('cpu_id', $ramInfo->id)->max('created_at');
+            $this->min_date = RamUsage::where('ram_id', $ramInfo->id)->min('created_at');
+            $this->max_date = RamUsage::where('ram_id', $ramInfo->id)->max('created_at');
             $this->raw_label = "RAM Usage";
             $this->start_datetime = now()->format('Y-m-d H:i');
             $this->end_datetime = now()->addHour()->format('Y-m-d H:i');
         } elseif ($type === 'gpu') {
             $this->trend_type = 'usage';
-            $this->min_date = GpuUsage::where('cpu_id', $gpuInfo->id)->min('created_at');
-            $this->max_date = GpuUsage::where('cpu_id', $gpuInfo->id)->max('created_at');
+            $this->min_date = GpuUsage::where('gpu_id', $gpuInfo->id)->min('created_at');
+            $this->max_date = GpuUsage::where('gpu_id', $gpuInfo->id)->max('created_at');
             $this->raw_label = "GPU Usage";
             $this->start_datetime = now()->format('Y-m-d H:i');
             $this->end_datetime = now()->addHour()->format('Y-m-d H:i');
