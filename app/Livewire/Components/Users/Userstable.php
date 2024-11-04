@@ -4,6 +4,7 @@ namespace App\Livewire\Components\Users;
 
 use Livewire\Component;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
 
@@ -46,7 +47,7 @@ class Userstable extends Component
         $this->useridForPassword = $userId;
         $user = User::find($this->useridForPassword);
         if ($user) {
-            $user->password = null;
+            $user->password = Hash::make('12345678');;
             $user->save();
 
             $this->dispatch('reset-password-success');

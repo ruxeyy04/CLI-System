@@ -118,12 +118,12 @@ new #[Layout('layouts.auth')] class extends Component {
                 </button>
             </div>
         </form>
-        <div class="text-center text-gray-500 fw-semibold fs-6">
+        {{-- <div class="text-center text-gray-500 fw-semibold fs-6">
             Not a Member yet?
 
             <a href="/register" class="link-primary" wire:navigate>
                 Sign up
             </a>
-        </div>
+        </div> --}}
     </div>
 </div>
