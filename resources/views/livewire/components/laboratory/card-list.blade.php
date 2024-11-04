@@ -4,7 +4,7 @@ use Livewire\Volt\Component;
 use App\Models\Laboratory;
 new class extends Component {
     public $labs;
-    
+
     protected function getListeners()
     {
         return [
@@ -44,7 +44,7 @@ new class extends Component {
     }
 }; ?>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-5 g-xl-9">
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-5 g-xl-9 d-flex justify-content-center">
     @foreach ($labs as $lab)
         <div class="col-md-4">
             <div class="card card-flush h-md-100">
@@ -62,10 +62,10 @@ new class extends Component {
                     <div class="text-gray-600 d-flex flex-column">
                         <div class="py-2 d-flex align-items-center">
                             <span class="bullet bg-primary me-3"></span>
-                            {{ $lab->computer_devices_count }} 
+                            {{ $lab->computer_devices_count }}
                             {{ Str::plural('Computer', $lab->computer_devices_count) }}
                         </div>
-                        
+
                         <div class="py-2 d-flex align-items-center">
                             <span class="bullet bg-primary me-3"></span> {{ $lab->capacity }} Capacity
                         </div>
@@ -79,15 +79,19 @@ new class extends Component {
                         </div>
                     </div>
                 </div>
-                <div class="flex-wrap pt-0 card-footer">
-                    <button class="my-1 btn btn-light btn-active-primary"
-                        wire:click="$dispatch('viewlab_modal', {'lab_id': {{ $lab->id }}})">View</button>
-                    <button type="button" class="my-1 btn btn-light btn-active-light-primary"
-                        wire:click="$dispatch('editlab_modal', {'lab_id': {{ $lab->id }}})">Edit</button>
-                    <button type="button" class="my-1 btn btn-light btn-active-light-danger"
-                        wire:click="$dispatch('delete-lab-confirmation', {'lab_id': {{ $lab->id }}})">Delete</button>
+                @if (Route::currentRouteName() != 'dashboard')
+                    <div class="flex-wrap pt-0 card-footer">
+                        <button class="my-1 btn btn-light btn-active-primary"
+                            wire:click="$dispatch('viewlab_modal', {'lab_id': {{ $lab->id }}})">View</button>
+                        <button type="button" class="my-1 btn btn-light btn-active-light-primary"
+                            wire:click="$dispatch('editlab_modal', {'lab_id': {{ $lab->id }}})">Edit</button>
+                        <button type="button" class="my-1 btn btn-light btn-active-light-danger"
+                            wire:click="$dispatch('delete-lab-confirmation', {'lab_id': {{ $lab->id }}})">Delete</button>
 
-                </div>
+                    </div>
+                @endif
+
+
             </div>
         </div>
     @endforeach

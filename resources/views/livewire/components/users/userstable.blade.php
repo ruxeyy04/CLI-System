@@ -8,7 +8,11 @@
                     <th class="min-w-125px">Last login</th>
                     <th class="min-w-125px">Verified Email </th>
                     <th class="min-w-125px">Joined Date</th>
+                    @if (Route::currentRouteName() != 'dashboard')
                     <th class="text-end min-w-100px">Actions</th>
+                    @endif
+                 
+                   
                 </tr>
             </thead>
             <tbody class="text-gray-600 fw-semibold">
@@ -62,6 +66,7 @@
                         <td>
                             {{ $user->created_at ? $user->created_at->format('d M Y, h:i a') : 'N/A' }}
                         </td>
+                        @if (Route::currentRouteName() != 'dashboard')
                         <td class="text-end">
                             @if ($user->id != Auth::id())
                                 <button class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm"
@@ -94,6 +99,9 @@
                             @endif
 
                         </td>
+                        @endif
+                     
+                       
                     </tr>
                 @endforeach
             </tbody>

@@ -102,49 +102,108 @@
                     @php
                         $currentDeviceId = request()->route('id');
                     @endphp
-
-                    <div data-kt-menu-trigger="click"
-                        class="menu-item menu-accordion {{ $laboratory->computerDevices->contains('id', $currentDeviceId) ? 'show' : '' }}">
-                        <span class="menu-link">
-                            <span class="menu-icon">
-                                <i class="ki-duotone ki-element-8 fs-2">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                </i>
+                    @if (ucfirst(auth()->user()->role) == 'Incharge')
+                        <div data-kt-menu-trigger="click"
+                            class="menu-item menu-accordion {{ $laboratory->computerDevices->contains('id', $currentDeviceId) ? 'show' : '' }}">
+                            <span class="menu-link">
+                                <span class="menu-icon">
+                                    <i class="ki-duotone ki-element-8 fs-2">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                    </i>
+                                </span>
+                                <span class="menu-title">{{ $laboratory->laboratory_name }}</span>
+                                <span class="menu-arrow"></span>
                             </span>
-                            <span class="menu-title">{{ $laboratory->laboratory_name }}</span>
-                            <span class="menu-arrow"></span>
-                        </span>
 
-                        <div class="menu-sub menu-sub-accordion">
-                            @if ($laboratory->computerDevices->isEmpty())
-                                <div class="menu-item">
-                                    <span class="menu-link">
-                                        <span class="menu-title">No Device Yet</span>
-                                    </span>
-                                </div>
-                            @else
-                                @foreach ($laboratory->computerDevices as $device)
+                            <div class="menu-sub menu-sub-accordion">
+                                @if ($laboratory->computerDevices->isEmpty())
                                     <div class="menu-item">
-                                        <a class="menu-link {{ $device->id == $currentDeviceId ? 'active' : '' }}"
-                                            href="{{ route('devicegraph', ['id' => $device->id]) }}">
-                                            <span class="menu-icon">
-                                                <i class="ki-duotone ki-screen fs-4">
-                                                    <span class="path1"></span>
-                                                    <span class="path2"></span>
-                                                    <span class="path3"></span>
-                                                    <span class="path4"></span>
-                                                </i>
-                                            </span>
-                                            <span class="menu-title">{{ $device->device_name }}</span>
-                                        </a>
+                                        <span class="menu-link">
+                                            <span class="menu-title">No Device Yet</span>
+                                        </span>
                                     </div>
-                                @endforeach
-                            @endif
+                                @else
+                                    @foreach ($laboratory->computerDevices as $device)
+                                        <div class="menu-item">
+                                            <a class="menu-link {{ $device->id == $currentDeviceId ? 'active' : '' }}"
+                                                href="{{ route('devicegraph', ['id' => $device->id]) }}">
+                                                <span class="menu-icon">
+                                                    <i class="ki-duotone ki-screen fs-4">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                        <span class="path3"></span>
+                                                        <span class="path4"></span>
+                                                    </i>
+                                                </span>
+                                                <span class="menu-title">{{ $device->device_name }}</span>
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
                         </div>
-                    </div>
-                @endforeach
+                    @elseif (ucfirst(auth()->user()->role) == 'Assistant')
+                        @if (auth()->user()->laboratory_id == $laboratory->id)
+                            <div data-kt-menu-trigger="click"
+                                class="menu-item menu-accordion {{ $laboratory->computerDevices->contains('id', $currentDeviceId) ? 'show' : '' }}">
+                                <span class="menu-link">
+                                    <span class="menu-icon">
+                                        <i class="ki-duotone ki-element-8 fs-2">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                        </i>
+                                    </span>
+                                    <span class="menu-title">{{ $laboratory->laboratory_name }}</span>
+                                    <span class="menu-arrow"></span>
+                                </span>
 
+                                <div class="menu-sub menu-sub-accordion">
+                                    @if ($laboratory->computerDevices->isEmpty())
+                                        <div class="menu-item">
+                                            <span class="menu-link">
+                                                <span class="menu-title">No Device Yet</span>
+                                            </span>
+                                        </div>
+                                    @else
+                                        @foreach ($laboratory->computerDevices as $device)
+                                            <div class="menu-item">
+                                                <a class="menu-link {{ $device->id == $currentDeviceId ? 'active' : '' }}"
+                                                    href="{{ route('devicegraph', ['id' => $device->id]) }}">
+                                                    <span class="menu-icon">
+                                                        <i class="ki-duotone ki-screen fs-4">
+                                                            <span class="path1"></span>
+                                                            <span class="path2"></span>
+                                                            <span class="path3"></span>
+                                                            <span class="path4"></span>
+                                                        </i>
+                                                    </span>
+                                                    <span class="menu-title">{{ $device->device_name }}</span>
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
+                            </div>
+                        @elseif (auth()->user()->laboratory_id === null)
+                        
+                        @endif
+
+                    @endif
+
+
+                @endforeach
+                @if(auth()->user()->laboratory_id === null && ucfirst(auth()->user()->role) == 'Assistant')
+                <div class="menu-item">
+                    <!--begin:Menu link--><a class="menu-link" href="#!"
+                        target="_blank"><span class="menu-icon"> <i class="ki-duotone ki-element-8 fs-2">
+                            <span class="path1"></span>
+                            <span class="path2"></span>
+                        </i></span><span
+                            class="menu-title">No Laboratory Assigned</span></a>
+                    <!--end:Menu link-->
+                </div>
+                @endif
 
 
 
@@ -158,13 +217,19 @@
                 </div>
                 <!--end:Menu item-->
                 <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link--><a class="menu-link {{ request()->routeIs('laboratory') ? 'active' : '' }}"
-                        href="{{ route('laboratory') }}" wire:navigate><span class="menu-icon"><i
-                                class="ki-duotone ki-abstract-13 fs-2"><span class="path1"></span><span
-                                    class="path2"></span></i></span><span class="menu-title">Laboratory</span></a>
-                    <!--end:Menu link-->
-                </div>
+                @if (ucfirst(auth()->user()->role) == 'Incharge')
+                    <div class="menu-item">
+                        <!--begin:Menu link--><a
+                            class="menu-link {{ request()->routeIs('laboratory') ? 'active' : '' }}"
+                            href="{{ route('laboratory') }}" wire:navigate><span class="menu-icon"><i
+                                    class="ki-duotone ki-abstract-13 fs-2"><span class="path1"></span><span
+                                        class="path2"></span></i></span><span
+                                class="menu-title">Laboratory</span></a>
+                        <!--end:Menu link-->
+                    </div>
+                @endif
+                
+                @if(ucfirst(auth()->user()->role) === 'Incharge')
                 <div class="menu-item">
                     <a class="menu-link {{ request()->routeIs('computerdevices') ? 'active' : '' }}"
                         href="{{ route('computerdevices') }}" wire:navigate>
@@ -177,38 +242,65 @@
                         <span class="menu-title">Computer Devices</span>
                     </a>
                 </div>
+                @elseif(auth()->user()->laboratory_id != null && ucfirst(auth()->user()->role) === 'Assistant')
                 <div class="menu-item">
-                    <a class="menu-link {{ request()->routeIs('user_management') ? 'active' : '' }}"
-                        href="{{ route('user_management') }}" wire:navigate>
+                    <a class="menu-link {{ request()->routeIs('computerdevices') ? 'active' : '' }}"
+                        href="{{ route('computerdevices') }}" wire:navigate>
                         <span class="menu-icon">
-                            <i class="ki-duotone ki-people fs-2">
+                            <i class="ki-duotone ki-monitor-mobile fs-2">
                                 <span class="path1"></span>
                                 <span class="path2"></span>
-                                <span class="path3"></span>
-                                <span class="path4"></span>
-                                <span class="path5"></span>
                             </i>
                         </span>
-                        <span class="menu-title">Users</span>
+                        <span class="menu-title">Computer Devices</span>
                     </a>
                 </div>
+                @else
+                <div class="menu-item">
+                    <!--begin:Menu link--><a class="menu-link" href="#!"
+                        target="_blank"><span class="menu-icon"> <i class="ki-duotone ki-monitor-mobile fs-2">
+                            <span class="path1"></span>
+                            <span class="path2"></span>
+                        </i></span><span
+                            class="menu-title">No Laboratory Assigned</span></a>
+                    <!--end:Menu link-->
+                </div>
+                @endif
+                @if (ucfirst(auth()->user()->role) == 'Incharge')
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('user_management') ? 'active' : '' }}"
+                            href="{{ route('user_management') }}" wire:navigate>
+                            <span class="menu-icon">
+                                <i class="ki-duotone ki-people fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                    <span class="path3"></span>
+                                    <span class="path4"></span>
+                                    <span class="path5"></span>
+                                </i>
+                            </span>
+                            <span class="menu-title">Users</span>
+                        </a>
+                    </div>
+                @endif
+
                 <!--end:Menu item-->
                 <!--begin:Menu item-->
-                <div class="pt-5 menu-item">
+                {{-- <div class="pt-5 menu-item">
                     <!--begin:Menu content-->
                     <div class="menu-content"><span class="menu-heading fw-bold text-uppercase fs-7">Help</span>
                     </div>
                     <!--end:Menu content-->
-                </div>
+                </div> --}}
                 <!--end:Menu item-->
                 <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link--><a class="menu-link" href="https://preview.keenthemes.com/html/keen/docs"
+                {{-- <div class="menu-item">
+                    <!--begin:Menu link--><a class="menu-link" href="#!"
                         target="_blank"><span class="menu-icon"><i class="ki-duotone ki-abstract-26 fs-2"><span
                                     class="path1"></span><span class="path2"></span></i></span><span
                             class="menu-title">System Guide</span></a>
                     <!--end:Menu link-->
-                </div>
+                </div> --}}
                 <!--end:Menu item-->
             </div>
             <!--end::Menu-->
