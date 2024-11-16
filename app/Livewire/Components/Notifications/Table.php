@@ -11,11 +11,8 @@ class Table extends Component
 {
     use WithPagination, WithoutUrlPagination;
     protected $paginationTheme = 'bootstrap';
-    public $searchVal = ''; // Search input value
+    public $searchVal = ''; 
 
-    /**
-     * Define the event listeners.
-     */
     protected function getListeners()
     {
         return [
@@ -23,21 +20,16 @@ class Table extends Component
         ];
     }
 
-    /**
-     * Method to update the search value when triggered by an event.
-     */
+
     public function searchNotif($searchVal)
     {
         $this->searchVal = $searchVal;
-        $this->resetPage(); // Reset to the first page when searching
+        $this->resetPage();
     }
 
-    /**
-     * Render the notifications table.
-     */
+
     public function render()
     {
-        // Fetch notifications with filtering by search value (device name, title, or message)
         $notifications = Notifications::with('device')
             ->where(function ($query) {
                 $query->where('title', 'like', '%' . $this->searchVal . '%')
@@ -46,11 +38,11 @@ class Table extends Component
                           $deviceQuery->where('device_name', 'like', '%' . $this->searchVal . '%');
                       });
             })
-            ->latest()
-            ->paginate(5); // Paginate results
+            ->orderBy('created_at', 'DESC') 
+            ->paginate(5); 
 
         return view('livewire.components.notifications.table', [
-            'notifications' => $notifications, // Pass filtered notifications to the view
+            'notifications' => $notifications, 
         ]);
     }
 }
