@@ -43,7 +43,7 @@ new class extends Component {
         <!--end::Search-->
     </div>
     <!--end::Search-->
-
+--}}
 
 
     <!--begin::Notifications-->
@@ -52,13 +52,13 @@ new class extends Component {
         <div class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px"
             data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent"
             data-kt-menu-placement="bottom-end">
-            <i class="ki-duotone ki-notification-status fs-1"><span class="path1"></span><span
-                    class="path2"></span><span class="path3"></span><span class="path4"></span></i>
+            <i class="ki-duotone ki-notification-status fs-1"><span class="path1"></span><span class="path2"></span><span
+                    class="path3"></span><span class="path4"></span></i>
         </div>
         <livewire:components.navbar.notification />
         <!--end::Menu wrapper-->
     </div>
-    <!--end::Notifications--> --}}
+    <!--end::Notifications-->
 
 
 
@@ -169,8 +169,8 @@ new class extends Component {
                             </span>
                         </div>
 
-                        <a href="#" class="fw-semibold text-muted text-hover-primary fs-7" x-data="{{ json_encode(['email' => auth()->user()->email]) }}"
-                            x-on:email-update.window="email = $event.detail.email;"
+                        <a href="#" class="fw-semibold text-muted text-hover-primary fs-7"
+                            x-data="{{ json_encode(['email' => auth()->user()->email]) }}" x-on:email-update.window="email = $event.detail.email;"
                             x-text="email"></a>
                     </div>
                     <!--end::Username-->

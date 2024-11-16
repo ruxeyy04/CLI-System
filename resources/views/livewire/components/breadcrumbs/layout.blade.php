@@ -18,6 +18,8 @@
             Laboratory
         @elseif(Route::currentRouteName() == 'computerdevices')
             Computer Devices
+        @elseif(Route::currentRouteName() == 'notifications')
+            Notifications
         @elseif(Route::currentRouteName() == 'devicegraph')
             Computer Device Real-Time Information
         @else
@@ -37,13 +39,14 @@
 
         @if (Route::currentRouteName() == 'devicegraph')
             @php
-                $deviceId = request()->route('id'); 
+                $deviceId = request()->route('id');
                 $device = \App\Models\ComputerDevice::find($deviceId);
                 $laboratory = $device ? $device->laboratory : null;
             @endphp
             @if ($laboratory)
                 <li class="breadcrumb-item text-muted">
-                    <a href="{{ route('laboratory') }}" class="text-muted text-hover-primary">{{ $laboratory->laboratory_name }}</a>
+                    <a href="{{ route('laboratory') }}"
+                        class="text-muted text-hover-primary">{{ $laboratory->laboratory_name }}</a>
                 </li>
                 <li class="breadcrumb-item">
                     <span class="bg-gray-500 bullet w-5px h-2px"></span>
@@ -82,7 +85,11 @@
             <li class="breadcrumb-item text-muted">
                 Computer Devices
             </li>
-        @else
+        @elseif(Route::currentRouteName() == 'notifications')
+        <li class="breadcrumb-item text-muted">
+            Notifications
+        </li>
+    @else
             <li class="breadcrumb-item text-muted">
                 Dashboard
             </li>

@@ -24,7 +24,7 @@ Route::middleware(['auth', 'isNoPassword', 'verified'])->group(function () {
     Route::view('laboratory', 'laboratory')->name('laboratory');
     Route::view('computer-devices', 'computerdevices')->name('computerdevices');
     Route::get('/devicegraph/{id}', [DeviceController::class, 'show'])->name('devicegraph');
-
+    Volt::route('nofications', 'pages.notifications')->name('notifications');
 });
 
 Route::middleware(['auth'])

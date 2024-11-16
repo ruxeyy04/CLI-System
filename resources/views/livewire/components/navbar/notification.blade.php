@@ -12,19 +12,11 @@
         <!--begin::Tabs-->
         <ul class="nav nav-line-tabs nav-line-tabs-2x nav-stretch fw-semibold px-9">
             <li class="nav-item">
-                <a class="pb-4 text-white opacity-75 nav-link opacity-state-100" data-bs-toggle="tab"
+                <a class="pb-4 text-white opacity-75 nav-link opacity-state-100 active" data-bs-toggle="tab"
                     href="#kt_topbar_notifications_1">Alerts</a>
             </li>
 
-            <li class="nav-item">
-                <a class="pb-4 text-white opacity-75 nav-link opacity-state-100 active" data-bs-toggle="tab"
-                    href="#kt_topbar_notifications_2">Updates</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="pb-4 text-white opacity-75 nav-link opacity-state-100" data-bs-toggle="tab"
-                    href="#kt_topbar_notifications_3">Logs</a>
-            </li>
+    
         </ul>
         <!--end::Tabs-->
     </div>
@@ -33,7 +25,7 @@
     <!--begin::Tab content-->
     <div class="tab-content">
         <!--begin::Tab panel-->
-        <div class="tab-pane fade" id="kt_topbar_notifications_1" role="tabpanel">
+        <div class="tab-pane fade show active" id="kt_topbar_notifications_1" role="tabpanel">
             <!--begin::Items-->
             <div class="px-8 my-5 scroll-y mh-325px">
                 <!--begin::Item-->
@@ -241,7 +233,7 @@
 
             <!--begin::View more-->
             <div class="py-3 text-center border-top">
-                <a href="user-profile/activity.html" class="btn btn-color-gray-600 btn-active-color-primary">
+                <a href="{{route('notifications')}}" class="btn btn-color-gray-600 btn-active-color-primary" wire:navigate>
                     View All
                     <i class="ki-duotone ki-arrow-right fs-5"><span class="path1"></span><span
                             class="path2"></span></i> </a>
@@ -250,290 +242,7 @@
         </div>
         <!--end::Tab panel-->
 
-        <!--begin::Tab panel-->
-        <div class="tab-pane fade show active" id="kt_topbar_notifications_2" role="tabpanel">
-            <!--begin::Wrapper-->
-            <div class="d-flex flex-column px-9">
-                <!--begin::Section-->
-                <div class="pt-10 pb-0">
-                    <!--begin::Title-->
-                    <h3 class="text-center text-gray-900 fw-bold">
-                        Get Pro Access
-                    </h3>
-                    <!--end::Title-->
-
-                    <!--begin::Text-->
-                    <div class="pt-1 text-center text-gray-600 fw-semibold">
-                        Outlines keep you honest. They stoping you from amazing poorly about drive
-                    </div>
-                    <!--end::Text-->
-
-                    <!--begin::Action-->
-                    <div class="mt-5 text-center mb-9">
-                        <a href="#" class="px-6 btn btn-sm btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_upgrade_plan">Upgrade</a>
-                    </div>
-                    <!--end::Action-->
-                </div>
-                <!--end::Section-->
-
-                <!--begin::Illustration-->
-                <div class="px-4 text-center">
-                    <img class="mw-100 mh-200px" alt="image"
-                        src="../assets/media/illustrations/sketchy-1/1.png" />
-                </div>
-                <!--end::Illustration-->
-            </div>
-            <!--end::Wrapper-->
-        </div>
-        <!--end::Tab panel-->
-
-        <!--begin::Tab panel-->
-        <div class="tab-pane fade" id="kt_topbar_notifications_3" role="tabpanel">
-            <!--begin::Items-->
-            <div class="px-8 my-5 scroll-y mh-325px">
-                <!--begin::Item-->
-                <div class="py-4 d-flex flex-stack">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-success me-4">200 OK</span>
-                        <!--end::Code-->
-
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">New order</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">Just now</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="py-4 d-flex flex-stack">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-danger me-4">500 ERR</span>
-                        <!--end::Code-->
-
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">New customer</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">2 hrs</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="py-4 d-flex flex-stack">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-success me-4">200 OK</span>
-                        <!--end::Code-->
-
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">Payment process</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">5 hrs</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="py-4 d-flex flex-stack">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-warning me-4">300 WRN</span>
-                        <!--end::Code-->
-
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">Search query</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">2 days</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="py-4 d-flex flex-stack">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-success me-4">200 OK</span>
-                        <!--end::Code-->
-
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">API connection</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">1 week</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="py-4 d-flex flex-stack">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-success me-4">200 OK</span>
-                        <!--end::Code-->
-
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">Database restore</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">Mar 5</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="py-4 d-flex flex-stack">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-warning me-4">300 WRN</span>
-                        <!--end::Code-->
-
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">System update</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">May 15</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="py-4 d-flex flex-stack">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-warning me-4">300 WRN</span>
-                        <!--end::Code-->
-
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">Server OS update</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">Apr 3</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="py-4 d-flex flex-stack">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-warning me-4">300 WRN</span>
-                        <!--end::Code-->
-
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">API rollback</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">Jun 30</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="py-4 d-flex flex-stack">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-danger me-4">500 ERR</span>
-                        <!--end::Code-->
-
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">Refund process</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">Jul 10</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="py-4 d-flex flex-stack">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-danger me-4">500 ERR</span>
-                        <!--end::Code-->
-
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">Withdrawal process</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">Sep 10</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-                <!--begin::Item-->
-                <div class="py-4 d-flex flex-stack">
-                    <!--begin::Section-->
-                    <div class="d-flex align-items-center me-2">
-                        <!--begin::Code-->
-                        <span class="w-70px badge badge-light-danger me-4">500 ERR</span>
-                        <!--end::Code-->
-
-                        <!--begin::Title-->
-                        <a href="#" class="text-gray-800 text-hover-primary fw-semibold">Mail tasks</a>
-                        <!--end::Title-->
-                    </div>
-                    <!--end::Section-->
-
-                    <!--begin::Label-->
-                    <span class="badge badge-light fs-8">Dec 10</span>
-                    <!--end::Label-->
-                </div>
-                <!--end::Item-->
-
-            </div>
-            <!--end::Items-->
-
-            <!--begin::View more-->
-            <div class="py-3 text-center border-top">
-                <a href="user-profile/activity.html" class="btn btn-color-gray-600 btn-active-color-primary">
-                    View All
-                    <i class="ki-duotone ki-arrow-right fs-5"><span class="path1"></span><span
-                            class="path2"></span></i> </a>
-            </div>
-            <!--end::View more-->
-        </div>
-        <!--end::Tab panel-->
+    
     </div>
     <!--end::Tab content-->
 </div>

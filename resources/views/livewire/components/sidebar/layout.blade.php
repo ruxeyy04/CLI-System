@@ -83,6 +83,7 @@
                                     </span>
                                 </span>
                                 <span class="menu-title">Sessions</span>
+                                <span class="status-indicator danger-status"></span>
                             </a>
                         </div>
                         <!--end:Menu item-->
@@ -124,7 +125,9 @@
                                         </span>
                                     </div>
                                 @else
-                                    @foreach ($laboratory->computerDevices as $device)
+                                    @foreach ($laboratory->computerDevices->sortBy(function ($device) {
+        return (int) preg_replace('/\D/', '', $device->device_name); // Casts to integer to avoid issues
+    }) as $device)
                                         <div class="menu-item">
                                             <a class="menu-link {{ $device->id == $currentDeviceId ? 'active' : '' }}"
                                                 href="{{ route('devicegraph', ['id' => $device->id]) }}">
@@ -186,23 +189,21 @@
                                 </div>
                             </div>
                         @elseif (auth()->user()->laboratory_id === null)
-                        
                         @endif
 
                     @endif
 
 
                 @endforeach
-                @if(auth()->user()->laboratory_id === null && ucfirst(auth()->user()->role) == 'Assistant')
-                <div class="menu-item">
-                    <!--begin:Menu link--><a class="menu-link" href="#!"
-                        target="_blank"><span class="menu-icon"> <i class="ki-duotone ki-element-8 fs-2">
-                            <span class="path1"></span>
-                            <span class="path2"></span>
-                        </i></span><span
-                            class="menu-title">No Laboratory Assigned</span></a>
-                    <!--end:Menu link-->
-                </div>
+                @if (auth()->user()->laboratory_id === null && ucfirst(auth()->user()->role) == 'Assistant')
+                    <div class="menu-item">
+                        <!--begin:Menu link--><a class="menu-link" href="#!" target="_blank"><span
+                                class="menu-icon"> <i class="ki-duotone ki-element-8 fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </i></span><span class="menu-title">No Laboratory Assigned</span></a>
+                        <!--end:Menu link-->
+                    </div>
                 @endif
 
 
@@ -228,43 +229,42 @@
                         <!--end:Menu link-->
                     </div>
                 @endif
-                
-                @if(ucfirst(auth()->user()->role) === 'Incharge')
-                <div class="menu-item">
-                    <a class="menu-link {{ request()->routeIs('computerdevices') ? 'active' : '' }}"
-                        href="{{ route('computerdevices') }}" wire:navigate>
-                        <span class="menu-icon">
-                            <i class="ki-duotone ki-monitor-mobile fs-2">
-                                <span class="path1"></span>
-                                <span class="path2"></span>
-                            </i>
-                        </span>
-                        <span class="menu-title">Computer Devices</span>
-                    </a>
-                </div>
+
+                @if (ucfirst(auth()->user()->role) === 'Incharge')
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('computerdevices') ? 'active' : '' }}"
+                            href="{{ route('computerdevices') }}" wire:navigate>
+                            <span class="menu-icon">
+                                <i class="ki-duotone ki-monitor-mobile fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </i>
+                            </span>
+                            <span class="menu-title">Computer Devices</span>
+                        </a>
+                    </div>
                 @elseif(auth()->user()->laboratory_id != null && ucfirst(auth()->user()->role) === 'Assistant')
-                <div class="menu-item">
-                    <a class="menu-link {{ request()->routeIs('computerdevices') ? 'active' : '' }}"
-                        href="{{ route('computerdevices') }}" wire:navigate>
-                        <span class="menu-icon">
-                            <i class="ki-duotone ki-monitor-mobile fs-2">
-                                <span class="path1"></span>
-                                <span class="path2"></span>
-                            </i>
-                        </span>
-                        <span class="menu-title">Computer Devices</span>
-                    </a>
-                </div>
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('computerdevices') ? 'active' : '' }}"
+                            href="{{ route('computerdevices') }}" wire:navigate>
+                            <span class="menu-icon">
+                                <i class="ki-duotone ki-monitor-mobile fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </i>
+                            </span>
+                            <span class="menu-title">Computer Devices</span>
+                        </a>
+                    </div>
                 @else
-                <div class="menu-item">
-                    <!--begin:Menu link--><a class="menu-link" href="#!"
-                        target="_blank"><span class="menu-icon"> <i class="ki-duotone ki-monitor-mobile fs-2">
-                            <span class="path1"></span>
-                            <span class="path2"></span>
-                        </i></span><span
-                            class="menu-title">No Laboratory Assigned</span></a>
-                    <!--end:Menu link-->
-                </div>
+                    <div class="menu-item">
+                        <!--begin:Menu link--><a class="menu-link" href="#!" target="_blank"><span
+                                class="menu-icon"> <i class="ki-duotone ki-monitor-mobile fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </i></span><span class="menu-title">No Laboratory Assigned</span></a>
+                        <!--end:Menu link-->
+                    </div>
                 @endif
                 @if (ucfirst(auth()->user()->role) == 'Incharge')
                     <div class="menu-item">
@@ -283,7 +283,21 @@
                         </a>
                     </div>
                 @endif
-
+                <div class="pt-5 menu-item">
+                    <!--begin:Menu content-->
+                    <div class="menu-content"><span class="menu-heading fw-bold text-uppercase fs-7">Alert</span>
+                    </div>
+                    <!--end:Menu content-->
+                </div>
+                <div class="menu-item">
+                    <!--begin:Menu link--><a
+                        class="menu-link {{ request()->routeIs('notifications') ? 'active' : '' }}"
+                        href="{{ route('notifications') }}" wire:navigate><span class="menu-icon"><i
+                                class="ki-duotone ki-notification-status fs-2"><span class="path1"></span><span
+                                    class="path2"></span><span class="path3"></span><span
+                                    class="path4"></span></i></span><span class="menu-title">Notifications</span></a>
+                    <!--end:Menu link-->
+                </div>
                 <!--end:Menu item-->
                 <!--begin:Menu item-->
                 {{-- <div class="pt-5 menu-item">
