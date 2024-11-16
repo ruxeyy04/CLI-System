@@ -38,4 +38,8 @@ class ComputerDevice extends Model
     public function ramInfo() {
         return $this->hasMany(RamInfo::class, 'device_id');
     }
+    public function notifications()
+    {
+        return $this->hasMany(Notifications::class, 'device_id');
+    }
 }

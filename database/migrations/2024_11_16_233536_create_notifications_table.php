@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
+            $table->string('title'); // Notification title
+            $table->text('message'); // Notification message
+            $table->string('type')->nullable(); // Type of notification (e.g., "info", "warning", "error")
+            $table->boolean('is_read')->default(false); // Read status
+            $table->string('device_id'); // Foreign key to computer_devices
+            $table->foreign('device_id')->references('id')->on('computer_devices')->onDelete('cascade');
             $table->timestamps();
         });
     }
