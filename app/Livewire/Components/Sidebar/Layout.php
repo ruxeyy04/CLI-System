@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Components\Sidebar;
 
+use App\Models\ComputerDevice;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use hisorange\BrowserDetect\Parser as Browser;
@@ -13,7 +14,8 @@ class Layout extends Component
         return [
             'add-device-success' => 'reloadSidebar',
             'update-device-success' => 'reloadSidebar',
-            'add-laboratory-success' => 'reloadSidebar'
+            'add-laboratory-success' => 'reloadSidebar',
+            'update-sidebar' => 'reloadSidebar'
         ];
     }
     public $devices; 
@@ -29,8 +31,15 @@ class Layout extends Component
     
     protected function loadDevices()
     {
-        return DB::table('computer_devices')->get();
+        return ComputerDevice::with([
+            'cpuInfo.cpuUtilizations',
+            'cpuInfo.cpuTemps',
+            'gpuInfo.gpuUsage',
+            'gpuInfo.gpuTemps',
+            'ramInfo.ramUsage',
+        ])->get();
     }
+    
     
     public function render()
     {

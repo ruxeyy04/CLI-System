@@ -1,4 +1,5 @@
 <?php
+ini_set('memory_limit', '1G');  // Increase the memory limit to 1GB
 
 use Illuminate\Http\Request;
 

@@ -1,21 +1,7 @@
 <!--begin::Menu-->
 <div class="menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px" data-kt-menu="true" id="kt_menu_notifications">
     <!--begin::Heading-->
-    <div class="d-flex flex-column bgi-no-repeat rounded-top"
-        style="background-image:url('../assets/media/misc/menu-header-bg.jpg')">
-        @php
-            use App\Models\Notifications;
-
-            // Fetch the total count of notifications
-            $notificationCount = Notifications::count();
-
-            // Fetch the latest 10 notifications with their associated devices
-            $notifications = Notifications::with('device')
-                ->latest('created_at')
-                ->limit(10)
-                ->get();
-        @endphp
-
+    <div class="d-flex flex-column bgi-no-repeat rounded-top" style="background-image:url('../assets/media/misc/menu-header-bg.jpg')">
         <!--begin::Title-->
         <h3 class="mt-10 mb-6 text-white fw-semibold px-9">
             Notifications <span class="opacity-75 fs-8 ps-3">{{ $notificationCount }} alerts</span>
@@ -25,8 +11,7 @@
         <!--begin::Tabs-->
         <ul class="nav nav-line-tabs nav-line-tabs-2x nav-stretch fw-semibold px-9">
             <li class="nav-item">
-                <a class="pb-4 text-white opacity-75 nav-link opacity-state-100 active" data-bs-toggle="tab"
-                    href="#kt_topbar_notifications_1">Alerts</a>
+                <a class="pb-4 text-white opacity-75 nav-link opacity-state-100 active" data-bs-toggle="tab" href="#kt_topbar_notifications_1">Alerts</a>
             </li>
         </ul>
         <!--end::Tabs-->
@@ -49,16 +34,16 @@
                                 <span class="symbol-label bg-light-{{ 
                                     $notification->type === 'CPU' ? 'danger' : 
                                     ($notification->type === 'GPU' ? 'warning' : 
-                                    ($notification->type === 'RAM' ? 'info' : 'primary')) 
+                                    ($notification->type === 'RAM' ? 'info' : 
+                                    ($notification->type === 'Storage' ? 'primary' : 'secondary'))) 
                                 }}">
-                                 <i class="fa-solid {{ 
-                                    $notification->type === 'CPU' ? 'fa-microchip' : 
-                                    ($notification->type === 'GPU' ? 'fa-vr-cardboard' : 
-                                    ($notification->type === 'RAM' ? 'fa-memory' : 
-                                    ($notification->type === 'Storage' ? 'fa-hard-drive' : 
-                                    ($notification->type === 'Input Device' ? 'fa-brands fa-usb' : 'fa-question-circle')))) 
-                                }}"></i>
-                                
+                                    <i class="fa-solid {{ 
+                                        $notification->type === 'CPU' ? 'fa-microchip' : 
+                                        ($notification->type === 'GPU' ? 'fa-vr-cardboard' : 
+                                        ($notification->type === 'RAM' ? 'fa-memory' : 
+                                        ($notification->type === 'Storage' ? 'fa-hard-drive' : 
+                                        ($notification->type === 'Input Device' ? 'fa-brands fa-usb' : 'fa-question-circle')))) 
+                                    }}"></i>
                                 </span>
                             </div>
                             <!--end::Symbol-->

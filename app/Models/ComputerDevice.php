@@ -22,24 +22,33 @@ class ComputerDevice extends Model
         'patched_date',
     ];
     protected $casts = [
-        'patched_date' => 'datetime', 
+        'patched_date' => 'datetime',
     ];
     public function laboratory()
     {
         return $this->belongsTo(Laboratory::class);
     }
 
-    public function cpuInfo() {
-        return $this->hasMany(CpuInfo::class, 'device_id');
+    public function cpuInfo()
+    {
+        return $this->hasOne(CpuInfo::class, 'device_id');
     }
-    public function gpuInfo() {
-        return $this->hasMany(GpuInfo::class, 'device_id');
+
+
+    public function gpuInfo()
+    {
+        return $this->hasOne(GpuInfo::class, 'device_id');
     }
-    public function ramInfo() {
-        return $this->hasMany(RamInfo::class, 'device_id');
+    public function ramInfo()
+    {
+        return $this->hasOne(RamInfo::class, 'device_id');
     }
     public function notifications()
     {
         return $this->hasMany(Notifications::class, 'device_id');
+    }
+    public function diskInfo()
+    {
+        return $this->hasMany(DiskInfo::class, 'device_id');
     }
 }

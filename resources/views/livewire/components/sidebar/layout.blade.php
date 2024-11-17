@@ -83,7 +83,6 @@
                                     </span>
                                 </span>
                                 <span class="menu-title">Sessions</span>
-                                <span class="status-indicator danger-status"></span>
                             </a>
                         </div>
                         <!--end:Menu item-->
@@ -126,8 +125,50 @@
                                     </div>
                                 @else
                                     @foreach ($laboratory->computerDevices->sortBy(function ($device) {
-        return (int) preg_replace('/\D/', '', $device->device_name); // Casts to integer to avoid issues
-    }) as $device)
+                                        return (int) preg_replace('/\D/', '', $device->device_name);
+                                    }) as $device)
+                                        @php
+                                            // Check for critical conditions
+                                            $criticalStatus = false;
+
+                                            // Check CPU usage and temperature
+                                            if (
+                                                $device->cpuInfo->cpuUtilizations->sortByDesc('created_at')->first()
+                                                    ->util >= 90 ||
+                                                $device->cpuInfo->cpuTemps->sortByDesc('created_at')->first()->temp >=
+                                                    80
+                                            ) {
+                                                $criticalStatus = true;
+                                            }
+
+                                            // Check GPU usage and temperature
+                                            if (
+                                                $device->gpuInfo->gpuUsage->sortByDesc('created_at')->first()->usage >=
+                                                    80 ||
+                                                $device->gpuInfo->gpuTemps->sortByDesc('created_at')->first()->temp >=
+                                                    70
+                                            ) {
+                                                $criticalStatus = true;
+                                            }
+
+                                            // Check RAM usage
+                                            if (
+                                                $device->ramInfo->ramUsage->sortByDesc('created_at')->first()->usage >=
+                                                85
+                                            ) {
+                                                $criticalStatus = true;
+                                            }
+
+                                            // Check Disk usage
+                                            foreach ($device->diskInfo as $disk) {
+                                                $usagePercentage = round(($disk->used / $disk->total) * 100);
+                                                if ($usagePercentage > 90) {
+                                                    $criticalStatus = true;
+                                                    break;
+                                                }
+                                            }
+                                        @endphp
+
                                         <div class="menu-item">
                                             <a class="menu-link {{ $device->id == $currentDeviceId ? 'active' : '' }}"
                                                 href="{{ route('devicegraph', ['id' => $device->id]) }}">
@@ -140,6 +181,11 @@
                                                     </i>
                                                 </span>
                                                 <span class="menu-title">{{ $device->device_name }}</span>
+                                                @if ($criticalStatus)
+                                                    <span class="status-indicator danger-status"></span>
+                                                @else
+                                                    <span class="status-indicator normal-status"></span>
+                                                @endif
                                             </a>
                                         </div>
                                     @endforeach
@@ -170,6 +216,37 @@
                                         </div>
                                     @else
                                         @foreach ($laboratory->computerDevices as $device)
+                                            @php
+                                                $criticalStatus = false;
+
+                                                // Logic repeated here for Assistant role
+                                                if (
+                                                    $device->cpuInfo->cpuUtilizations->max('util') >= 90 ||
+                                                    $device->cpuInfo->cpuTemps->max('temp') >= 80
+                                                ) {
+                                                    $criticalStatus = true;
+                                                }
+
+                                                if (
+                                                    $device->gpuInfo->gpuUsage->max('usage') >= 80 ||
+                                                    $device->gpuInfo->gpuTemps->max('temp') >= 70
+                                                ) {
+                                                    $criticalStatus = true;
+                                                }
+
+                                                if ($device->ramInfo->ramUsage->max('usage') >= 85) {
+                                                    $criticalStatus = true;
+                                                }
+
+                                                foreach ($device->diskInfo as $disk) {
+                                                    $usagePercentage = round(($disk->used / $disk->total) * 100);
+                                                    if ($usagePercentage >= 90) {
+                                                        $criticalStatus = true;
+                                                        break;
+                                                    }
+                                                }
+                                            @endphp
+
                                             <div class="menu-item">
                                                 <a class="menu-link {{ $device->id == $currentDeviceId ? 'active' : '' }}"
                                                     href="{{ route('devicegraph', ['id' => $device->id]) }}">
@@ -182,18 +259,19 @@
                                                         </i>
                                                     </span>
                                                     <span class="menu-title">{{ $device->device_name }}</span>
+                                                    @if ($criticalStatus)
+                                                        <span class="status-indicator danger-status"></span>
+                                                    @else
+                                                        <span class="status-indicator normal-status"></span>
+                                                    @endif
                                                 </a>
                                             </div>
                                         @endforeach
                                     @endif
                                 </div>
                             </div>
-                        @elseif (auth()->user()->laboratory_id === null)
                         @endif
-
                     @endif
-
-
                 @endforeach
                 @if (auth()->user()->laboratory_id === null && ucfirst(auth()->user()->role) == 'Assistant')
                     <div class="menu-item">

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Events\DiskUpdate;
+use App\Events\NotificationAlert;
 use App\Models\DiskInfo;
+use App\Models\Notifications;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Validation\ValidationException;
 
 class DiskController extends Controller
 {
@@ -19,7 +19,10 @@ class DiskController extends Controller
     
             $existingDisks = DiskInfo::where('device_id', $device_id)->get();
             $changesMade = false; // Flag to track changes
-    
+            $createNotification = false;
+            $notificationTitle = '';
+            $notificationMessage = '';
+
             foreach ($request->disk_list as $serial_number => $disk) {
                 $diskInfo = DiskInfo::updateOrCreate(
                     [
@@ -36,11 +39,27 @@ class DiskController extends Controller
                         'health' => $disk['health'],
                         'drive_type' => $disk['drive_type'],
                         'model' => $disk['model'],
-                        'status' => 'active', 
-                        'ejected_on' => null, 
+                        'status' => 'active',
+                        'ejected_on' => null,
                     ]
                 );
     
+                // Calculate the storage usage percentage
+                $usagePercentage = round(($disk['used'] / $disk['total']) * 100);
+    
+                // Check if the usage percentage exceeds 90% and create a notification if needed
+                $lastNotification = Notifications::where('device_id', $device_id)
+                                                  ->where('type', 'Storage')
+                                                  ->where('is_read', false)
+                                                  ->where('message', 'LIKE', "%{$usagePercentage}%")
+                                                  ->first();
+    
+                if ($usagePercentage > 90 && !$lastNotification) {
+                    $createNotification = true;
+                    $notificationTitle = 'Disk Usage Alert';
+                    $notificationMessage = "The disk mounted at {$disk['mountpoint']} has reached {$usagePercentage}%, which is above the threshold of 90%.";
+                }
+
                 // Check if a new record was created or an existing one was updated
                 if ($diskInfo->wasRecentlyCreated || $diskInfo->wasChanged()) {
                     $changesMade = true;
@@ -51,8 +70,8 @@ class DiskController extends Controller
                 // Only update if the disk is currently active
                 if (!in_array($existingDisk->serial_number, $providedSerialNumbers) && $existingDisk->status !== 'inactive') {
                     $existingDisk->update([
-                        'status' => 'inactive', 
-                        'ejected_on' => Carbon::now(), 
+                        'status' => 'inactive',
+                        'ejected_on' => Carbon::now(),
                     ]);
                     $changesMade = true; // Mark that a change was made
                 }
@@ -63,11 +82,24 @@ class DiskController extends Controller
                 DiskUpdate::dispatch($device_id);
             }
     
+            // Create notification if needed
+            if ($createNotification) {
+                Notifications::create([
+                    'title' => $notificationTitle,
+                    'message' => $notificationMessage,
+                    'type' => 'Storage',
+                    'is_read' => false,
+                    'device_id' => $device_id,
+                ]);
+                NotificationAlert::dispatch($device_id, $notificationMessage, $notificationTitle);
+            }
+    
             return response()->json(['success' => true, 'message' => 'Disk data updated successfully']);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
         }
     }
+
     public function get(Request $request)
     {
         $validated = $request->validate([

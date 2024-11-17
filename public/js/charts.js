@@ -436,6 +436,7 @@ if (currentDeviceId !== null) {
                     temperatureData.shift();
                     timestampss.shift();
                 }
+                Livewire.dispatch('update-sidebar')
             }
         );
         window.Echo.private("gpu-graph." + currentDeviceId).listen(
@@ -477,6 +478,7 @@ if (currentDeviceId !== null) {
                     gpuTemp.shift();
                     gpuTimestamps.shift();
                 }
+                Livewire.dispatch('update-sidebar')
             }
         );
         window.Echo.private("ram-graph." + currentDeviceId).listen(
@@ -510,6 +512,7 @@ if (currentDeviceId !== null) {
                     ramUsage.shift();
                     ramTimestamps.shift();
                 }
+                Livewire.dispatch('update-sidebar')
             }
         );
     });

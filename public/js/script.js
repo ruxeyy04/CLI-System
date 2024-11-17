@@ -1,12 +1,12 @@
 toastr.options = {
-    closeButton: false,
+    closeButton: true,
     debug: false,
-    newestOnTop: false,
-    progressBar: false,
+    newestOnTop: true,
+    progressBar: true,
     positionClass: "toastr-top-right",
     preventDuplicates: false,
     onclick: null,
-    showDuration: "300",
+    showDuration: "500",
     hideDuration: "1000",
     timeOut: "5000",
     extendedTimeOut: "1000",
@@ -359,24 +359,24 @@ Livewire.on("viewTrendChart", () => {
         },
         series: [
             {
-                data: []
+                data: [],
             },
             {
-                name: 'Trend Line',
-                data: []
-            }
+                name: "Trend Line",
+                data: [],
+            },
         ],
         xaxis: {
-            type: 'datetime',
+            type: "datetime",
             labels: {
                 formatter: function (value) {
-                    return new Date(value).toLocaleTimeString('en-US', {
-                        hour: 'numeric',
-                        minute: '2-digit',
+                    return new Date(value).toLocaleTimeString("en-US", {
+                        hour: "numeric",
+                        minute: "2-digit",
                         hour12: true,
                     });
-                }
-            }
+                },
+            },
         },
         stroke: {
             curve: ["smooth", "straight"],
@@ -411,42 +411,54 @@ Livewire.on("viewTrendChart", () => {
                 },
             },
         },
-                tooltip: {
+        tooltip: {
             x: {
                 formatter: function (val) {
-                    return new Date(val).toLocaleString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: 'numeric',
-                        minute: '2-digit',
+                    return new Date(val).toLocaleString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "2-digit",
                         hour12: true,
                     });
-                }
-            }
-        }
+                },
+            },
+        },
     });
 
     chart.render();
 
-    const cpuTemperatureData = rawData.map(item => ({
+    const cpuTemperatureData = rawData.map((item) => ({
         x: new Date(item.created_at).getTime(),
-        y: parseFloat(item.data).toFixed(2)
+        y: parseFloat(item.data).toFixed(2),
     }));
 
-    const trendLineData = trend_line.map(item => ({
+    const trendLineData = trend_line.map((item) => ({
         x: new Date(item.x).getTime(),
-        y: parseFloat(item.y).toFixed(2)
+        y: parseFloat(item.y).toFixed(2),
     }));
-    console.log(cpuTemperatureData, trendLineData)
+    console.log(cpuTemperatureData, trendLineData);
     chart.updateSeries([
         {
             name: raw_label,
-            data: cpuTemperatureData
+            data: cpuTemperatureData,
         },
         {
-            name: 'Trend Line',
-            data: trendLineData
-        }
+            name: "Trend Line",
+            data: trendLineData,
+        },
     ]);
+});
+
+$(document).ready(function () {
+    window.Echo.channel("notif-alert").listen(".notify.alert", (event) => {
+        console.log(event)
+        // Display toastr notification when the event is received
+        toastr.info(
+            event.message,
+            event.title
+        );
+        Livewire.dispatch('reload-notif')
+    });
 });
