@@ -613,21 +613,40 @@ if (currentDeviceId !== null) {
     chart4.render();
 
     Livewire.on("refreshCharts", () => {
-        const rawData = event.detail.raw_data;
-        const trend_line = event.detail.trend_line;
-        const raw_label = event.detail.raw_data_label;
-        const cpuTemperatureData = rawData.map((item) => ({
-            x: new Date(item.created_at).getTime(),
-            y: parseFloat(item.data).toFixed(2),
-        }));
-
-        const trendLineData = trend_line.map((item) => ({
+        const rawData = event.detail.raw_data || [];
+        const trendLine = event.detail.trend_line || [];
+        const rawLabel = event.detail.raw_data_label || "No Data";
+    
+        const cpuTemperatureData = rawData.length
+            ? rawData.map((item) => ({
+                  x: new Date(item.created_at).getTime(),
+                  y: parseFloat(item.data).toFixed(2),
+              }))
+            : [
+                  { x: new Date(event.detail.start_datetime).getTime(), y: 0 },
+                  { x: new Date(event.detail.end_datetime).getTime(), y: 0 },
+              ];
+    
+        const trendLineData = trendLine.map((item) => ({
             x: new Date(item.x).getTime(),
             y: parseFloat(item.y).toFixed(2),
         }));
+    
+        // Calculate min and max for y-axis, ensuring a centered 0
+        const yValues = [...cpuTemperatureData, ...trendLineData].map((item) => item.y);
+        const yMin = Math.min(...yValues, 0) - 1; // Expand 1 unit below the lowest value or 0
+        const yMax = Math.max(...yValues, 0) + 1; // Expand 1 unit above the highest value or 0
+    
+        chart4.updateOptions({
+            yaxis: {
+                min: yMin,
+                max: yMax,
+            },
+        });
+    
         chart4.updateSeries([
             {
-                name: raw_label,
+                name: rawLabel,
                 data: cpuTemperatureData,
             },
             {
@@ -636,6 +655,8 @@ if (currentDeviceId !== null) {
             },
         ]);
     });
+    
+    
     Livewire.on("closeModalTrend", () => {
         Swal.fire(
             "Saved!",

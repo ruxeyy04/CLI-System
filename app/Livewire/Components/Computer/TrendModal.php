@@ -183,11 +183,34 @@ class TrendModal extends Component
 
     private function calculateTrendLine($data)
     {
+        $data = $data->toArray(); // Convert Collection to array if it's not already an array
         $n = count($data);
-        if ($n < 2) {
-            return []; // Not enough data points to calculate trend line
+    
+        if ($n === 0) {
+            // Return a horizontal line with y = 0 for the start and end datetime
+            return [
+                [
+                    'x' => $this->start_datetime,
+                    'y' => 0,
+                ],
+                [
+                    'x' => $this->end_datetime,
+                    'y' => 0,
+                ],
+            ];
         }
-
+    
+        if ($n < 2) {
+            $averageY = $n > 0 ? array_sum(array_column($data, 'y')) / $n : 0;
+    
+            return array_map(function ($point) use ($averageY) {
+                return [
+                    'x' => $point['x'],
+                    'y' => $averageY,
+                ];
+            }, $data);
+        }
+    
         // Calculate the means of x and y
         $sumX = 0;
         $sumY = 0;
@@ -195,10 +218,10 @@ class TrendModal extends Component
             $sumX += strtotime($point['x']);
             $sumY += $point['y'];
         }
-
+    
         $meanX = $sumX / $n;
         $meanY = $sumY / $n;
-
+    
         // Calculate the slope (m) and intercept (b) for y = mx + b
         $numerator = 0;
         $denominator = 0;
@@ -208,27 +231,28 @@ class TrendModal extends Component
             $numerator += ($x - $meanX) * ($y - $meanY);
             $denominator += pow($x - $meanX, 2);
         }
-
+    
         $slope = $denominator != 0 ? $numerator / $denominator : 0;
         $intercept = $meanY - $slope * $meanX;
-
+    
         // Generate trend line data based on the calculated slope and intercept
-        $trendLine = [];
-        foreach ($data as $point) {
+        return array_map(function ($point) use ($slope, $intercept) {
             $x = strtotime($point['x']);
             $y = $slope * $x + $intercept;
-            $trendLine[] = [
+    
+            return [
                 'x' => date('Y-m-d H:i:s', $x),
                 'y' => $y,
             ];
-        }
-
-        return $trendLine;
+        }, $data);
     }
+    
+    
+    
     private function generateTrendDescription($trendLine)
     {
         if (count($trendLine) < 2) {
-            return "No sufficient data to determine trend.";
+            return "From {$this->start_datetime} to {$this->end_datetime}, the {$this->raw_label} indicates no data available.";
         }
     
         $firstPoint = reset($trendLine);
@@ -251,9 +275,10 @@ class TrendModal extends Component
         } elseif ($change < -$threshold) {
             return "The {$this->raw_label} is showing a decrease from $startDate to $endDate.";
         } else {
-            return "The {$this->raw_label} shows no significant change from $startDate to $endDate.";
+            return "The {$this->raw_label} indicates a normal state with no significant changes.";
         }
     }
+    
     
     
 

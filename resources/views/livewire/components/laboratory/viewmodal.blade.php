@@ -302,26 +302,27 @@ new class extends Component {
                                                                         {{ $device->patch_id ? 'Patched' : 'Not Patch' }}</div>
                                                                 </td>
                                                                 <td>
-                                                                    @if ($device->cpuInfo->isNotEmpty())
-                                                                        {{ $device->cpuInfo->first()->brand }}
+                                                                    @if ($device->cpuInfo)
+                                                                        {{ $device->cpuInfo->brand }}
                                                                     @else
                                                                         N/A
                                                                     @endif
                                                                 </td>
                                                                 <td>
-                                                                    @if ($device->gpuInfo->isNotEmpty())
-                                                                        {{ $device->gpuInfo->first()->brand }}
+                                                                    @if ($device->gpuInfo )
+                                                                        {{ $device->gpuInfo->brand }}
                                                                     @else
                                                                         N/A
                                                                     @endif
                                                                 </td>
                                                                 <td>
-                                                                    @if ($device->ramInfo->isNotEmpty())
-                                                                        {{ $device->ramInfo->sum('total_ram') }} GB
+                                                                    @if ($device->ramInfo )
+                                                                        {{ $device->ramInfo->total_ram }} GB
                                                                     @else
                                                                         N/A
                                                                     @endif
                                                                 </td>
+                                                                
                                                                 <td>{{ $device->created_at ? $device->created_at->format('d M Y, h:i a'): 'N/A' }}
                                                                 </td>
                                                             </tr>

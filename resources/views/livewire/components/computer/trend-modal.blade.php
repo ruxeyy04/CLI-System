@@ -26,11 +26,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="start_datetime" class="form-label">Start Date & Time</label>
-                            <input type="datetime-local" class="form-control" id="start_datetime" wire:model="start_datetime" min="{{ $min_date }}" max="{{ $max_date }}">
+                            <input type="datetime-local" class="form-control" id="start_datetime" wire:model="start_datetime"  max="{{ $max_date }}">
                         </div>
                         <div class="mb-3">
                             <label for="end_datetime" class="form-label">End Date & Time</label>
-                            <input type="datetime-local" class="form-control" id="end_datetime" wire:model="end_datetime" min="{{ $min_date }}" max="{{ $max_date }}">
+                            <input type="datetime-local" class="form-control" id="end_datetime" wire:model="end_datetime"  max="{{ $max_date }}">
                         </div>
 
                     </form>
