@@ -457,7 +457,7 @@ $(document).ready(function () {
         // Display toastr notification when the event is received
         toastr.info(
             event.message,
-            event.title
+            `${event.title} on ${event.devicename}`
         );
         Livewire.dispatch('reload-notif')
     });

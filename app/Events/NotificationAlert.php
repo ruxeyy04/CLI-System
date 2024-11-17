@@ -2,9 +2,9 @@
 
 namespace App\Events;
 
+use App\Models\ComputerDevice;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -13,17 +13,27 @@ class NotificationAlert implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     */
     public $deviceId;
     public $message;
     public $title;
+    public $devicename;
+
+    /**
+     * Create a new event instance.
+     */
     public function __construct($deviceId, $message, $title)
     {
         $this->deviceId = $deviceId;
         $this->message = $message;
         $this->title = $title;
+        
+        // Fetch the device name from the ComputerDevice model using the deviceId
+        $device = ComputerDevice::find($deviceId);
+        if ($device) {
+            $this->devicename = $device->device_name;
+        } else {
+            $this->devicename = null; // Or handle the case if the device is not found
+        }
     }
 
     /**
