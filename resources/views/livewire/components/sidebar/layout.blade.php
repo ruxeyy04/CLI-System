@@ -125,49 +125,75 @@
                                     </div>
                                 @else
                                     @foreach ($laboratory->computerDevices->sortBy(function ($device) {
-                                        return (int) preg_replace('/\D/', '', $device->device_name);
-                                    }) as $device)
+                                            return (int) preg_replace('/\D/', '', $device->device_name);
+                                        }) as $device)
                                         @php
                                             // Check for critical conditions
                                             $criticalStatus = false;
 
                                             // Check CPU usage and temperature
+                                            $cpuUtilization = optional(
+                                                collect(optional($device->cpuInfo)->cpuUtilizations ?? [])
+                                                    ->sortByDesc('created_at')
+                                                    ->first(),
+                                            )->util;
+                                            $cpuTemperature = optional(
+                                                collect(optional($device->cpuInfo)->cpuTemps ?? [])
+                                                    ->sortByDesc('created_at')
+                                                    ->first(),
+                                            )->temp;
+
                                             if (
-                                                $device->cpuInfo->cpuUtilizations->sortByDesc('created_at')->first()
-                                                    ->util >= 90 ||
-                                                $device->cpuInfo->cpuTemps->sortByDesc('created_at')->first()->temp >=
-                                                    80
+                                                ($cpuUtilization !== null && $cpuUtilization >= 90) ||
+                                                ($cpuTemperature !== null && $cpuTemperature >= 80)
                                             ) {
                                                 $criticalStatus = true;
                                             }
 
                                             // Check GPU usage and temperature
+                                            $gpuUsage = optional(
+                                                collect(optional($device->gpuInfo)->gpuUsage ?? [])
+                                                    ->sortByDesc('created_at')
+                                                    ->first(),
+                                            )->usage;
+                                            $gpuTemperature = optional(
+                                                collect(optional($device->gpuInfo)->gpuTemps ?? [])
+                                                    ->sortByDesc('created_at')
+                                                    ->first(),
+                                            )->temp;
+
                                             if (
-                                                $device->gpuInfo->gpuUsage->sortByDesc('created_at')->first()->usage >=
-                                                    80 ||
-                                                $device->gpuInfo->gpuTemps->sortByDesc('created_at')->first()->temp >=
-                                                    70
+                                                ($gpuUsage !== null && $gpuUsage >= 80) ||
+                                                ($gpuTemperature !== null && $gpuTemperature >= 70)
                                             ) {
                                                 $criticalStatus = true;
                                             }
 
                                             // Check RAM usage
-                                            if (
-                                                $device->ramInfo->ramUsage->sortByDesc('created_at')->first()->usage >=
-                                                85
-                                            ) {
+                                            $ramUsage = optional(
+                                                collect(optional($device->ramInfo)->ramUsage ?? [])
+                                                    ->sortByDesc('created_at')
+                                                    ->first(),
+                                            )->usage;
+
+                                            if ($ramUsage !== null && $ramUsage >= 85) {
                                                 $criticalStatus = true;
                                             }
 
                                             // Check Disk usage
-                                            foreach ($device->diskInfo as $disk) {
-                                                $usagePercentage = round(($disk->used / $disk->total) * 100);
-                                                if ($usagePercentage > 90) {
-                                                    $criticalStatus = true;
-                                                    break;
+                                            if (!empty($device->diskInfo)) {
+                                                foreach ($device->diskInfo as $disk) {
+                                                    if (!is_null($disk->total) && $disk->total > 0) {
+                                                        $usagePercentage = round(($disk->used / $disk->total) * 100);
+                                                        if ($usagePercentage > 90) {
+                                                            $criticalStatus = true;
+                                                            break;
+                                                        }
+                                                    }
                                                 }
                                             }
                                         @endphp
+
 
                                         <div class="menu-item">
                                             <a class="menu-link {{ $device->id == $currentDeviceId ? 'active' : '' }}"
