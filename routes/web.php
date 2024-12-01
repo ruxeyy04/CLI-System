@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\DeviceLogs;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -24,6 +25,7 @@ Route::middleware(['auth', 'isNoPassword', 'verified'])->group(function () {
     Route::view('laboratory', 'laboratory')->name('laboratory');
     Route::view('computer-devices', 'computerdevices')->name('computerdevices');
     Route::get('/devicegraph/{id}', [DeviceController::class, 'show'])->name('devicegraph');
+    Route::get('/devicelogs/{id}', [DeviceLogs::class, 'show'])->name('devicelogs');
     Volt::route('nofications', 'pages.notifications')->name('notifications');
 });
 

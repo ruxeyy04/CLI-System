@@ -104,7 +104,7 @@
                     @endphp
                     @if (ucfirst(auth()->user()->role) == 'Incharge')
                         <div data-kt-menu-trigger="click"
-                            class="menu-item menu-accordion {{ $laboratory->computerDevices->contains('id', $currentDeviceId) ? 'show' : '' }}">
+                            class="menu-item menu-accordion {{ Route::is('devicegraph') && $laboratory->computerDevices->contains('id', $currentDeviceId) ? 'show' : '' }}">
                             <span class="menu-link">
                                 <span class="menu-icon">
                                     <i class="ki-duotone ki-element-8 fs-2">
@@ -196,7 +196,7 @@
 
 
                                         <div class="menu-item">
-                                            <a class="menu-link {{ $device->id == $currentDeviceId ? 'active' : '' }}"
+                                            <a class="menu-link {{Route::is('devicegraph') &&  $device->id == $currentDeviceId ? 'active' : '' }}"
                                                 href="{{ route('devicegraph', ['id' => $device->id]) }}">
                                                 <span class="menu-icon">
                                                     <i class="ki-duotone ki-screen fs-4">
@@ -221,7 +221,7 @@
                     @elseif (ucfirst(auth()->user()->role) == 'Assistant')
                         @if (auth()->user()->laboratory_id == $laboratory->id)
                             <div data-kt-menu-trigger="click"
-                                class="menu-item menu-accordion {{ $laboratory->computerDevices->contains('id', $currentDeviceId) ? 'show' : '' }}">
+                                class="menu-item menu-accordion {{ Route::is('devicegraph') && $laboratory->computerDevices->contains('id', $currentDeviceId) ? 'show' : '' }}">
                                 <span class="menu-link">
                                     <span class="menu-icon">
                                         <i class="ki-duotone ki-element-8 fs-2">
@@ -274,8 +274,227 @@
                                             @endphp
 
                                             <div class="menu-item">
-                                                <a class="menu-link {{ $device->id == $currentDeviceId ? 'active' : '' }}"
+                                                <a class="menu-link {{ Route::is('devicegraph') && $device->id == $currentDeviceId ? 'active' : '' }}"
                                                     href="{{ route('devicegraph', ['id' => $device->id]) }}">
+                                                    <span class="menu-icon">
+                                                        <i class="ki-duotone ki-screen fs-4">
+                                                            <span class="path1"></span>
+                                                            <span class="path2"></span>
+                                                            <span class="path3"></span>
+                                                            <span class="path4"></span>
+                                                        </i>
+                                                    </span>
+                                                    <span class="menu-title">{{ $device->device_name }}</span>
+                                                    @if ($criticalStatus)
+                                                        <span class="status-indicator danger-status"></span>
+                                                    @else
+                                                        <span class="status-indicator normal-status"></span>
+                                                    @endif
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
+                    @endif
+                @endforeach
+                @if (auth()->user()->laboratory_id === null && ucfirst(auth()->user()->role) == 'Assistant')
+                    <div class="menu-item">
+                        <!--begin:Menu link--><a class="menu-link" href="#!" target="_blank"><span
+                                class="menu-icon"> <i class="ki-duotone ki-element-8 fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </i></span><span class="menu-title">No Laboratory Assigned</span></a>
+                        <!--end:Menu link-->
+                    </div>
+                @endif
+                <div class="pt-5 menu-item">
+                    <!--begin:Menu content-->
+                    <div class="menu-content">
+                        <span class="menu-heading fw-bold text-uppercase fs-7">Device Logs</span>
+                    </div>
+                    <!--end:Menu content-->
+                </div>
+
+                @foreach ($laboratories as $laboratory)
+                    @php
+                        $currentDeviceId = request()->route('id');
+                    @endphp
+                    @if (ucfirst(auth()->user()->role) == 'Incharge')
+                        <div data-kt-menu-trigger="click"
+                            class="menu-item menu-accordion {{ Route::is('devicelogs') && $laboratory->computerDevices->contains('id', $currentDeviceId) ? 'show' : '' }}">
+                            <span class="menu-link">
+                                <span class="menu-icon">
+                                    <i class="ki-duotone ki-element-8 fs-2">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                    </i>
+                                </span>
+                                <span class="menu-title">{{ $laboratory->laboratory_name }}</span>
+                                <span class="menu-arrow"></span>
+                            </span>
+
+                            <div class="menu-sub menu-sub-accordion">
+                                @if ($laboratory->computerDevices->isEmpty())
+                                    <div class="menu-item">
+                                        <span class="menu-link">
+                                            <span class="menu-title">No Device Yet</span>
+                                        </span>
+                                    </div>
+                                @else
+                                    @foreach ($laboratory->computerDevices->sortBy(function ($device) {
+                                            return (int) preg_replace('/\D/', '', $device->device_name);
+                                        }) as $device)
+                                        @php
+                                            // Check for critical conditions
+                                            $criticalStatus = false;
+
+                                            // Check CPU usage and temperature
+                                            $cpuUtilization = optional(
+                                                collect(optional($device->cpuInfo)->cpuUtilizations ?? [])
+                                                    ->sortByDesc('created_at')
+                                                    ->first(),
+                                            )->util;
+                                            $cpuTemperature = optional(
+                                                collect(optional($device->cpuInfo)->cpuTemps ?? [])
+                                                    ->sortByDesc('created_at')
+                                                    ->first(),
+                                            )->temp;
+
+                                            if (
+                                                ($cpuUtilization !== null && $cpuUtilization >= 90) ||
+                                                ($cpuTemperature !== null && $cpuTemperature >= 80)
+                                            ) {
+                                                $criticalStatus = true;
+                                            }
+
+                                            // Check GPU usage and temperature
+                                            $gpuUsage = optional(
+                                                collect(optional($device->gpuInfo)->gpuUsage ?? [])
+                                                    ->sortByDesc('created_at')
+                                                    ->first(),
+                                            )->usage;
+                                            $gpuTemperature = optional(
+                                                collect(optional($device->gpuInfo)->gpuTemps ?? [])
+                                                    ->sortByDesc('created_at')
+                                                    ->first(),
+                                            )->temp;
+
+                                            if (
+                                                ($gpuUsage !== null && $gpuUsage >= 80) ||
+                                                ($gpuTemperature !== null && $gpuTemperature >= 70)
+                                            ) {
+                                                $criticalStatus = true;
+                                            }
+
+                                            // Check RAM usage
+                                            $ramUsage = optional(
+                                                collect(optional($device->ramInfo)->ramUsage ?? [])
+                                                    ->sortByDesc('created_at')
+                                                    ->first(),
+                                            )->usage;
+
+                                            if ($ramUsage !== null && $ramUsage >= 85) {
+                                                $criticalStatus = true;
+                                            }
+
+                                            // Check Disk usage
+                                            if (!empty($device->diskInfo)) {
+                                                foreach ($device->diskInfo as $disk) {
+                                                    if (!is_null($disk->total) && $disk->total > 0) {
+                                                        $usagePercentage = round(($disk->used / $disk->total) * 100);
+                                                        if ($usagePercentage > 90) {
+                                                            $criticalStatus = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        @endphp
+
+
+                                        <div class="menu-item">
+                                            <a class="menu-link {{Route::is('devicelogs') &&  $device->id == $currentDeviceId ? 'active' : '' }}"
+                                                href="{{ route('devicelogs', ['id' => $device->id]) }}">
+                                                <span class="menu-icon">
+                                                    <i class="ki-duotone ki-screen fs-4">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                        <span class="path3"></span>
+                                                        <span class="path4"></span>
+                                                    </i>
+                                                </span>
+                                                <span class="menu-title">{{ $device->device_name }}</span>
+                                                @if ($criticalStatus)
+                                                    <span class="status-indicator danger-status"></span>
+                                                @else
+                                                    <span class="status-indicator normal-status"></span>
+                                                @endif
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    @elseif (ucfirst(auth()->user()->role) == 'Assistant')
+                        @if (auth()->user()->laboratory_id == $laboratory->id)
+                            <div data-kt-menu-trigger="click"
+                                class="menu-item menu-accordion {{ Route::is('devicelogs') && $laboratory->computerDevices->contains('id', $currentDeviceId) ? 'show' : '' }}">
+                                <span class="menu-link">
+                                    <span class="menu-icon">
+                                        <i class="ki-duotone ki-element-8 fs-2">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                        </i>
+                                    </span>
+                                    <span class="menu-title">{{ $laboratory->laboratory_name }}</span>
+                                    <span class="menu-arrow"></span>
+                                </span>
+
+                                <div class="menu-sub menu-sub-accordion">
+                                    @if ($laboratory->computerDevices->isEmpty())
+                                        <div class="menu-item">
+                                            <span class="menu-link">
+                                                <span class="menu-title">No Device Yet</span>
+                                            </span>
+                                        </div>
+                                    @else
+                                        @foreach ($laboratory->computerDevices as $device)
+                                            @php
+                                                $criticalStatus = false;
+
+                                                // Logic repeated here for Assistant role
+                                                if (
+                                                    $device->cpuInfo->cpuUtilizations->max('util') >= 90 ||
+                                                    $device->cpuInfo->cpuTemps->max('temp') >= 80
+                                                ) {
+                                                    $criticalStatus = true;
+                                                }
+
+                                                if (
+                                                    $device->gpuInfo->gpuUsage->max('usage') >= 80 ||
+                                                    $device->gpuInfo->gpuTemps->max('temp') >= 70
+                                                ) {
+                                                    $criticalStatus = true;
+                                                }
+
+                                                if ($device->ramInfo->ramUsage->max('usage') >= 85) {
+                                                    $criticalStatus = true;
+                                                }
+
+                                                foreach ($device->diskInfo as $disk) {
+                                                    $usagePercentage = round(($disk->used / $disk->total) * 100);
+                                                    if ($usagePercentage >= 90) {
+                                                        $criticalStatus = true;
+                                                        break;
+                                                    }
+                                                }
+                                            @endphp
+
+                                            <div class="menu-item">
+                                                <a class="menu-link {{ Route::is('devicelogs') && $device->id == $currentDeviceId ? 'active' : '' }}"
+                                                    href="{{ route('devicelogs', ['id' => $device->id]) }}">
                                                     <span class="menu-icon">
                                                         <i class="ki-duotone ki-screen fs-4">
                                                             <span class="path1"></span>
