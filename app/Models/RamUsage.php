@@ -14,8 +14,9 @@ class RamUsage extends Model
         'usage',
     ];
 
-    public function cpuInfo()
+    public function ramInfo()
     {
-        return $this->belongsTo(CpuInfo::class, 'ram_id');
+        return $this->belongsTo(RamInfo::class, 'ram_id');
     }
+    
 }
