@@ -22,6 +22,8 @@
             Notifications
         @elseif(Route::currentRouteName() == 'devicegraph')
             Computer Device Real-Time Information
+        @elseif(Route::currentRouteName() == 'devicelogs')
+            Computer Device Logs
         @else
             Welcome!
         @endif
@@ -55,6 +57,24 @@
                     {{ $device->device_name }}
                 </li>
             @endif
+            @elseif (Route::currentRouteName() == 'devicelogs')
+            @php
+                $deviceId = request()->route('id');
+                $device = \App\Models\ComputerDevice::find($deviceId);
+                $laboratory = $device ? $device->laboratory : null;
+            @endphp
+            @if ($laboratory)
+                <li class="breadcrumb-item text-muted">
+                    <a href="{{ route('laboratory') }}"
+                        class="text-muted text-hover-primary">{{ $laboratory->laboratory_name }}</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="bg-gray-500 bullet w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-muted">
+                    {{ $device->device_name }}
+                </li>
+            @endif       
         @elseif (Request::segment(1) == 'account')
             <li class="breadcrumb-item text-muted">
                 <a href="{{ route('account_overview') }}" class="text-muted text-hover-primary">Account</a>
@@ -85,11 +105,12 @@
             <li class="breadcrumb-item text-muted">
                 Computer Devices
             </li>
+            
         @elseif(Route::currentRouteName() == 'notifications')
-        <li class="breadcrumb-item text-muted">
-            Notifications
-        </li>
-    @else
+            <li class="breadcrumb-item text-muted">
+                Notifications
+            </li>
+        @else
             <li class="breadcrumb-item text-muted">
                 Dashboard
             </li>
