@@ -28,6 +28,34 @@
                 </div>
             </div>
         </div>
+        <div class="row gx-5 gx-xl-10 mb-xl-10">
+            <div class="mb-5 col-lg-12 col-xl-12 col-xxl-6 mb-xl-0">
+                <div class="card">
+                    <div class="pt-6 border-0 card-header">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="text-gray-900 card-label fw-bold">Gpu Temperature Logs</span>
+                        </h3>
+                        <livewire:components.devicelogs.gputabletempsearch />
+                    </div>
+                    <div class="py-4 card-body">
+                        <livewire:components.devicelogs.gputabletemp :device="$device">
+                    </div>
+                </div>
+            </div>
+            <div class="mb-5 col-lg-12 col-xl-12 col-xxl-6 mb-xl-0">
+                <div class="card">
+                    <div class="pt-6 border-0 card-header">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="text-gray-900 card-label fw-bold">Gpu Usage Logs</span>
+                        </h3>
+                        <livewire:components.devicelogs.gputableutilsearch />
+                    </div>
+                    <div class="py-4 card-body">
+                        <livewire:components.devicelogs.gputableutil :device="$device">
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="card">
             <div class="pt-6 border-0 card-header">
                 <h3 class="card-title align-items-start flex-column">

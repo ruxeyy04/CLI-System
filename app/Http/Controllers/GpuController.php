@@ -51,23 +51,13 @@ class GpuController extends Controller
         }
 
         $lastTemp = $gpuInfo->gpuTemps()->latest()->first();
-        if ($request->has('temp')) {
-            if (!$lastTemp || $lastTemp->temp !== $request->temp) {
-                $gpuInfo->gpuTemps()->create(['temp' => $request->temp]);
-                $gpuInfo->gpuUsage()->create(['usage' => $request->usage]);
-                GpuGraphUpdate::dispatch($request->temp, $request->usage, $request->input('device_id'));
-            }
-        }
-
         // Handle usage data
         $lastUsage = $gpuInfo->gpuUsage()->latest()->first();
-        if ($request->has('usage')) {
-            if (!$lastUsage || $lastUsage->usage !== $request->usage) {
-                $gpuInfo->gpuTemps()->create(['temp' => $request->temp]);
-                $gpuInfo->gpuUsage()->create(['usage' => $request->usage]);
-                GpuGraphUpdate::dispatch($request->temp, $request->usage, $request->input('device_id'));
-            }
-        }
+    
+        $gpuInfo->gpuTemps()->create(['temp' => $request->temp]);
+        $gpuInfo->gpuUsage()->create(['usage' => $request->usage]);
+        GpuGraphUpdate::dispatch($request->temp, $request->usage, $request->input('device_id'));
+
         $lastTempAlert = $lastTemp && $lastTemp->temp >= 80;
         $lastUsageAlert = $lastUsage && $lastUsage->usage >= 90;
         // GPU Temperature Alert

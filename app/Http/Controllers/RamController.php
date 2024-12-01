@@ -53,15 +53,13 @@ class RamController extends Controller
         $lastUsageAlert = $lastUsage && $lastUsage->usage >= 85;
 
         if ($request->has('usage')) {
-            if (!$lastUsage || $lastUsage->usage !== $request->usage) {
-                $ramInfo->ramUsage()->create(['usage' => $request->usage]);
-                RamGraphUpdate::dispatch($request->usage, $request->input('device_id'));
+            $ramInfo->ramUsage()->create(['usage' => $request->usage]);
+            RamGraphUpdate::dispatch($request->usage, $request->input('device_id'));
 
-                if ($request->usage >= 85 && !$lastUsageAlert) {
-                    $createNotification = true;
-                    $notificationTitle = 'RAM Usage Alert';
-                    $notificationMessage = "RAM usage has reached {$request->usage}%, which is above the threshold of 85%.";
-                }
+            if ($request->usage >= 85 && !$lastUsageAlert) {
+                $createNotification = true;
+                $notificationTitle = 'RAM Usage Alert';
+                $notificationMessage = "RAM usage has reached {$request->usage}%, which is above the threshold of 85%.";
             }
         }
 

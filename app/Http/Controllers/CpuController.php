@@ -79,15 +79,11 @@ class CpuController extends Controller
         }
 
         // Create or update temperature and utilization data
-        if ($request->has('temp') && (!$lastTemp || $lastTemp->temp !== $currentTemp)) {
-            $cpuInfo->cpuTemps()->create(['temp' => $currentTemp]);
-            CpuGraphUpdate::dispatch($currentTemp, $currentUtil, $request->input('device_id'));
-        }
+        $cpuInfo->cpuTemps()->create(['temp' => $currentTemp]);
+        CpuGraphUpdate::dispatch($currentTemp, $currentUtil, $request->input('device_id'));
 
-        if ($request->has('util') && (!$lastUtilization || $lastUtilization->util !== $currentUtil)) {
-            $cpuInfo->cpuUtilizations()->create(['util' => $currentUtil]);
-            CpuGraphUpdate::dispatch($currentTemp, $currentUtil, $request->input('device_id'));
-        }
+        $cpuInfo->cpuUtilizations()->create(['util' => $currentUtil]);
+        CpuGraphUpdate::dispatch($currentTemp, $currentUtil, $request->input('device_id'));
 
         if ($hasChanges) {
             PatchSaved::dispatch($request->input('device_id'));

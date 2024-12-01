@@ -5,11 +5,12 @@ namespace App\Livewire\Components\Devicelogs;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\CpuUtilization;
+use Livewire\WithoutUrlPagination;
 
 class Cputableutil extends Component
 {
-    use WithPagination;
-
+    use WithPagination, WithoutUrlPagination;
+    protected $paginationTheme = 'bootstrap';
     public $device;
     public $searchValUtil = ''; // Default search value
 
