@@ -22,7 +22,6 @@ new class extends Component {
         $this->device = $device;
         $this->gpuInfo = GpuInfo::where('device_id', $this->device->id)->first();
     }
-    
 }; ?>
 
 <div class="card card-flush h-md-50 mb-xl-10">
@@ -42,8 +41,8 @@ new class extends Component {
                         $brand = $gpuInfo->brand;
                         $uniqueBrand = implode(' ', array_unique(explode(' ', $brand)));
                     @endphp
-                    
-                    {{ $uniqueBrand }}
+
+                        {{ $uniqueBrand }}
                     </div>
                 </div>
                 <div class="d-flex fs-6 fw-semibold align-items-center">
@@ -59,7 +58,10 @@ new class extends Component {
                 <div class="d-flex fs-6 fw-semibold align-items-center">
                     <div class="bullet w-8px h-6px rounded-2 bg-primary me-3"></div>
                     <div class="text-gray-500 flex-grow-1 me-4">Power</div>
-                    <div class="text-gray-700 fw-bolder text-xxl-end">{{ round($gpuInfo->power, 2) }}W</div>
+                    <div class="text-gray-700 fw-bolder text-xxl-end">
+                        {{ is_numeric($gpuInfo->power) ? round((float) $gpuInfo->power, 2) . 'W' : 'N/A' }}
+                    </div>
+
                 </div>
                 <div class="d-flex fs-6 fw-semibold align-items-center">
                     <div class="bullet w-8px h-6px rounded-2 bg-success me-3"></div>
