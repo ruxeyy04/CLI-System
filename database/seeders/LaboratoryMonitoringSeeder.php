@@ -12,63 +12,184 @@ use App\Models\GpuInfo;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 
 class LaboratoryMonitoringSeeder extends Seeder
 {
+    public const DEFAULT_WORKSTATIONS_PER_LAB = 5;
+
+    /** @var list<string>|null null = seed all laboratories */
+    protected ?array $selectedLaboratories = null;
+
+    protected int $workstationsPerLab = self::DEFAULT_WORKSTATIONS_PER_LAB;
+
+    protected ?int $greenPerLab = null;
+
+    protected ?int $redPerLab = null;
+
+    /** @var list<string> */
+    protected array $redIssueTypes = ['cpu_temp', 'ram', 'gpu_temp', 'cpu_util', 'gpu_usage'];
+
     /**
-     * Demo labs and workstations with green (healthy) and red (unhealthy) metrics.
-     *
-     * Run: php artisan db:seed --class=LaboratoryMonitoringSeeder
+     * @param  list<string>  $names
+     */
+    public function setLaboratories(array $names): self
+    {
+        $this->selectedLaboratories = self::parseLaboratoryNames(implode(',', $names));
+
+        return $this;
+    }
+
+    /**
+     * Configure workstations per laboratory and health mix (green + red must equal total when both set).
+     */
+    public function setWorkstationCounts(int $perLab, ?int $green = null, ?int $red = null): self
+    {
+        $this->workstationsPerLab = self::validateWorkstationCounts($perLab, $green, $red);
+        [$this->greenPerLab, $this->redPerLab] = self::resolveHealthCounts($perLab, $green, $red);
+
+        return $this;
+    }
+
+    public static function validateWorkstationCounts(int $perLab, ?int $green, ?int $red): int
+    {
+        if ($perLab < 1) {
+            throw new InvalidArgumentException('Workstations per lab must be at least 1.');
+        }
+
+        if ($perLab > 99) {
+            throw new InvalidArgumentException('Workstations per lab cannot exceed 99 (WS-01 to WS-99).');
+        }
+
+        if ($green !== null && $green < 0) {
+            throw new InvalidArgumentException('Green count cannot be negative.');
+        }
+
+        if ($red !== null && $red < 0) {
+            throw new InvalidArgumentException('Red count cannot be negative.');
+        }
+
+        if ($green !== null && $red !== null && ($green + $red) !== $perLab) {
+            throw new InvalidArgumentException("Green ({$green}) + red ({$red}) must equal workstations per lab ({$perLab}).");
+        }
+
+        if ($green !== null && $green > $perLab) {
+            throw new InvalidArgumentException('Green count cannot exceed workstations per lab.');
+        }
+
+        if ($red !== null && $red > $perLab) {
+            throw new InvalidArgumentException('Red count cannot exceed workstations per lab.');
+        }
+
+        return $perLab;
+    }
+
+    /**
+     * @return array{0: int, 1: int} [green, red]
+     */
+    public static function resolveHealthCounts(int $perLab, ?int $green, ?int $red): array
+    {
+        if ($green !== null && $red !== null) {
+            return [$green, $red];
+        }
+
+        if ($green !== null) {
+            return [$green, $perLab - $green];
+        }
+
+        if ($red !== null) {
+            return [$perLab - $red, $red];
+        }
+
+        $redCount = $perLab <= 1 ? 0 : max(1, (int) round($perLab * 0.2));
+
+        return [$perLab - $redCount, $redCount];
+    }
+
+    /**
+     * @return array<string, array{capacity: int}>
+     */
+    public static function laboratoryCatalog(): array
+    {
+        return [
+            'HF-201' => ['capacity' => 30],
+            'HF-202' => ['capacity' => 40],
+            'HF-204' => ['capacity' => 35],
+            'HF-304' => ['capacity' => 25],
+        ];
+    }
+
+    /**
+     * @return list<string>
+     */
+    public static function parseLaboratoryNames(string $input): array
+    {
+        $catalog = self::laboratoryCatalog();
+        $aliases = self::laboratoryAliases();
+        $names = [];
+
+        foreach (explode(',', $input) as $part) {
+            $part = trim($part);
+
+            if ($part === '') {
+                continue;
+            }
+
+            $normalized = $aliases[strtoupper(str_replace(' ', '', $part))] ?? null;
+
+            if (!$normalized) {
+                $candidate = strtoupper($part);
+                if (!str_starts_with($candidate, 'HF-')) {
+                    $candidate = 'HF-'.$candidate;
+                }
+                $normalized = array_key_exists($candidate, $catalog) ? $candidate : null;
+            }
+
+            if (!$normalized) {
+                throw new InvalidArgumentException("Unknown laboratory: {$part}");
+            }
+
+            $names[] = $normalized;
+        }
+
+        $names = array_values(array_unique($names));
+
+        if ($names === []) {
+            throw new InvalidArgumentException('No valid laboratory names were provided.');
+        }
+
+        return $names;
+    }
+
+    /**
+     * Run: php artisan monitoring:seed --labs=HF-202 --workstations=10 --green=8 --red=2
      */
     public function run(): void
     {
-        $labs = [
-            ['name' => 'HF-201', 'capacity' => 30],
-            ['name' => 'HF-202', 'capacity' => 40],
-            ['name' => 'HF-204', 'capacity' => 35],
-            ['name' => 'HF-304', 'capacity' => 25],
-        ];
-
-        $labIds = [];
-        foreach ($labs as $lab) {
-            $record = Laboratory::firstOrCreate(
-                ['laboratory_name' => $lab['name']],
-                ['capacity' => $lab['capacity']]
+        if ($this->greenPerLab === null || $this->redPerLab === null) {
+            [$this->greenPerLab, $this->redPerLab] = self::resolveHealthCounts(
+                $this->workstationsPerLab,
+                $this->greenPerLab,
+                $this->redPerLab
             );
-            $labIds[$lab['name']] = $record->id;
         }
 
-        $workstations = [
-            // HF-201 — 5 workstations (1 red)
-            ['lab' => 'HF-201', 'name' => 'WS-01', 'healthy' => true],
-            ['lab' => 'HF-201', 'name' => 'WS-02', 'healthy' => true],
-            ['lab' => 'HF-201', 'name' => 'WS-03', 'healthy' => false, 'issue' => 'cpu_temp'],
-            ['lab' => 'HF-201', 'name' => 'WS-04', 'healthy' => true],
-            ['lab' => 'HF-201', 'name' => 'WS-05', 'healthy' => true],
+        $catalog = self::laboratoryCatalog();
+        $labsToSeed = $this->resolveLaboratoriesToSeed($catalog);
 
-            // HF-202 — 5 workstations (2 red)
-            ['lab' => 'HF-202', 'name' => 'WS-06', 'healthy' => true],
-            ['lab' => 'HF-202', 'name' => 'WS-07', 'healthy' => false, 'issue' => 'ram'],
-            ['lab' => 'HF-202', 'name' => 'WS-08', 'healthy' => true],
-            ['lab' => 'HF-202', 'name' => 'WS-09', 'healthy' => false, 'issue' => 'gpu_temp'],
-            ['lab' => 'HF-202', 'name' => 'WS-10', 'healthy' => true],
+        $labIds = [];
+        foreach ($labsToSeed as $name => $lab) {
+            $record = Laboratory::firstOrCreate(
+                ['laboratory_name' => $name],
+                ['capacity' => $lab['capacity']]
+            );
+            $labIds[$name] = $record->id;
+        }
 
-            // HF-204 — 5 workstations (1 red)
-            ['lab' => 'HF-204', 'name' => 'WS-11', 'healthy' => true],
-            ['lab' => 'HF-204', 'name' => 'WS-12', 'healthy' => false, 'issue' => 'cpu_util'],
-            ['lab' => 'HF-204', 'name' => 'WS-13', 'healthy' => true],
-            ['lab' => 'HF-204', 'name' => 'WS-14', 'healthy' => true],
-            ['lab' => 'HF-204', 'name' => 'WS-15', 'healthy' => true],
-
-            // HF-304 — 5 workstations (1 red)
-            ['lab' => 'HF-304', 'name' => 'WS-16', 'healthy' => true],
-            ['lab' => 'HF-304', 'name' => 'WS-17', 'healthy' => true],
-            ['lab' => 'HF-304', 'name' => 'WS-18', 'healthy' => false, 'issue' => 'gpu_usage'],
-            ['lab' => 'HF-304', 'name' => 'WS-19', 'healthy' => true],
-            ['lab' => 'HF-304', 'name' => 'WS-20', 'healthy' => true],
-        ];
-
+        $workstations = $this->workstationsForLabs(array_keys($labsToSeed));
         $patchedAt = Carbon::parse('2024-11-22 19:00:00');
+        $healthyCount = 0;
+        $unhealthyCount = 0;
 
         foreach ($workstations as $index => $ws) {
             $slug = Str::lower(str_replace('-', '', $ws['name']));
@@ -98,10 +219,87 @@ class LaboratoryMonitoringSeeder extends Seeder
             $this->seedHardwareMetrics($device, $metrics);
             $this->seedPeripherals($device, $ws['name']);
             $this->seedStorage($device, $ws['name']);
+
+            $ws['healthy'] ? $healthyCount++ : $unhealthyCount++;
         }
 
-        $this->command?->info('Seeded 4 laboratories (HF-201, HF-202, HF-204, HF-304) with 20 workstations.');
-        $this->command?->info('Health mix: 15 green (healthy), 5 red (unhealthy).');
+        $labList = implode(', ', array_keys($labsToSeed));
+        $labCount = count($labsToSeed);
+        $this->command?->info("Seeded laboratories: {$labList}");
+        $this->command?->info("Per lab: {$this->workstationsPerLab} workstations ({$this->greenPerLab} green, {$this->redPerLab} red).");
+        $this->command?->info("Totals: {$healthyCount} green, {$unhealthyCount} red (".count($workstations)." across {$labCount} ".($labCount === 1 ? 'lab' : 'labs').').');
+    }
+
+    /**
+     * @param  array<string, array{capacity: int}>  $catalog
+     * @return array<string, array{capacity: int}>
+     */
+    protected function resolveLaboratoriesToSeed(array $catalog): array
+    {
+        if ($this->selectedLaboratories === null) {
+            return $catalog;
+        }
+
+        $selected = [];
+        foreach ($this->selectedLaboratories as $name) {
+            $selected[$name] = $catalog[$name];
+        }
+
+        return $selected;
+    }
+
+    /**
+     * @param  list<string>  $labNames
+     * @return list<array{lab: string, name: string, healthy: bool, issue?: string}>
+     */
+    protected function workstationsForLabs(array $labNames): array
+    {
+        [$greenCount, $redCount] = self::resolveHealthCounts(
+            $this->workstationsPerLab,
+            $this->greenPerLab,
+            $this->redPerLab
+        );
+
+        $workstations = [];
+
+        foreach ($labNames as $lab) {
+            $redIssueIndex = 0;
+
+            for ($i = 1; $i <= $this->workstationsPerLab; $i++) {
+                $isHealthy = $i <= $greenCount;
+                $entry = [
+                    'lab' => $lab,
+                    'name' => 'WS-'.str_pad((string) $i, 2, '0', STR_PAD_LEFT),
+                    'healthy' => $isHealthy,
+                ];
+
+                if (!$isHealthy) {
+                    $entry['issue'] = $this->redIssueTypes[$redIssueIndex % count($this->redIssueTypes)];
+                    $redIssueIndex++;
+                }
+
+                $workstations[] = $entry;
+            }
+        }
+
+        return $workstations;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    protected static function laboratoryAliases(): array
+    {
+        return [
+            'HF201' => 'HF-201',
+            'HF202' => 'HF-202',
+            'HF204' => 'HF-204',
+            'HF304' => 'HF-304',
+            'HF-201' => 'HF-201',
+            'HF-202' => 'HF-202',
+            'HF-204' => 'HF-204',
+            'HF-304' => 'HF-304',
+        ];
     }
 
     /**

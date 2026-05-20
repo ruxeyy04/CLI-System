@@ -13,8 +13,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            LaboratoryMonitoringSeeder::class,
-        ]);
+        $seeder = new LaboratoryMonitoringSeeder();
+
+        if ($labList = env('SEED_LABS')) {
+            $seeder->setLaboratories(explode(',', $labList));
+        }
+
+        if (env('SEED_WORKSTATIONS') || env('SEED_GREEN') || env('SEED_RED')) {
+            $seeder->setWorkstationCounts(
+                (int) (env('SEED_WORKSTATIONS') ?: LaboratoryMonitoringSeeder::DEFAULT_WORKSTATIONS_PER_LAB),
+                env('SEED_GREEN') !== null ? (int) env('SEED_GREEN') : null,
+                env('SEED_RED') !== null ? (int) env('SEED_RED') : null
+            );
+        }
+
+        $seeder->setCommand($this->command);
+        $seeder->run();
     }
 }
