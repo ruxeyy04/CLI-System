@@ -20,11 +20,36 @@ class Table extends Component
             'update-device-success' => 'loadDevice',
             'remove-patch' => 'removePatch',
             'search-user' => 'searchUser',
+            'dashboard-filter-lab' => 'filterByLab',
+            'dashboard-filter-device' => 'filterByDevice',
+            'dashboard-clear-filters' => 'clearDashboardFilters',
         ];
     }
 
     protected $paginationTheme = 'bootstrap';
     public $searchVal = '';
+    public ?int $filterLabId = null;
+    public ?string $filterDeviceId = null;
+
+    public function filterByLab(?int $labId = null): void
+    {
+        $this->filterLabId = $labId;
+        $this->filterDeviceId = null;
+        $this->resetPage();
+    }
+
+    public function filterByDevice(?string $deviceId = null): void
+    {
+        $this->filterDeviceId = $deviceId;
+        $this->resetPage();
+    }
+
+    public function clearDashboardFilters(): void
+    {
+        $this->filterLabId = null;
+        $this->filterDeviceId = null;
+        $this->resetPage();
+    }
     #[On('echo:device-updates,.patch.saved')]
     public function reloadTable()
     {
@@ -69,6 +94,10 @@ class Table extends Component
         $devices = ComputerDevice::with('laboratory');
     
         foreach ($searchTerms as $term) {
+            if ($term === '') {
+                continue;
+            }
+
             $devices->where(function ($query) use ($term) {
                 $query->where('id', 'like', '%' . $term . '%')
                     ->orWhere('device_name', 'like', '%' . $term . '%')
@@ -78,6 +107,14 @@ class Table extends Component
                         $query->where('laboratory_name', 'like', '%' . $term . '%');
                     });
             });
+        }
+
+        if ($this->filterLabId) {
+            $devices->where('laboratory_id', $this->filterLabId);
+        }
+
+        if ($this->filterDeviceId) {
+            $devices->where('id', $this->filterDeviceId);
         }
     
         $devices = $devices->paginate(5);

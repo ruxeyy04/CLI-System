@@ -51,4 +51,9 @@ class ComputerDevice extends Model
     {
         return $this->hasMany(DiskInfo::class, 'device_id');
     }
+
+    public function inputDevices()
+    {
+        return $this->hasMany(InputDevice::class, 'device_id');
+    }
 }
