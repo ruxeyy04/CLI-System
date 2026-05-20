@@ -4,9 +4,14 @@
     @if (isset($disks))
         @foreach ($disks as $disk)
             @php
-                // Calculate disk usage percentage
-                $usagePercentage = round(($disk->used / $disk->total) * 100);
-                $barColor = $usagePercentage > 90 ? 'danger' : 'success'; // Change color based on usage
+                $diskTotal = is_numeric($disk->total)
+                    ? (float) $disk->total
+                    : (float) preg_replace('/[^0-9.]/', '', (string) $disk->total);
+                $diskUsed = is_numeric($disk->used)
+                    ? (float) $disk->used
+                    : (float) preg_replace('/[^0-9.]/', '', (string) $disk->used);
+                $usagePercentage = $diskTotal > 0 ? round(($diskUsed / $diskTotal) * 100) : 0;
+                $barColor = $usagePercentage > 90 ? 'danger' : 'success';
             @endphp
 
             <div class="mt-3 d-flex align-items-center flex-column w-100">

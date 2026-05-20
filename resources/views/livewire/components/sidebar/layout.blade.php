@@ -183,8 +183,15 @@
                                             // Check Disk usage
                                             if (!empty($device->diskInfo)) {
                                                 foreach ($device->diskInfo as $disk) {
-                                                    if (!is_null($disk->total) && $disk->total > 0) {
-                                                        $usagePercentage = round(($disk->used / $disk->total) * 100);
+                                                    $diskTotal = is_numeric($disk->total)
+                                                        ? (float) $disk->total
+                                                        : (float) preg_replace('/[^0-9.]/', '', (string) $disk->total);
+                                                    $diskUsed = is_numeric($disk->used)
+                                                        ? (float) $disk->used
+                                                        : (float) preg_replace('/[^0-9.]/', '', (string) $disk->used);
+
+                                                    if ($diskTotal > 0) {
+                                                        $usagePercentage = round(($diskUsed / $diskTotal) * 100);
                                                         if ($usagePercentage > 90) {
                                                             $criticalStatus = true;
                                                             break;
@@ -402,8 +409,15 @@
                                             // Check Disk usage
                                             if (!empty($device->diskInfo)) {
                                                 foreach ($device->diskInfo as $disk) {
-                                                    if (!is_null($disk->total) && $disk->total > 0) {
-                                                        $usagePercentage = round(($disk->used / $disk->total) * 100);
+                                                    $diskTotal = is_numeric($disk->total)
+                                                        ? (float) $disk->total
+                                                        : (float) preg_replace('/[^0-9.]/', '', (string) $disk->total);
+                                                    $diskUsed = is_numeric($disk->used)
+                                                        ? (float) $disk->used
+                                                        : (float) preg_replace('/[^0-9.]/', '', (string) $disk->used);
+
+                                                    if ($diskTotal > 0) {
+                                                        $usagePercentage = round(($diskUsed / $diskTotal) * 100);
                                                         if ($usagePercentage > 90) {
                                                             $criticalStatus = true;
                                                             break;

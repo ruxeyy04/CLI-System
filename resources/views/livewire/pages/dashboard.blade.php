@@ -251,7 +251,7 @@ new #[Layout('layouts.assistant')] class extends Component {
                             role="button" tabindex="0">
                             <span class="fw-bold fs-4 mb-1">{{ $lab['name'] }}</span>
                             <span class="fs-8 opacity-75">{{ $lab['device_count'] }}
-                                {{ Str::plural('device', $lab['device_count']) }}</span>
+                                {{ $lab['device_count'] === 1 ? 'device' : 'devices' }}</span>
                             <span class="badge mt-2 badge-light-{{ $lab['status'] === 'healthy' ? 'success' : ($lab['status'] === 'unhealthy' ? 'danger' : 'secondary') }}">
                                 {{ ucfirst($lab['status']) }}
                             </span>
@@ -410,12 +410,12 @@ new #[Layout('layouts.assistant')] class extends Component {
     updateDateTime();
 </script>
 
-@script
 <script>
-    $wire.on('dashboard-scroll-to', ({ target }) => {
-        $nextTick(() => {
-            document.getElementById(target)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('dashboard-scroll-to', ({ target }) => {
+            requestAnimationFrame(() => {
+                document.getElementById(target)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
         });
     });
 </script>
-@endscript
