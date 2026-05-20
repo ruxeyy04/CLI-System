@@ -1,0 +1,209 @@
+<?php
+
+namespace App\Services;
+
+use App\Events\CpuGraphUpdate;
+use App\Events\GpuGraphUpdate;
+use App\Events\RamGraphUpdate;
+use App\Models\ComputerDevice;
+use App\Models\CpuInfo;
+use App\Models\GpuInfo;
+use App\Models\RamInfo;
+class DeviceMetricsMockService
+{
+
+    /**
+     * @return array{devices: int, skipped: int}
+     */
+    public function tickAll(bool $broadcast = true, ?string $deviceId = null): array
+    {
+        $query = ComputerDevice::query()
+            ->whereNotNull('patch_id')
+            ->with(['cpuInfo', 'gpuInfo', 'ramInfo']);
+
+        if ($deviceId !== null) {
+            $query->where('id', $deviceId);
+        }
+
+        $devices = $query->get();
+        $skipped = 0;
+
+        foreach ($devices as $device) {
+            if ($this->tickDevice($device, $broadcast)) {
+                continue;
+            }
+
+            $skipped++;
+        }
+
+        return [
+            'devices' => $devices->count() - $skipped,
+            'skipped' => $skipped,
+        ];
+    }
+
+    public function tickDevice(ComputerDevice $device, bool $broadcast = true): bool
+    {
+        $device->loadMissing(['cpuInfo', 'gpuInfo', 'ramInfo']);
+
+        if (!$device->cpuInfo && !$device->gpuInfo && !$device->ramInfo) {
+            return false;
+        }
+
+        $cpuMetrics = $device->cpuInfo ? $this->mockCpuMetrics($device->cpuInfo) : null;
+        $gpuMetrics = $device->gpuInfo ? $this->mockGpuMetrics($device->gpuInfo) : null;
+        $ramMetrics = $device->ramInfo ? $this->mockRamMetrics($device->ramInfo) : null;
+
+        if ($cpuMetrics && $broadcast) {
+            CpuGraphUpdate::dispatch(
+                $cpuMetrics['temp'],
+                $cpuMetrics['util'],
+                $device->id
+            );
+        }
+
+        if ($gpuMetrics && $broadcast) {
+            GpuGraphUpdate::dispatch(
+                $gpuMetrics['temp'],
+                $gpuMetrics['usage'],
+                $device->id
+            );
+        }
+
+        if ($ramMetrics && $broadcast) {
+            RamGraphUpdate::dispatch($ramMetrics['usage'], $device->id);
+        }
+
+        return true;
+    }
+
+    public static function allowedIntervals(): array
+    {
+        return [1, 2, 3, 4, 5, 10, 15, 30];
+    }
+
+    public static function normalizeInterval(int $minutes): int
+    {
+        if (in_array($minutes, self::allowedIntervals(), true)) {
+            return $minutes;
+        }
+
+        return max(1, min(30, $minutes));
+    }
+
+    /**
+     * @return array{temp: float, util: float}
+     */
+    protected function mockCpuMetrics(CpuInfo $cpu): array
+    {
+        $lastTemp = (float) ($cpu->cpuTemps()->latest()->value('temp') ?? 58);
+        $lastUtil = (float) ($cpu->cpuUtilizations()->latest()->value('util') ?? 42);
+
+        $temp = $this->jitter(
+            $lastTemp,
+            (float) $lastTemp >= DeviceHealthService::CPU_TEMP_THRESHOLD
+                ? ['min' => 78, 'max' => 92]
+                : ['min' => 45, 'max' => 72]
+        );
+
+        $util = $this->jitter(
+            $lastUtil,
+            (float) $lastUtil >= DeviceHealthService::CPU_UTIL_THRESHOLD
+                ? ['min' => 85, 'max' => 98]
+                : ['min' => 12, 'max' => 68]
+        );
+
+        $this->pruneHistory($cpu->cpuTemps());
+        $this->pruneHistory($cpu->cpuUtilizations());
+
+        $cpu->cpuTemps()->create(['temp' => $temp]);
+        $cpu->cpuUtilizations()->create(['util' => $util]);
+
+        return ['temp' => $temp, 'util' => $util];
+    }
+
+    /**
+     * @return array{temp: float, usage: float}
+     */
+    protected function mockGpuMetrics(GpuInfo $gpu): array
+    {
+        $lastTemp = (float) ($gpu->gpuTemps()->latest()->value('temp') ?? $gpu->temp ?? 62);
+        $lastUsage = (float) ($gpu->gpuUsage()->latest()->value('usage') ?? $gpu->usage ?? 38);
+
+        $temp = $this->jitter(
+            $lastTemp,
+            $lastTemp >= DeviceHealthService::GPU_TEMP_THRESHOLD
+                ? ['min' => 78, 'max' => 90]
+                : ['min' => 48, 'max' => 74]
+        );
+
+        $usage = $this->jitter(
+            $lastUsage,
+            $lastUsage >= DeviceHealthService::GPU_USAGE_THRESHOLD
+                ? ['min' => 88, 'max' => 98]
+                : ['min' => 15, 'max' => 62]
+        );
+
+        $this->pruneHistory($gpu->gpuTemps());
+        $this->pruneHistory($gpu->gpuUsage());
+
+        $gpu->gpuTemps()->create(['temp' => $temp]);
+        $gpu->gpuUsage()->create(['usage' => $usage]);
+
+        $gpu->update([
+            'temp' => (string) $temp,
+            'usage' => (string) $usage,
+        ]);
+
+        return ['temp' => $temp, 'usage' => $usage];
+    }
+
+    /**
+     * @return array{usage: float, used: float, available: float}
+     */
+    protected function mockRamMetrics(RamInfo $ram): array
+    {
+        $total = (float) ($ram->total_ram ?: 16);
+        $lastUsage = (float) ($ram->ramUsage()->latest()->value('usage') ?? 55);
+
+        $usage = $this->jitter(
+            $lastUsage,
+            $lastUsage >= DeviceHealthService::RAM_USAGE_THRESHOLD
+                ? ['min' => 86, 'max' => 96]
+                : ['min' => 38, 'max' => 72]
+        );
+
+        $used = round($total * ($usage / 100), 1);
+        $available = round(max(0, $total - $used), 1);
+
+        $this->pruneHistory($ram->ramUsage());
+
+        $ram->ramUsage()->create(['usage' => $usage]);
+        $ram->update([
+            'used' => (string) $used,
+            'available' => (string) $available,
+        ]);
+
+        return ['usage' => $usage, 'used' => $used, 'available' => $available];
+    }
+
+    /**
+     * @param  array{min: float, max: float}  $bounds
+     */
+    protected function jitter(float $current, array $bounds): float
+    {
+        $span = $bounds['max'] - $bounds['min'];
+        $step = max(0.5, $span * 0.12);
+        $delta = (mt_rand(-100, 100) / 100.0) * $step;
+        $value = $current + $delta;
+
+        return round(max($bounds['min'], min($bounds['max'], $value)), 1);
+    }
+
+    protected function pruneHistory($relation): void
+    {
+        $relation->newQuery()
+            ->where('created_at', '<', now()->startOfDay())
+            ->delete();
+    }
+}

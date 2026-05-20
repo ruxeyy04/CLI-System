@@ -80,8 +80,6 @@ class CpuController extends Controller
 
         // Create or update temperature and utilization data
         $cpuInfo->cpuTemps()->create(['temp' => $currentTemp]);
-        CpuGraphUpdate::dispatch($currentTemp, $currentUtil, $request->input('device_id'));
-
         $cpuInfo->cpuUtilizations()->create(['util' => $currentUtil]);
         CpuGraphUpdate::dispatch($currentTemp, $currentUtil, $request->input('device_id'));
 
