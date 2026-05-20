@@ -12,15 +12,13 @@ new #[Layout('layouts.auth')] class extends Component {
 
     // Define validation rules
     protected array $rules = [
-        'form.email' => 'required|email',
-        'form.password' => 'required|min:8',
+        'form.login' => 'required|string',
+        'form.password' => 'required|min:4',
     ];
 
-    // Custom validation messages
     protected array $messages = [
-        'form.password.required' => 'The password field is required',
-        'form.email.required' => 'The email field is required',
-        'form.email.email' => 'The email field must be a valid email address.',
+        'form.login.required' => 'The username or email field is required.',
+        'form.password.required' => 'The password field is required.',
         'form.password.min' => 'The password field must be at least 8 characters.',
     ];
 
@@ -70,10 +68,10 @@ new #[Layout('layouts.auth')] class extends Component {
             </div>
 
             <div class="mb-8 fv-row">
-                <input type="text" placeholder="Email" name="email" class="bg-transparent form-control"
-                    wire:model="form.email" />
+                <input type="text" placeholder="Username or email" name="login" autocomplete="username"
+                    class="bg-transparent form-control" wire:model="form.login" />
 
-                @error('form.email')
+                @error('form.login')
                     <div class="fv-plugins-message-container invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
