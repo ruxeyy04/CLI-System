@@ -26,4 +26,21 @@ return [
     */
     'broadcast_connection' => env('BROADCAST_CONNECTION', 'pusher'),
 
+    /*
+    | Daily slots for `device:mock-data` (one CPU/GPU/RAM reading per time).
+    */
+    'display_timezone' => env('MONITORING_TIMEZONE', 'Asia/Manila'),
+
+    'time_scheduler' => [
+        '1' => '07:00:00',
+        '2' => '08:30:00',
+        '3' => '10:00:00',
+        '4' => '11:30:00',
+        '5' => '13:00:00',
+        '6' => '14:30:00',
+        '7' => '16:00:00',
+        '8' => '17:30:00',
+        '9' => '19:00:00',
+    ],
+
 ];

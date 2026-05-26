@@ -96,7 +96,7 @@ new #[Layout('layouts.assistant')] class extends Component {
                         </tr>
                     </thead>
                     <tbody class="text-gray-600 fw-6 fw-semibold">
-                        @foreach ($sessions as $session)
+                        @forelse ($sessions as $session)
                             <tr>
                                 <td>{{ $session->devicefamily ?? 'None' }} - {{ $session->devicemodel ?? 'None' }}</td>
                                 <td><span
@@ -121,7 +121,13 @@ new #[Layout('layouts.assistant')] class extends Component {
                                     @endif
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="7" class="py-10 text-center text-muted">
+                                    No active sessions found. Log out and sign in again if you recently changed session storage.
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

@@ -44,16 +44,4 @@
             <div id="gpu_usage_graph" class="min-h-auto" style="height: 350px" wire:ignore></div>
         </div>
     </div>
-
-    @script
-    <script>
-        window.updateGpuGraphFromLivewire?.({
-            usage: @js($gpu_usage_data),
-            temp: @js($gpu_temp_data),
-            timestamps: @js($timestamps),
-            startDate: @js($graphStartDate),
-            endDate: @js($graphEndDate),
-        });
-    </script>
-    @endscript
 </div>

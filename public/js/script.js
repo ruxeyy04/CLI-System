@@ -345,110 +345,60 @@ Livewire.on("delete-trend-confirmation", () => {
 });
 
 Livewire.on("viewTrendChart", () => {
-    const rawData = event.detail.raw_data;
-    const trend_line = event.detail.trend_line;
-    const raw_label = event.detail.raw_data_label;
-    // Initialize the chart
-    var chart = new ApexCharts(document.querySelector("#view_trend_graph"), {
-        chart: {
-            fontFamily: "inherit",
-            height: 500,
-            toolbar: {
-                show: true,
-            },
-        },
-        series: [
-            {
-                data: [],
-            },
-            {
-                name: "Trend Line",
-                data: [],
-            },
-        ],
-        xaxis: {
-            type: "datetime",
-            labels: {
-                formatter: function (value) {
-                    return new Date(value).toLocaleTimeString("en-US", {
-                        hour: "numeric",
-                        minute: "2-digit",
-                        hour12: true,
-                    });
-                },
-            },
-        },
-        stroke: {
-            curve: ["smooth", "straight"],
-            show: true,
-            width: 3,
-        },
-        labels: {
-            rotate: 0,
-            rotateAlways: true,
-            style: {
-                colors: "#f1f3f7",
-                fontSize: "12px",
-            },
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        crosshairs: {
-            position: "front",
-            stroke: {
-                color: "#f1f3f7",
-                width: 1,
-                dashArray: 3,
-            },
-        },
-        grid: {
-            borderColor: borderColor,
-            strokeDashArray: 4,
-            yaxis: {
-                lines: {
+    const rawData = event.detail.raw_data || [];
+    const trendLine = event.detail.trend_line || [];
+    const rawLabel = event.detail.raw_data_label || "No Data";
+    const borderColor =
+        typeof KTThemeMode !== "undefined" &&
+        KTThemeMode.getMode() === "light"
+            ? "#f1f3f7"
+            : "#25282f";
+
+    if (window.viewTrendChartInstance) {
+        window.viewTrendChartInstance.destroy();
+    }
+
+    window.viewTrendChartInstance = new ApexCharts(
+        document.querySelector("#view_trend_graph"),
+        {
+            chart: {
+                fontFamily: "inherit",
+                type: "line",
+                height: 500,
+                toolbar: {
                     show: true,
                 },
             },
-        },
-        tooltip: {
-            x: {
-                formatter: function (val) {
-                    return new Date(val).toLocaleString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                        hour: "numeric",
-                        minute: "2-digit",
-                        hour12: true,
-                    });
+            series: [{ data: [] }, { name: "Trend Line", data: [] }],
+            xaxis: window.CliChartLabels.buildTrendCategoryXaxis([]),
+            stroke: {
+                curve: ["smooth", "straight"],
+                show: true,
+                width: 3,
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            grid: {
+                borderColor: borderColor,
+                strokeDashArray: 4,
+                yaxis: {
+                    lines: {
+                        show: true,
+                    },
                 },
             },
-        },
-    });
+            tooltip: window.CliChartLabels.buildTrendTooltip([]),
+        }
+    );
 
-    chart.render();
-
-    const cpuTemperatureData = rawData.map((item) => ({
-        x: new Date(item.created_at).getTime(),
-        y: parseFloat(item.data).toFixed(2),
-    }));
-
-    const trendLineData = trend_line.map((item) => ({
-        x: new Date(item.x).getTime(),
-        y: parseFloat(item.y).toFixed(2),
-    }));
-    console.log(cpuTemperatureData, trendLineData);
-    chart.updateSeries([
-        {
-            name: raw_label,
-            data: cpuTemperatureData,
-        },
-        {
-            name: "Trend Line",
-            data: trendLineData,
-        },
-    ]);
+    window.viewTrendChartInstance.render();
+    window.CliChartLabels.applyTrendChart(
+        window.viewTrendChartInstance,
+        rawData,
+        trendLine,
+        rawLabel
+    );
 });
 
 $(document).ready(function () {

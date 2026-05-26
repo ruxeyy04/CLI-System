@@ -36,18 +36,16 @@ new #[Layout('layouts.auth')] class extends Component {
         // Authenticate the user using the login form's method
         $this->form->authenticate();
 
-        // Update session with device information before regenerating session ID
-        $sessionId = session()->getId();
+        Session::regenerate();
+
         DB::table('sessions')
-            ->where('id', $sessionId)
+            ->where('id', session()->getId())
             ->update([
                 'devicefamily' => Browser::deviceFamily(),
                 'devicemodel' => Browser::deviceModel(),
                 'platformname' => Browser::platformName(),
+                'browsername' => Browser::browserName(),
             ]);
-
-        // Regenerate session
-        Session::regenerate();
 
         // Redirect to the intended page
         $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);

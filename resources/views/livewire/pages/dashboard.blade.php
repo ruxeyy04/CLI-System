@@ -90,14 +90,12 @@ new #[Layout('layouts.assistant')] class extends Component {
         $this->selectedDeviceDetails = null;
         $this->selectedLabName = Laboratory::find($labId)?->laboratory_name;
         $this->loadLabDevices($labId);
-        $this->dispatch('dashboard-scroll-to', target: 'workstations-section');
     }
 
     public function selectDevice(string $deviceId): void
     {
         $this->selectedDeviceId = $deviceId;
         $this->loadDeviceDetails($deviceId);
-        $this->dispatch('dashboard-scroll-to', target: 'device-details-section');
     }
 
     public function clearLabSelection(): void
@@ -391,6 +389,27 @@ new #[Layout('layouts.assistant')] class extends Component {
             </div>
         </div>
     @endif
+
+    {{-- Users (Incharge) — bottom of dashboard --}}
+    @if (ucfirst(auth()->user()->role) === 'Incharge')
+        <div class="card mb-6" id="users-section">
+            <div class="card-header border-0 pt-6 flex-wrap gap-3">
+                <div class="card-title flex-column align-items-start">
+                    <h2 class="fw-bold mb-1">Users</h2>
+                    <span class="text-muted fs-7">System accounts and their roles</span>
+                </div>
+                <div class="card-toolbar flex-row align-items-center gap-3">
+                    <livewire:components.users.users-table-search />
+                    <a href="{{ route('user_management') }}" class="btn btn-sm btn-light-primary" wire:navigate>
+                        Manage users
+                    </a>
+                </div>
+            </div>
+            <div class="card-body pt-2">
+                <livewire:components.users.userstable />
+            </div>
+        </div>
+    @endif
 </div>
 
 <script>
@@ -408,14 +427,4 @@ new #[Layout('layouts.assistant')] class extends Component {
 
     setInterval(updateDateTime, 1000);
     updateDateTime();
-</script>
-
-<script>
-    document.addEventListener('livewire:init', () => {
-        Livewire.on('dashboard-scroll-to', ({ target }) => {
-            requestAnimationFrame(() => {
-                document.getElementById(target)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-        });
-    });
 </script>

@@ -7,6 +7,7 @@ use App\Models\GpuTemp;
 use App\Models\GpuUsage;
 use App\Models\RamUsage;
 use App\Models\TrendLog;
+use App\Support\DeviceChartSeries;
 use Livewire\Component;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
@@ -154,7 +155,12 @@ class ViewTrendModal extends Component
         }
         $this->show_chart = true;
         $trendLine = $this->calculateTrendLine($this->trend_data);
-        $this->dispatch('viewTrendChart', raw_data: $this->raw_logs, trend_line: $trendLine, raw_data_label: $this->raw_label);
+        $this->dispatch(
+            'viewTrendChart',
+            raw_data: DeviceChartSeries::formatLogsForChart($this->raw_logs),
+            trend_line: DeviceChartSeries::formatTrendLineForChart($trendLine),
+            raw_data_label: $this->raw_label,
+        );
     }
     public function hideTrendChart() {
         $this->show_chart = false;

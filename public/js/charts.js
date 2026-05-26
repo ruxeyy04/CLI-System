@@ -1,17 +1,525 @@
+const LAB_CHART_TIMEZONE = "Asia/Manila";
+
+function formatLabTimestamp(date = new Date()) {
+    const parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone: LAB_CHART_TIMEZONE,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+    }).formatToParts(date);
+
+    const get = (type) => parts.find((p) => p.type === type)?.value ?? "00";
+
+    return `${get("year")}-${get("month")}-${get("day")} ${get("hour")}:${get("minute")}:${get("second")}`;
+}
+
+function parseChartTimestamp(value) {
+    if (value == null) {
+        return Date.now();
+    }
+
+    if (typeof value === "number") {
+        return value;
+    }
+
+    const raw = String(value).trim();
+
+    if (/^\d+$/.test(raw)) {
+        return Number(raw);
+    }
+
+    const normalized = raw.includes("T")
+        ? raw.replace(/\.\d+Z?$/, "").replace("Z", "").replace("T", " ")
+        : raw;
+
+    return new Date(normalized.replace(" ", "T")).getTime();
+}
+
+function formatChartAxisTime(value) {
+    return formatSchedulerLabel(value);
+}
+
+/** Wall-clock label from "Y-m-d H:i:s" — matches time_scheduler slots exactly. */
+function formatSchedulerLabel(stamp) {
+    const raw = String(stamp ?? "").trim();
+
+    if (!raw) {
+        return "";
+    }
+
+    const timePart = raw.includes(" ") ? raw.split(" ")[1] : raw;
+    const segments = timePart.split(":").map((part) => parseInt(part, 10));
+
+    if (segments.length < 2 || Number.isNaN(segments[0]) || Number.isNaN(segments[1])) {
+        return raw;
+    }
+
+    const hour24 = segments[0];
+    const minute = segments[1];
+    const period = hour24 >= 12 ? "PM" : "AM";
+    const hour12 = hour24 % 12 || 12;
+
+    return `${String(hour12).padStart(2, "0")}:${String(minute).padStart(2, "0")} ${period}`;
+}
+
+/** One x-axis label per reading (matches scheduler slots, not auto-spaced ticks). */
+function buildChartCategories(timestamps) {
+    return (timestamps || []).map((stamp) => formatSchedulerLabel(stamp));
+}
+
+var graphStartDate = "";
+var graphEndDate = "";
+
+function isMultiDayGraphRange() {
+    return Boolean(
+        graphStartDate && graphEndDate && graphStartDate !== graphEndDate
+    );
+}
+
+function buildGraphCategoryLabels(timestamps) {
+    return isMultiDayGraphRange()
+        ? buildTrendCategories(timestamps)
+        : buildChartCategories(timestamps);
+}
+
+function buildGraphCategoryXaxis(timestamps) {
+    const categories = buildGraphCategoryLabels(timestamps);
+
+    return {
+        type: "category",
+        categories,
+        tickPlacement: "on",
+        labels: {
+            rotate: categories.length > 8 ? -45 : -45,
+            rotateAlways: false,
+            hideOverlappingLabels: false,
+            trim: false,
+            style: {
+                colors: "#9fa7bc",
+                fontSize: categories.length > 12 ? "9px" : "11px",
+            },
+        },
+        axisTicks: {
+            show: true,
+        },
+        tooltip: {
+            enabled: false,
+        },
+    };
+}
+
+function setGraphDateRange(startDate, endDate) {
+    graphStartDate = startDate || "";
+    graphEndDate = endDate || startDate || "";
+}
+
+function toNumericSeries(values) {
+    return (values || []).map((value) => {
+        if (value == null || value === "") {
+            return null;
+        }
+
+        const number = Number(value);
+
+        return Number.isNaN(number) ? null : number;
+    });
+}
+
+function buildCategoryXaxis(timestamps) {
+    return {
+        type: "category",
+        categories: buildChartCategories(timestamps),
+        tickPlacement: "on",
+        labels: {
+            rotate: -45,
+            rotateAlways: false,
+            hideOverlappingLabels: false,
+            trim: false,
+            style: {
+                colors: "#9fa7bc",
+                fontSize: "11px",
+            },
+        },
+        axisTicks: {
+            show: true,
+        },
+        tooltip: {
+            enabled: false,
+        },
+    };
+}
+
+function resolveChartPointIndex(value, opts) {
+    if (opts?.dataPointIndex != null && !Number.isNaN(opts.dataPointIndex)) {
+        return opts.dataPointIndex;
+    }
+
+    if (value == null || value === "") {
+        return null;
+    }
+
+    const numeric = parseInt(String(value), 10);
+
+    if (Number.isNaN(numeric)) {
+        return null;
+    }
+
+    // ApexCharts category tooltips often pass a 1-based index (e.g. "2" for 08:30 AM).
+    if (numeric >= 1 && numeric <= 20) {
+        return numeric - 1;
+    }
+
+    return numeric;
+}
+
+function buildChartTooltip(timestamps) {
+    const labels = buildGraphCategoryLabels(timestamps);
+
+    return {
+        shared: true,
+        intersect: false,
+        x: {
+            show: true,
+            formatter: function (value, opts) {
+                const index = resolveChartPointIndex(value, opts);
+
+                if (index != null && timestamps?.[index]) {
+                    return formatTrendTooltipLabel(timestamps[index]);
+                }
+
+                if (index != null && labels[index]) {
+                    return labels[index];
+                }
+
+                const categories = opts?.w?.config?.xaxis?.categories;
+
+                if (index != null && categories?.[index]) {
+                    return categories[index];
+                }
+
+                if (typeof value === "string" && value.includes(":")) {
+                    return formatTrendTooltipLabel(value);
+                }
+
+                return value ?? "";
+            },
+        },
+    };
+}
+
+function normalizeTrendTimestamp(value) {
+    if (value == null) {
+        return "";
+    }
+
+    let raw = String(value).trim();
+
+    if (raw.includes("T")) {
+        raw = raw.replace("T", " ").replace(/\.\d+Z?$/, "").replace("Z", "");
+    }
+
+    return raw;
+}
+
+function formatTrendTooltipLabel(stamp) {
+    const raw = normalizeTrendTimestamp(stamp);
+    const [datePart] = raw.split(" ");
+
+    if (!datePart) {
+        return raw;
+    }
+
+    const [year, month, day] = datePart.split("-").map((part) => parseInt(part, 10));
+
+    if ([year, month, day].some((part) => Number.isNaN(part))) {
+        return `${raw} at ${formatSchedulerLabel(raw)}`;
+    }
+
+    const monthName = new Date(year, month - 1, day).toLocaleString("en-US", {
+        month: "long",
+    });
+
+    return `${monthName} ${day}, ${year} at ${formatSchedulerLabel(raw)}`;
+}
+
+/** Category labels for trend charts (date + scheduler wall-clock time). */
+function buildTrendCategories(timestamps) {
+    return (timestamps || []).map((stamp) => {
+        const raw = normalizeTrendTimestamp(stamp);
+        const [datePart] = raw.split(" ");
+
+        if (!datePart) {
+            return formatSchedulerLabel(raw);
+        }
+
+        const [, month, day] = datePart.split("-");
+
+        return `${month}/${day} ${formatSchedulerLabel(raw)}`;
+    });
+}
+
+function buildTrendCategoryXaxis(timestamps) {
+    return {
+        type: "category",
+        categories: buildTrendCategories(timestamps),
+        tickPlacement: "on",
+        labels: {
+            rotate: -45,
+            rotateAlways: false,
+            hideOverlappingLabels: false,
+            trim: true,
+            style: {
+                colors: "#9fa7bc",
+                fontSize: "10px",
+            },
+        },
+        axisTicks: {
+            show: true,
+        },
+        tooltip: {
+            enabled: false,
+        },
+    };
+}
+
+function roundTrendValue(value) {
+    if (value == null || Number.isNaN(value)) {
+        return null;
+    }
+
+    return Math.round(Number(value) * 10) / 10;
+}
+
+function formatTrendAxisValue(value) {
+    if (value == null || Number.isNaN(value)) {
+        return "";
+    }
+
+    const rounded = roundTrendValue(value);
+
+    return Number.isInteger(rounded)
+        ? String(rounded)
+        : rounded.toFixed(1);
+}
+
+function trendValueSuffix(rawLabel = "") {
+    return String(rawLabel).toLowerCase().includes("temp") ? " °C" : " %";
+}
+
+function buildTrendYaxis(min, max) {
+    return {
+        min,
+        max,
+        tickAmount: 6,
+        decimalsInFloat: 1,
+        labels: {
+            style: {
+                colors: "#9fa7bc",
+                fontSize: "12px",
+            },
+            formatter: function (value) {
+                return formatTrendAxisValue(value);
+            },
+        },
+    };
+}
+
+function buildTrendTooltip(timestamps, rawLabel = "") {
+    const labels = (timestamps || []).map((stamp) =>
+        formatTrendTooltipLabel(stamp)
+    );
+    const suffix = trendValueSuffix(rawLabel);
+
+    return {
+        shared: true,
+        intersect: false,
+        y: {
+            formatter: function (value) {
+                return formatTrendAxisValue(value) + suffix;
+            },
+        },
+        x: {
+            show: true,
+            formatter: function (value, opts) {
+                const index = resolveChartPointIndex(value, opts);
+
+                if (index != null && labels[index]) {
+                    return labels[index];
+                }
+
+                if (index != null && timestamps?.[index]) {
+                    return formatTrendTooltipLabel(timestamps[index]);
+                }
+
+                const categories = opts?.w?.config?.xaxis?.categories;
+
+                if (index != null && categories?.[index]) {
+                    return categories[index];
+                }
+
+                return value ?? "";
+            },
+        },
+    };
+}
+
+function applyTrendChart(chart, rawData, trendLine, rawLabel) {
+    const timestamps = (rawData || []).map((item) =>
+        normalizeTrendTimestamp(item.created_at)
+    );
+    const rawSeries = toNumericSeries((rawData || []).map((item) => item.data)).map(
+        roundTrendValue
+    );
+    const trendSeries = toNumericSeries((trendLine || []).map((item) => item.y)).map(
+        roundTrendValue
+    );
+    const numericValues = [...rawSeries, ...trendSeries].filter(
+        (value) => value != null && !Number.isNaN(value)
+    );
+
+    const yMin =
+        numericValues.length > 0
+            ? roundTrendValue(Math.min(...numericValues, 0) - 1)
+            : -1;
+    const yMax =
+        numericValues.length > 0
+            ? roundTrendValue(Math.max(...numericValues, 0) + 1)
+            : 1;
+
+    chart.updateOptions({
+        xaxis: buildTrendCategoryXaxis(timestamps),
+        tooltip: buildTrendTooltip(timestamps, rawLabel),
+        yaxis: buildTrendYaxis(yMin, yMax),
+    });
+
+    chart.updateSeries([
+        {
+            name: rawLabel,
+            data: rawSeries,
+        },
+        {
+            name: "Trend Line",
+            data: trendSeries,
+        },
+    ]);
+}
+
+window.CliChartLabels = {
+    normalizeTrendTimestamp,
+    formatSchedulerLabel,
+    formatTrendTooltipLabel,
+    formatTrendAxisValue,
+    buildTrendCategories,
+    buildTrendCategoryXaxis,
+    buildTrendYaxis,
+    buildTrendTooltip,
+    applyTrendChart,
+    toNumericSeries,
+    buildGraphCategoryXaxis,
+    setGraphDateRange,
+};
+
+function buildCpuChartSeries(utilizationValues, temperatureValues) {
+    return [
+        {
+            name: "Utilization",
+            data: toNumericSeries(utilizationValues),
+        },
+        {
+            name: "Temperature",
+            data: toNumericSeries(temperatureValues),
+        },
+    ];
+}
+
+function buildGpuChartSeries(usageValues, temperatureValues) {
+    return [
+        {
+            name: "Usage",
+            data: toNumericSeries(usageValues),
+        },
+        {
+            name: "Temperature",
+            data: toNumericSeries(temperatureValues),
+        },
+    ];
+}
+
+function buildRamChartSeries(usageValues) {
+    return [
+        {
+            name: "RAM Usage",
+            data: toNumericSeries(usageValues),
+        },
+    ];
+}
 
 if (currentDeviceId !== null) {
     // CPU
-    var utilizationData = cpu_util.data;
-    var temperatureData = cpu_temp.data;
-    var timestampss = timestamps;
+    var utilizationData = [];
+    var temperatureData = [];
+    var timestampss = [];
     // RAM
-    var ramUsage = ram_usage.data;
-    var ramTimestamps = ram_usage.timestamps;
+    var ramUsage = [];
+    var ramTimestamps = [];
 
     // GPU
-    var gpuUsage = gpu_usage.data;
-    var gpuTemp = gpu_temp.data;
-    var gpuTimestamps = gpu_timestamps;
+    var gpuUsage = [];
+    var gpuTemp = [];
+    var gpuTimestamps = [];
+
+    var chart;
+    var chart1;
+    var chart2;
+
+    function applyCpuGraphPayload(payload) {
+        utilizationData = payload?.util ?? [];
+        temperatureData = payload?.temp ?? [];
+        timestampss = payload?.timestamps ?? [];
+        setGraphDateRange(payload?.startDate, payload?.endDate);
+
+        if (!chart) {
+            window.__pendingCpuGraphPayload = payload;
+            return;
+        }
+
+        refreshCpuChart();
+    }
+
+    function applyRamGraphPayload(payload) {
+        ramUsage = payload?.usage ?? [];
+        ramTimestamps = payload?.timestamps ?? [];
+        setGraphDateRange(payload?.startDate, payload?.endDate);
+
+        if (!chart1) {
+            window.__pendingRamGraphPayload = payload;
+            return;
+        }
+
+        refreshRamChart();
+    }
+
+    function applyGpuGraphPayload(payload) {
+        gpuUsage = payload?.usage ?? [];
+        gpuTemp = payload?.temp ?? [];
+        gpuTimestamps = payload?.timestamps ?? [];
+        setGraphDateRange(payload?.startDate, payload?.endDate);
+
+        if (!chart2) {
+            window.__pendingGpuGraphPayload = payload;
+            return;
+        }
+
+        refreshGpuChart();
+    }
+
+    window.updateCpuGraphFromLivewire = applyCpuGraphPayload;
+    window.updateRamGraphFromLivewire = applyRamGraphPayload;
+    window.updateGpuGraphFromLivewire = applyGpuGraphPayload;
 
     function limitToLast20Samples(dataArray) {
         if (dataArray.length > 20) {
@@ -39,16 +547,7 @@ if (currentDeviceId !== null) {
         );
     });
     var options = {
-        series: [
-            {
-                name: "Utilization",
-                data: utilizationData,
-            },
-            {
-                name: "Temperature",
-                data: temperatureData,
-            },
-        ],
+        series: buildCpuChartSeries(utilizationData, temperatureData),
         chart: {
             fontFamily: "inherit",
             type: "area",
@@ -76,23 +575,7 @@ if (currentDeviceId !== null) {
             show: true,
             width: 3,
         },
-        xaxis: {
-            type: "datetime",
-            categories: timestampss,
-            labels: {
-                formatter: function (value) {
-                    return new Date(value).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                    });
-                },
-            },
-            tooltip: {
-                x: {
-                    format: "dd/MM/yy HH:mm",
-                },
-            },
-        },
+        xaxis: buildGraphCategoryXaxis(timestampss),
         yaxis: [
             {
                 tickAmount: 8,
@@ -124,30 +607,6 @@ if (currentDeviceId !== null) {
                 },
             },
         ],
-
-        axisBorder: {
-            show: false,
-        },
-        axisTicks: {
-            show: false,
-        },
-        tickAmount: 6,
-        labels: {
-            rotate: 0,
-            rotateAlways: true,
-            style: {
-                colors: "#f1f3f7",
-                fontSize: "12px",
-            },
-        },
-        crosshairs: {
-            position: "front",
-            stroke: {
-                color: "#f1f3f7",
-                width: 1,
-                dashArray: 3,
-            },
-        },
         grid: {
             borderColor: borderColor,
             strokeDashArray: 4,
@@ -157,19 +616,10 @@ if (currentDeviceId !== null) {
                 },
             },
         },
-        tooltip: {
-            x: {
-                format: "dd/MM/yy HH:mm",
-            },
-        },
+        tooltip: buildChartTooltip(timestampss),
     };
     var options1 = {
-        series: [
-            {
-                name: "RAM Usage",
-                data: ramUsage,
-            },
-        ],
+        series: buildRamChartSeries(ramUsage),
         chart: {
             fontFamily: "inherit",
             type: "area",
@@ -197,23 +647,7 @@ if (currentDeviceId !== null) {
             show: true,
             width: 3,
         },
-        xaxis: {
-            type: "datetime",
-            categories: ramTimestamps,
-            labels: {
-                formatter: function (value) {
-                    return new Date(value).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                    });
-                },
-            },
-            tooltip: {
-                x: {
-                    format: "dd/MM/yy HH:mm",
-                },
-            },
-        },
+        xaxis: buildGraphCategoryXaxis(ramTimestamps),
         yaxis: {
             tickAmount: 8,
             max: 100,
@@ -224,32 +658,8 @@ if (currentDeviceId !== null) {
                     fontSize: "12px",
                 },
                 formatter: function (value) {
-                    return value + " %"; // Add the percentage symbol here
+                    return value + " %";
                 },
-            },
-        },
-
-        axisBorder: {
-            show: false,
-        },
-        axisTicks: {
-            show: false,
-        },
-        tickAmount: 6,
-        labels: {
-            rotate: 0,
-            rotateAlways: true,
-            style: {
-                colors: "#f1f3f7",
-                fontSize: "12px",
-            },
-        },
-        crosshairs: {
-            position: "front",
-            stroke: {
-                color: "#f1f3f7",
-                width: 1,
-                dashArray: 3,
             },
         },
         grid: {
@@ -261,23 +671,10 @@ if (currentDeviceId !== null) {
                 },
             },
         },
-        tooltip: {
-            x: {
-                format: "dd/MM/yy HH:mm",
-            },
-        },
+        tooltip: buildChartTooltip(ramTimestamps),
     };
     var options2 = {
-        series: [
-            {
-                name: "Usage",
-                data: gpuUsage,
-            },
-            {
-                name: "Temperature",
-                data: gpuTemp,
-            },
-        ],
+        series: buildGpuChartSeries(gpuUsage, gpuTemp),
         chart: {
             fontFamily: "inherit",
             type: "area",
@@ -303,18 +700,7 @@ if (currentDeviceId !== null) {
             show: true,
             width: 3,
         },
-        xaxis: {
-            type: "datetime",
-            categories: gpuTimestamps,
-            labels: {
-                formatter: function (value) {
-                    return new Date(value).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                    });
-                },
-            },
-        },
+        xaxis: buildGraphCategoryXaxis(gpuTimestamps),
         yaxis: [
             {
                 min: 0,
@@ -355,12 +741,32 @@ if (currentDeviceId !== null) {
                 },
             },
         },
-        tooltip: {
-            x: {
-                format: "dd/MM/yy HH:mm",
-            },
-        },
+        tooltip: buildChartTooltip(gpuTimestamps),
     };
+
+    function refreshCpuChart() {
+        chart.updateOptions({
+            xaxis: buildGraphCategoryXaxis(timestampss),
+            tooltip: buildChartTooltip(timestampss),
+        });
+        chart.updateSeries(buildCpuChartSeries(utilizationData, temperatureData));
+    }
+
+    function refreshGpuChart() {
+        chart2.updateOptions({
+            xaxis: buildGraphCategoryXaxis(gpuTimestamps),
+            tooltip: buildChartTooltip(gpuTimestamps),
+        });
+        chart2.updateSeries(buildGpuChartSeries(gpuUsage, gpuTemp));
+    }
+
+    function refreshRamChart() {
+        chart1.updateOptions({
+            xaxis: buildGraphCategoryXaxis(ramTimestamps),
+            tooltip: buildChartTooltip(ramTimestamps),
+        });
+        chart1.updateSeries(buildRamChartSeries(ramUsage));
+    }
 
     document.addEventListener("livewire:navigate", () => {
         if (chart) {
@@ -378,57 +784,45 @@ if (currentDeviceId !== null) {
     });
 
     // CPU
-    var chart = new ApexCharts(
+    chart = new ApexCharts(
         document.querySelector("#cpu_temp_utilGraph"),
         options
     );
     chart.render();
+    if (window.__pendingCpuGraphPayload) {
+        applyCpuGraphPayload(window.__pendingCpuGraphPayload);
+        window.__pendingCpuGraphPayload = null;
+    }
     // RAM
-    var chart1 = new ApexCharts(
+    chart1 = new ApexCharts(
         document.querySelector("#ram_usage_graph"),
         options1
     );
 
     chart1.render();
+    if (window.__pendingRamGraphPayload) {
+        applyRamGraphPayload(window.__pendingRamGraphPayload);
+        window.__pendingRamGraphPayload = null;
+    }
     // GPU
-    var chart2 = new ApexCharts(
+    chart2 = new ApexCharts(
         document.querySelector("#gpu_usage_graph"),
         options2
     );
     chart2.render();
+    if (window.__pendingGpuGraphPayload) {
+        applyGpuGraphPayload(window.__pendingGpuGraphPayload);
+        window.__pendingGpuGraphPayload = null;
+    }
     document.addEventListener('livewire:navigated', () => {
         window.Echo.private("cpu-graph." + currentDeviceId).listen(
             ".cpu.graph.update",
             (e) => {
-                const currentTime = new Date();
-
-                const formattedTime = new Intl.DateTimeFormat("en-PH", {
-                    timeZone: "Asia/Manila",
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                    hour12: true,
-                }).format(currentTime);
-
-                const isoTime = new Date(formattedTime).toISOString();
-
                 utilizationData.push(e.util);
                 temperatureData.push(e.temp);
-                timestampss.push(isoTime);
+                timestampss.push(formatLabTimestamp());
 
-                chart.updateSeries([
-                    {
-                        name: "Utilization",
-                        data: utilizationData,
-                    },
-                    {
-                        name: "Temperature",
-                        data: temperatureData,
-                    },
-                ]);
+                refreshCpuChart();
 
                 const maxDataPoints = 20;
                 if (utilizationData.length > maxDataPoints) {
@@ -442,35 +836,11 @@ if (currentDeviceId !== null) {
         window.Echo.private("gpu-graph." + currentDeviceId).listen(
             ".gpu.graph.update",
             (e) => {
-                const currentTime = new Date();
-
-                const formattedTime = new Intl.DateTimeFormat("en-PH", {
-                    timeZone: "Asia/Manila",
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                    hour12: true,
-                }).format(currentTime);
-
-                const isoTime = new Date(formattedTime).toISOString();
-
                 gpuUsage.push(e.usage);
                 gpuTemp.push(e.temp);
-                gpuTimestamps.push(isoTime);
+                gpuTimestamps.push(formatLabTimestamp());
 
-                chart2.updateSeries([
-                    {
-                        name: "Usage",
-                        data: gpuUsage,
-                    },
-                    {
-                        name: "Temperature",
-                        data: gpuTemp,
-                    },
-                ]);
+                refreshGpuChart();
 
                 const maxDataPoints = 20;
                 if (gpuUsage.length > maxDataPoints) {
@@ -484,28 +854,10 @@ if (currentDeviceId !== null) {
         window.Echo.private("ram-graph." + currentDeviceId).listen(
             ".ram.graph.update",
             (e) => {
-                const currentTime = new Date();
-
-                const formattedTime = new Intl.DateTimeFormat("en-PH", {
-                    timeZone: "Asia/Manila",
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                    hour12: true,
-                }).format(currentTime);
-
-                const isoTime = new Date(formattedTime).toISOString();
                 ramUsage.push(e.usage);
-                ramTimestamps.push(isoTime);
+                ramTimestamps.push(formatLabTimestamp());
 
-                chart1.updateSeries([
-                    {
-                        data: ramUsage,
-                    },
-                ]);
+                refreshRamChart();
 
                 const maxDataPoints = 20;
                 if (ramUsage.length > maxDataPoints) {
@@ -528,10 +880,11 @@ if (currentDeviceId !== null) {
         ]);
     });
 
-    // Initialize the chart
+    // Initialize the trend analysis chart
     var chart4 = new ApexCharts(document.querySelector("#trend_graph"), {
         chart: {
             fontFamily: "inherit",
+            type: "line",
             height: 350,
             toolbar: {
                 show: true,
@@ -544,46 +897,16 @@ if (currentDeviceId !== null) {
             {
                 name: "Trend Line",
                 data: [],
-                stroke: {
-                    curve: "straight",
-                },
             },
         ],
-        xaxis: {
-            type: "datetime",
-            labels: {
-                formatter: function (value) {
-                    return new Date(value).toLocaleTimeString("en-US", {
-                        hour: "numeric",
-                        minute: "2-digit",
-                        hour12: true,
-                    });
-                },
-            },
-        },
+        xaxis: buildTrendCategoryXaxis([]),
         stroke: {
             curve: ["smooth", "straight"],
             show: true,
             width: 3,
         },
-        labels: {
-            rotate: 0,
-            rotateAlways: true,
-            style: {
-                colors: "#f1f3f7",
-                fontSize: "12px",
-            },
-        },
         dataLabels: {
             enabled: false,
-        },
-        crosshairs: {
-            position: "front",
-            stroke: {
-                color: "#f1f3f7",
-                width: 1,
-                dashArray: 3,
-            },
         },
         grid: {
             borderColor: borderColor,
@@ -594,66 +917,19 @@ if (currentDeviceId !== null) {
                 },
             },
         },
-        tooltip: {
-            x: {
-                formatter: function (val) {
-                    return new Date(val).toLocaleString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                        hour: "numeric",
-                        minute: "2-digit",
-                        hour12: true,
-                    });
-                },
-            },
-        },
+        yaxis: buildTrendYaxis(-1, 1),
+        tooltip: buildTrendTooltip([]),
     });
 
     chart4.render();
 
     Livewire.on("refreshCharts", () => {
-        const rawData = event.detail.raw_data || [];
-        const trendLine = event.detail.trend_line || [];
-        const rawLabel = event.detail.raw_data_label || "No Data";
-    
-        const cpuTemperatureData = rawData.length
-            ? rawData.map((item) => ({
-                  x: new Date(item.created_at).getTime(),
-                  y: parseFloat(item.data).toFixed(2),
-              }))
-            : [
-                  { x: new Date(event.detail.start_datetime).getTime(), y: 0 },
-                  { x: new Date(event.detail.end_datetime).getTime(), y: 0 },
-              ];
-    
-        const trendLineData = trendLine.map((item) => ({
-            x: new Date(item.x).getTime(),
-            y: parseFloat(item.y).toFixed(2),
-        }));
-    
-        // Calculate min and max for y-axis, ensuring a centered 0
-        const yValues = [...cpuTemperatureData, ...trendLineData].map((item) => item.y);
-        const yMin = Math.min(...yValues, 0) - 1; // Expand 1 unit below the lowest value or 0
-        const yMax = Math.max(...yValues, 0) + 1; // Expand 1 unit above the highest value or 0
-    
-        chart4.updateOptions({
-            yaxis: {
-                min: yMin,
-                max: yMax,
-            },
-        });
-    
-        chart4.updateSeries([
-            {
-                name: rawLabel,
-                data: cpuTemperatureData,
-            },
-            {
-                name: "Trend Line",
-                data: trendLineData,
-            },
-        ]);
+        applyTrendChart(
+            chart4,
+            event.detail.raw_data || [],
+            event.detail.trend_line || [],
+            event.detail.raw_data_label || "No Data"
+        );
     });
     
     

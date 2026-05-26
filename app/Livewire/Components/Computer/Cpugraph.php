@@ -4,26 +4,26 @@ namespace App\Livewire\Components\Computer;
 
 use App\Livewire\Concerns\InteractsWithDeviceGraphDateRange;
 use App\Models\ComputerDevice;
-use App\Models\GpuInfo;
-use App\Models\GpuTemp;
-use App\Models\GpuUsage;
+use App\Models\CpuInfo;
+use App\Models\CpuTemp;
+use App\Models\CpuUtilization;
 use App\Support\DeviceChartSeries;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class Gpugraph extends Component
+class Cpugraph extends Component
 {
     use InteractsWithDeviceGraphDateRange;
 
     public ComputerDevice $device;
 
-    public array $gpu_temp_data = [];
+    public array $cpu_temp_data = [];
 
-    public array $gpu_usage_data = [];
+    public array $cpu_util_data = [];
 
     public array $timestamps = [];
 
-    public ?int $gpu_id = null;
+    public ?int $cpu_id = null;
 
     public function mount(ComputerDevice $device): void
     {
@@ -45,37 +45,37 @@ class Gpugraph extends Component
         $this->isLoadingGraph = true;
 
         try {
-            $this->gpu_temp_data = [];
-            $this->gpu_usage_data = [];
+            $this->cpu_temp_data = [];
+            $this->cpu_util_data = [];
             $this->timestamps = [];
-            $this->gpu_id = null;
+            $this->cpu_id = null;
 
-            $gpuInfo = GpuInfo::where('device_id', $this->device->id)->first();
+            $cpuInfo = CpuInfo::where('device_id', $this->device->id)->first();
 
-            if (! $gpuInfo) {
+            if (! $cpuInfo) {
                 return;
             }
 
-            $this->gpu_id = $gpuInfo->id;
+            $this->cpu_id = $cpuInfo->id;
 
-            $gpuTempRecords = $this->applyGraphDateBetween(
-                GpuTemp::where('gpu_id', $gpuInfo->id)
+            $cpuTempRecords = $this->applyGraphDateBetween(
+                CpuTemp::where('cpu_id', $cpuInfo->id)
             )->orderBy('created_at')->get(['temp', 'created_at']);
 
-            $gpuUsageRecords = $this->applyGraphDateBetween(
-                GpuUsage::where('gpu_id', $gpuInfo->id)
-            )->orderBy('created_at')->get(['usage', 'created_at']);
+            $cpuUtilRecords = $this->applyGraphDateBetween(
+                CpuUtilization::where('cpu_id', $cpuInfo->id)
+            )->orderBy('created_at')->get(['util', 'created_at']);
 
             $series = DeviceChartSeries::alignDualSeries(
-                $gpuTempRecords,
-                $gpuUsageRecords,
+                $cpuTempRecords,
+                $cpuUtilRecords,
                 'temp',
-                'usage',
+                'util',
             );
 
             $this->timestamps = $series['timestamps'];
-            $this->gpu_temp_data = $series['primary'];
-            $this->gpu_usage_data = $series['secondary'];
+            $this->cpu_temp_data = $series['primary'];
+            $this->cpu_util_data = $series['secondary'];
         } finally {
             $this->isLoadingGraph = false;
         }
@@ -83,6 +83,6 @@ class Gpugraph extends Component
 
     public function render()
     {
-        return view('livewire.components.computer.gpugraph');
+        return view('livewire.components.computer.cpugraph');
     }
 }

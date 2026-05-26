@@ -142,7 +142,7 @@
         </div>
         <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
             <div class="dt-paging paging_simple_numbers">
-                {{ $devices->links() }}
+                {{ $devices->links(data: ['scrollTo' => false]) }}
             </div>
         </div>
     </div>

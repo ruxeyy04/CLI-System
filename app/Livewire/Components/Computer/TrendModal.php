@@ -12,6 +12,7 @@ use App\Models\GpuTemp;
 use App\Models\GpuUsage;
 use App\Models\RamInfo;
 use App\Models\RamUsage;
+use App\Support\DeviceChartSeries;
 
 class TrendModal extends Component
 {
@@ -178,7 +179,12 @@ class TrendModal extends Component
 
         $trendLine = $this->calculateTrendLine($this->trend_data);
         $this->description = $this->generateTrendDescription($trendLine);
-        $this->dispatch('refreshCharts', raw_data: $this->raw_logs, trend_line: $trendLine, raw_data_label: $this->raw_label);
+        $this->dispatch(
+            'refreshCharts',
+            raw_data: DeviceChartSeries::formatLogsForChart($this->raw_logs),
+            trend_line: DeviceChartSeries::formatTrendLineForChart($trendLine),
+            raw_data_label: $this->raw_label,
+        );
     }
 
     private function calculateTrendLine($data)
